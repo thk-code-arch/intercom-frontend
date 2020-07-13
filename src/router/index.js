@@ -1,27 +1,56 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Home from '../views/Home.vue';
+import Login from '../views/Login.vue';
+import Register from '../views/Register.vue';
 
-Vue.use(VueRouter)
+Vue.use(Router);
 
-  const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
-
-const router = new VueRouter({
-  routes
-})
+export const router = new Router({
+  mode: 'history',
+  routes: [
+    {
+      path: '/',
+      name: 'home',
+      component: Home
+    },
+    {
+      path: '/home',
+      component: Home
+    },
+    {
+      path: '/login',
+      component: Login
+    },
+    {
+      path: '/register',
+      component: Register
+    },
+    {
+      path: '/view',
+      name: 'View',
+      // lazy-loaded
+      component: () => import('../views/View.vue')
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      // lazy-loaded
+      component: () => import('../views/Profile.vue')
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      // lazy-loaded
+      component: () => import('../views/BoardAdmin.vue')
+    },
+    {
+      path: '/user',
+      name: 'user',
+      // lazy-loaded
+      component: () => import('../views/BoardUser.vue')
+    }
+  ]
+});
 
 export default router
