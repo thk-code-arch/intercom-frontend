@@ -5,6 +5,10 @@
         <strong>{{currentUser.username}}</strong> Profile
       </h3>
     </header>
+    
+          <a class="nav-link" href @click.prevent="logOut">
+            <font-awesome-icon icon="sign-out-alt" />LogOut
+          </a>
     <p>
       <strong>Token:</strong>
       {{currentUser.accessToken.substring(0, 20)}} ... {{currentUser.accessToken.substr(currentUser.accessToken.length - 20)}}
@@ -34,6 +38,12 @@ export default {
   },
   mounted() {
     if (!this.currentUser) {
+      this.$router.push('/login');
+    }
+  },
+  methods: {
+    logOut() {
+      this.$store.dispatch('auth/logout');
       this.$router.push('/login');
     }
   }
