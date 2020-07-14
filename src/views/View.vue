@@ -28,7 +28,6 @@ export default {
       const near = 0.1 // the near clipping plane
       const far = 1000 // the far clipping plane
       const camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
-      //camera.position.set(0, 5, 10)
       this.camera = camera
 
       // create scene
@@ -52,22 +51,6 @@ export default {
       this.dirLight.shadow.camera.near = near;    // default
       this.dirLight.shadow.camera.far = far * 10;     // default
       this.scene.add(this.dirLight)
-
-      /* var spotLight = new THREE.SpotLight( 0xffffff, 1 );
-      spotLight.position.set( 500, 400, 200 );
-      spotLight.angle = 0.4;
-      spotLight.penumbra = 0.05;
-      spotLight.decay = 1;
-      spotLight.distance = 2000;
-
-      spotLight.castShadow = true;
-      this.scene.add( spotLight ); 
-
-      spotLight.target.position.set( 3, 0, - 3 );
-      this.scene.add( spotLight.target );
-
-      var lightHelper = new THREE.SpotLightHelper( spotLight );
-      this.scene.add( lightHelper ); */
 
       // add controls
       this.controls = new OrbitControls(this.camera, this.container)
