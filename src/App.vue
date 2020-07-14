@@ -1,25 +1,23 @@
 <template>
   <div id="app">
- <div class="parent">
-<div class="div1"> 
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/view">View</router-link> |
-      <router-link to="/about">About</router-link>
-      <router-link v-if="showAdminBoard" to="/admin"> Admin Board</router-link>
-      <router-link v-if="currentUser" to="/user"> User</router-link>
+    <div class="parent">
+      <div class="div1"> 
+          <div id="nav">
+            <router-link to="/">Home</router-link> |
+            <router-link to="/view">View</router-link> |
+            <router-link to="/about">About</router-link>
+            <router-link v-if="showAdminBoard" to="/admin"> Admin Board</router-link>
+            <router-link v-if="currentUser" to="/user"> User</router-link>
+          </div>
+      </div>
+      <div class="div2"><router-view/></div>
+      <div class="div3">Left Sidebar 
+          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+      </div>
+      <div class="div4">Right Sidebar </div>
+      <div class="div5">Footer </div>
     </div>
-</div>
-
-<div class="div2"><router-view/></div>
-<div class="div3">Left Sidebar 
-    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-</div>
-
-<div class="div4">Right Sidebar </div>
-<div class="div5">Footer </div>
-  </div>
-</div> 
+  </div> 
 </template>
 
 <style>
@@ -64,6 +62,8 @@ grid-row-gap: 0px;
 
 .div3, .div4 {
   background-color: rgba(255,255,255,0.8);
+  margin: 10px;
+  padding: 5px;
   text-align: left;
 }
 

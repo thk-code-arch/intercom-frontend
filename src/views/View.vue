@@ -55,7 +55,7 @@ export default {
       // add controls
       this.controls = new OrbitControls(this.camera, this.container)
       // call this only in static scenes (i.e., if there is no animation loop)
-      this.controls.addEventListener( 'change', this.render )
+      this.controls.addEventListener( 'change', this.updateCamera )
 
       // create renderer
       this.renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -72,6 +72,14 @@ export default {
       this.camera.updateProjectionMatrix()
       this.renderer.setSize(this.container.clientWidth, this.container.clientHeight)
 
+      // create Vector to calculate Camera Direction
+      this.vector = new THREE.Vector3();
+
+      this.loadModel()
+      
+      this.render()
+    },
+    loadModel() {
       const gltfLoader = new GLTFLoader()
 
       this.gltf = gltfLoader.load(
@@ -104,10 +112,7 @@ export default {
           this.camera.position.z += size / -1.0;
           this.camera.lookAt( center );
 
-          console.log( this.camera.position );
-
-          const shadowRange = size * 1;
-          this.dirLight.shadow.camera = new THREE.OrthographicCamera( -shadowRange, shadowRange, shadowRange, -shadowRange, 0.5, 1000 ); 
+          this.dirLight.shadow.camera = new THREE.OrthographicCamera( -size, size, size, -size, 0.5, 1000 ); 
 
           this.controls.maxDistance = size * 10;
           this.controls.update();
@@ -118,13 +123,21 @@ export default {
         undefined,
         undefined
       )
-
+    },
+    updateCamera () {
       this.render()
+      this.camPos = {
+        x: this.camera.position.x,
+        y: this.camera.position.y,
+        z: this.camera.position.z,
+        dir: this.camera.getWorldDirection ( this.vector )
+      }
+      // TODO: send camera position to Server
+      console.log(this.camPos)
     },
     render () {
       this.renderer.render(this.scene, this.camera)
     }
-
   },
   mounted () {
     this.init()
