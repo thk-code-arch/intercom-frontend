@@ -28,6 +28,7 @@ body {
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-size: .8em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -60,5 +61,10 @@ grid-row-gap: 0px;
 .div3 { grid-area: 2 / 1 / 5 / 2; }
 .div4 { grid-area: 2 / 5 / 5 / 6; }
 .div5 { grid-area: 5 / 1 / 6 / 6; }
+
+.div3, .div4 {
+  background-color: rgba(255,255,255,0.8);
+  text-align: left;
+}
 
 </style>
