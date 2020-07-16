@@ -25,6 +25,10 @@
     <ul>
       <li v-for="(role,index) in currentUser.roles" :key="index">{{role}}</li>
     </ul>
+    <strong>Projects:</strong>
+    <ul>
+      <li v-for="(project,index) in currentUser.projects" :key="index">{{project}}</li>
+    </ul>
   </div>
 </template>
 
