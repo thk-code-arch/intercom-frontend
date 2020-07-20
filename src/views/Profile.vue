@@ -5,7 +5,6 @@
         <strong>{{currentUser.username}}</strong> Profile
       </h3>
     </header>
-    
           <a class="nav-link" href @click.prevent="logOut">
             <font-awesome-icon icon="sign-out-alt" />LogOut
           </a>
@@ -29,12 +28,17 @@
     <ul>
       <li v-for="(project,index) in currentUser.projects" :key="index">{{project}}</li>
     </ul>
+      <upload-files></upload-files>
   </div>
 </template>
 
 <script>
+import UploadFiles from "../components/UploadFiles";
 export default {
   name: 'Profile',
+  components: {
+      UploadFiles
+  },
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
@@ -45,11 +49,15 @@ export default {
       this.$router.push('/login');
     }
   },
+ data(){
+  return {
+    file: ''
+  }
+ },
   methods: {
     logOut() {
       this.$store.dispatch('auth/logout');
       this.$router.push('/login');
-    }
-  }
+    }  }
 };
 </script>
