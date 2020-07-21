@@ -64,7 +64,7 @@ export default {
   },
   created() {
     if (this.loggedIn) {
-      this.$router.push('/profile');
+      this.$router.push('/projects');
     }
   },
   methods: {

@@ -1,25 +1,46 @@
 <template>
   <div id="app">
     <div class="parent">
-      <div class="div1"> 
-          <div id="nav">
-            <router-link to="/">Home</router-link> |
-            <router-link to="/view">View</router-link> |
-            <router-link to="/about">About</router-link>
-            <router-link v-if="showAdminBoard" to="/admin"> Admin Board</router-link>
-            <router-link v-if="currentUser" to="/user"> User</router-link>
-          </div>
+      <div class="div1">
+      <header-menu v-if="showDiv"/>
       </div>
       <div class="div2"><router-view/></div>
-      <div class="div3">Left Sidebar 
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-      </div>
-      <div class="div4">Right Sidebar </div>
+      <left-sidebar v-if="showSidebar"/>
+      <right-sidebar v-if="showSidebar"/>
       <div class="div5">Footer </div>
     </div>
-  </div> 
+  </div>
 </template>
+<script>
 
+import HeaderMenu from "./components/HeaderMenu";
+import LeftSidebar from "./components/LeftSidebar";
+import RightSidebar from "./components/RightSidebar";
+
+export default {
+  name: "App",
+  data() {
+    return {
+    };
+  },
+  components: {
+      HeaderMenu,
+      LeftSidebar,
+      RightSidebar
+  },
+computed:{
+    showDiv() {
+        return this.$route.path !== '/login' && this.$route.path !== '/register';
+    },
+    showSidebar() {
+        return this.$route.path !== '/login' 
+            && this.$route.path !== '/register'
+            && this.$route.path !== '/projects';
+    }
+
+}
+}
+</script>
 <style>
 body {
     margin: 0;
