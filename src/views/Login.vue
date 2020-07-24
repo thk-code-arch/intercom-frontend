@@ -1,6 +1,6 @@
 <template>
   <div class="col-md-12">
-    <h3>user: admin / demo pass:123456</h3>
+    <h3>user: admin / demo </h3>
       <form name="form" @submit.prevent="handleLogin">
         <div class="form-group">
           <label for="username">Username</label>
