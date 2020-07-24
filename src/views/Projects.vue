@@ -9,12 +9,15 @@
     <ul>
       <li v-for="(project,index) in currentUser.projects" :key="index">{{project}}</li>
     </ul>
+    <select-project/>
   </div>
 </template>
 <script>
+import SelectProject from "../components/SelectProject";
 export default {
   name: 'projects',
   components: {
+      SelectProject
   },
   computed: {
     currentUser() {
