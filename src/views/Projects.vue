@@ -16,25 +16,7 @@ export default {
   components: {
       SelectProject
   },
-  computed: {
-    currentUser() {
-      return this.$store.state.auth.user;
-    }
-  },
-  mounted() {
-    if (!this.currentUser) {
-      this.$router.push('/login');
-    }
-  },
- data(){
-  return {
-    file: ''
-  }
- },
   methods: {
-    logOut() {
-      this.$store.dispatch('auth/logout');
-      this.$router.push('/login');
-    }  }
+      }
 };
 </script>

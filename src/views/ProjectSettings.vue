@@ -37,13 +37,13 @@ export default {
       UploadFiles
   },
   computed: {
-    currentUser() {
+    currentProject() {
       return this.$store.state.auth.user;
     }
   },
   mounted() {
-    if (!this.currentUser) {
-      this.$router.push('/login');
+    if (!this.currentProject) {
+        this.$router.push('/projects');
     }
   },
  data(){

@@ -32,11 +32,9 @@ computed:{
         return this.$route.path !== '/login' && this.$route.path !== '/register';
     },
     showSidebar() {
-        return this.$route.path !== '/login' 
-            && this.$route.path !== '/register'
-            && this.$route.path !== '/projects';
+        return this.$route.path == '/view'
     }
-
+//TODO add delete localstorage when JWT Token is expired
 }
 }
 </script>
