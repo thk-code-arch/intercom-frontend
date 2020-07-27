@@ -20,8 +20,8 @@ export default {
   },
   methods: {
     SelectProject(e) {
-	const val = e.target.value
-	console.log(val)
+	const id = e.target.value
+    ProjectService.selectProject(id).then(this.$router.push('/view'));
     //TODO api selectproject & set localStorage
     }
   },

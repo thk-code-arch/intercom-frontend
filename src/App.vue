@@ -35,6 +35,9 @@ computed:{
         return this.$route.path == '/view'
     }
 //TODO add delete localstorage when JWT Token is expired
+},
+created () {
+	document.title = "InterCom";
 }
 }
 </script>
