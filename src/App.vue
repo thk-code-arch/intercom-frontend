@@ -16,7 +16,6 @@
 import HeaderMenu from "./components/HeaderMenu";
 import LeftSidebar from "./components/LeftSidebar";
 import RightSidebar from "./components/RightSidebar";
-
 export default {
   name: "App",
   data() {

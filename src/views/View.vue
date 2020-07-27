@@ -81,9 +81,9 @@ export default {
     },
     loadModel() {
       const gltfLoader = new GLTFLoader()
-
+// TODO add headers for download read https://discourse.threejs.org/t/gltf-loader-issue-invalid-typed-array-length-4/13442/5
       this.gltf = gltfLoader.load(
-        'https://icapi.bim-cloud.org/files/interact.gltf',
+        'https://icapi.bim-cloud.org/api/project/get_projectfile',
         gltf => {
           gltf.scene.traverse((o) => {
             if (o.isMesh) {

@@ -6,9 +6,6 @@
       </h3>
     </header>
     <strong>Select Project</strong>
-    <ul>
-      <li v-for="(project,index) in currentUser.projects" :key="index">{{project}}</li>
-    </ul>
     <select-project/>
   </div>
 </template>
