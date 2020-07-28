@@ -6,6 +6,7 @@
 			<router-link to="/view">View</router-link> 
 			</div>
 			<div id="right">
+			<router-link to="/project-settings" v-if="projectOwner">Project Settings</router-link>  |
 			<router-link to="/profile">User Profile</router-link>  |
 			<a href @click.prevent="logOut">LogOut</a>
 			</div>
@@ -20,6 +21,19 @@ export default {
   data() {
     return {
     };
+  },
+  computed: {
+    currentProject() {
+      console.log(this.$store.state.project);
+      return this.$store.state.project;
+    },
+    projectOwner() {
+      if (this.currentProject && this.currentProject.owner) {
+        console.log(this.currentProject.owner);
+        return true;
+      }
+      return false;
+	}
   },
   methods: {
     logOut() {

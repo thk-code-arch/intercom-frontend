@@ -5,7 +5,6 @@
         <strong>Projects</strong>
       </h3>
     </header>
-    <strong>Select Project</strong>
     <select-project/>
   </div>
 </template>

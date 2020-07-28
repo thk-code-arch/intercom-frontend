@@ -21,6 +21,18 @@ class ProjectService {
         return response.data;
       });
   }
+  addProject() {
+      return axios.post(API_URL + 'add_project',{},{
+    headers:{"x-access-token": authHeader()} 
+      })
+      .then(response => {
+        if (response.data.name) {
+          localStorage.setItem('project', JSON.stringify(response.data));
+        }
+
+        return response.data;
+      });
+  }
 }
 
 export default new ProjectService();
