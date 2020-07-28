@@ -13,6 +13,7 @@
 </template>
 <script>
 
+import axios from 'axios';
 import HeaderMenu from "./components/HeaderMenu";
 import LeftSidebar from "./components/LeftSidebar";
 import RightSidebar from "./components/RightSidebar";
@@ -37,7 +38,19 @@ computed:{
 //TODO add delete localstorage when JWT Token is expired
 },
 created () {
+    //set <header title>
 	document.title = "InterCom";
+	// relogin after JWT expire
+	axios.interceptors.response.use(function (response) {
+    return response
+    }, function (error) {
+    console.log(error.response.data)
+    if (error.response.data.error.statusCode === 401) {
+        this.$store.dispatch('auth/logout');
+        this.$router.push('/login');
+    }
+    return Promise.reject(error)
+})
 }
 }
 </script>

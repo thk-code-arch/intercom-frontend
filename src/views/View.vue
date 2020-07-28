@@ -6,7 +6,8 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-
+import authHeader from '../services/auth-header';
+import projectHeader from '../services/project-header';
 export default {
   name: 'ThreeViewport',
   data () {
@@ -81,6 +82,7 @@ export default {
     },
     loadModel() {
       const gltfLoader = new GLTFLoader()
+      gltfLoader.setRequestHeader( { 'x-current-project': projectHeader(),"x-access-token": authHeader() } );
 // TODO add headers for download read https://discourse.threejs.org/t/gltf-loader-issue-invalid-typed-array-length-4/13442/5
       this.gltf = gltfLoader.load(
         'https://icapi.bim-cloud.org/api/project/get_projectfile',
