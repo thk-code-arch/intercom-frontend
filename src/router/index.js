@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from '../views/Home.vue';
+import Projects from '../views/Projects.vue';
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
 
@@ -11,12 +11,8 @@ export const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/home',
-      component: Home
+      name: 'projects',
+      component: Projects
     },
     {
       path: '/login',
@@ -39,6 +35,12 @@ export const router = new Router({
       component: () => import('../views/Profile.vue')
     },
     {
+      path: '/admin',
+      name: 'admin',
+      // lazy-loaded
+      component: () => import('../views/Admin.vue')
+    },
+    {
       path: '/project-settings',
       name: 'Project-Settings',
       // lazy-loaded
@@ -47,8 +49,7 @@ export const router = new Router({
     {
       path: '/projects',
       name: 'projects',
-      // lazy-loaded
-      component: () => import('../views/Projects.vue')
+      component: Projects
     }
   ]
 });

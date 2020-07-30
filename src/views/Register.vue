@@ -1,11 +1,5 @@
 <template>
-  <div class="col-md-12">
-    <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      />
+  <div>
       <form name="form" @submit.prevent="handleRegister">
         <div v-if="!successful">
           <div class="form-group">
@@ -51,6 +45,18 @@
             >{{errors.first('password')}}</div>
           </div>
           <div class="form-group">
+            <label for="invite">Invite</label>
+            <input
+              v-model="user.invitecode"
+              class="form-control"
+              name="invitecode"
+            />
+            <div
+              v-if="submitted && errors.has('password')"
+              class="alert-danger"
+            >{{errors.first('password')}}</div>
+          </div>
+          <div class="form-group">
             <button class="btn btn-primary btn-block">Sign Up</button>
           </div>
         </div>
@@ -62,7 +68,6 @@
         :class="successful ? 'alert-success' : 'alert-danger'"
       >{{message}}</div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -72,7 +77,7 @@ export default {
   name: 'Register',
   data() {
     return {
-      user: new User('', '', ''),
+      user: new User('', '', '', ''),
       submitted: false,
       successful: false,
       message: ''

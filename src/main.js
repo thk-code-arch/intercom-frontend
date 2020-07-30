@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import Vuex from 'vuex'
 import * as VeeValidate from 'vee-validate'
+import './assets/styles/index.css';
 Vue.config.productionTip = false
 // set auth header
 Vue.use(Vuex);

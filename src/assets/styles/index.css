@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@font-face {
+  font-family: 'din-2014';
+  src: url('../fonts/DIN2014-Regular.ttf');
+}
+@tailwind utilities;
+

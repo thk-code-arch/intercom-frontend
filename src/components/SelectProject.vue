@@ -2,14 +2,14 @@
   <div>
     <strong>Select Project</strong>
      <p/>
-    <select name="projectSelect" v-model="selectedProject" @change="SelectProject">
+    <select name="projectSelect" v-model="selectedProject" @change="SelectProject" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
       <option v-for="project in projects" :key="project.id" v-bind:value="project.id"> {{ project.name }} </option>
      </select>
      <p/>
      <div v-if="showaddProject">
     <strong>New Project</strong>
      <p/>
-     <button v-on:click="addProject">Add new project</button>
+     <button v-on:click="addProject" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">Add new project</button>
      </div>
   </div>
 </template>
@@ -44,8 +44,18 @@ export default {
     },
     SelectProject(e) {
 	const id = e.target.value;
-    ProjectService.selectProject(id).then(this.$router.push('/view'));
-    //TODO api selectproject & set localStorage
+    ProjectService.selectProject(id).then(
+            () => {
+                this.$router.push('/view');
+            },
+            error => {
+              this.loading = false;
+              this.message =
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString();
+            }
+          );
     }
   },
   mounted() {

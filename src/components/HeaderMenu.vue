@@ -2,13 +2,14 @@
     <div id="nav">
 		<div id="nav-container">
 			<div id="left">
-			<router-link to="/projects">Projects</router-link> |
-			<router-link to="/view">View</router-link> 
+			<router-link to="/projects">Projects</router-link>
+			<router-link to="/view">View</router-link>
 			</div>
 			<div id="right">
-			<router-link to="/project-settings" v-if="projectOwner">Project Settings</router-link>  |
-			<router-link to="/profile">User Profile</router-link>  |
-			<a href @click.prevent="logOut">LogOut</a>
+			<router-link to="/project-settings" v-if="projectOwner">Project Settings</router-link>
+			<router-link to="/admin" v-if="isAdmin">Admin</router-link>
+			<router-link to="/profile">User Profile</router-link>
+			<a href @click.prevent="logOut">Logout</a>
 			</div>
 		</div>
     </div>
@@ -33,7 +34,16 @@ export default {
         return true;
       }
       return false;
-	}
+	},
+    currentUser() {
+      return this.$store.state.auth.user;
+    },
+    isAdmin() {
+      if (this.currentUser && this.currentUser.roles) {
+        return this.currentUser.roles.includes('ROLE_ADMIN');
+      }
+      return false;
+    }
   },
   methods: {
     logOut() {
