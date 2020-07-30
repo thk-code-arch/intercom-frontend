@@ -1,8 +1,20 @@
 <template>
+    <div class="parent h-full">
+<div class="div1">
   <div id="scene-container" ref="sceneContainer"></div>
-</template>
+</div>
+<div class="div2 bg-gray-400 bg-opacity-25"> 
+    <left-sidebar/>
+</div>
+<div class="div3 bg-gray-400 bg-opacity-25"> 
+    <right-sidebar/>
+</div>
+</div>
 
+</template>
 <script>
+import LeftSidebar from "../components/LeftSidebar";
+import RightSidebar from "../components/RightSidebar";
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -17,6 +29,10 @@ export default {
       camera: null,
       controls: null,
       renderer: null    }
+  },
+  components: {
+      LeftSidebar,
+      RightSidebar
   },
   methods: {
     init () {
@@ -83,7 +99,6 @@ export default {
     loadModel() {
       const gltfLoader = new GLTFLoader()
       gltfLoader.setRequestHeader( { 'x-current-project': projectHeader(),"x-access-token": authHeader() } );
-// TODO add headers for download read https://discourse.threejs.org/t/gltf-loader-issue-invalid-typed-array-length-4/13442/5
       this.gltf = gltfLoader.load(
         'https://icapi.bim-cloud.org/api/project/get_projectfile',
         gltf => {
@@ -152,4 +167,15 @@ export default {
   height: 95%;
   width: 100%
 }
+.parent {
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+grid-template-rows: repeat(5, 1fr);
+grid-column-gap: 0px;
+grid-row-gap: 0px;
+}
+
+.div1 { grid-area: 1 / 1 / 6 / 6; }
+.div2 { grid-area: 1 / 1 / 6 / 2; }
+.div3 { grid-area: 1 / 5 / 6 / 6; }
 </style>

@@ -1,22 +1,13 @@
 <template>
-  <div id="app">
-    <div class="parent">
-      <div class="div1">
+<body class="h-screen antialiased bg-gray-200" id="app">
       <header-menu v-if="showDiv"/>
-      </div>
-      <div class="div2"><router-view/></div>
-      <left-sidebar v-if="showSidebar"/>
-      <right-sidebar v-if="showSidebar"/>
-      <div class="div5">Footer </div>
-    </div>
-  </div>
+      <router-view/>
+</body>
 </template>
 <script>
 
 import axios from 'axios';
 import HeaderMenu from "./components/HeaderMenu";
-import LeftSidebar from "./components/LeftSidebar";
-import RightSidebar from "./components/RightSidebar";
 export default {
   name: "App",
   data() {
@@ -25,8 +16,6 @@ export default {
   },
   components: {
       HeaderMenu,
-      LeftSidebar,
-      RightSidebar
   },
 computed:{
     showDiv() {
@@ -55,35 +44,9 @@ created () {
 }
 </script>
 <style>
-body {
-    margin: 0;
-}
 #app {
   font-family: din-2014;
-  text-align: center;
-  color: #2c3e50;
 }
 
-.parent {
-display: grid;
-grid-template-columns: repeat(5, 1fr);
-min-height: 100vh;
-grid-template-rows: 0.3fr repeat(3, 1fr) 0.3fr;
-grid-column-gap: 0px;
-grid-row-gap: 0px;
-}
-
-.div1 { grid-area: 1 / 1 / 2 / 6; }
-.div2 { grid-area: 2 / 1 / 5 / 6; }
-.div3 { grid-area: 2 / 1 / 5 / 2; }
-.div4 { grid-area: 2 / 5 / 5 / 6; }
-.div5 { grid-area: 5 / 1 / 6 / 6; }
-
-.div3, .div4 {
-  background-color: rgba(255,255,255,0.8);
-  margin: 10px;
-  padding: 5px;
-  text-align: left;
-}
 
 </style>

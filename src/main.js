@@ -6,7 +6,14 @@ import Vuex from 'vuex'
 import * as VeeValidate from 'vee-validate'
 import './assets/styles/index.css';
 Vue.config.productionTip = false
-// set auth header
+//font awesome Icons
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+import { fas } from '@fortawesome/free-solid-svg-icons'
+
+library.add(fas)
+Vue.component('font-awesome-icon', FontAwesomeIcon)// set auth header
 Vue.use(Vuex);
 Vue.use(VeeValidate);
 new Vue({
