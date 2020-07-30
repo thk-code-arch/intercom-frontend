@@ -6,7 +6,7 @@
 			<router-link to="/view">View</router-link>
 			</div>
 			<div id="right">
-			<router-link to="/project-settings" v-if="projectOwner">Project Settings</router-link>
+			<router-link to="/project-settings" v-if="isProjectOwner">Project Settings</router-link>
 			<router-link to="/admin" v-if="isAdmin">Admin</router-link>
 			<router-link to="/profile">User Profile</router-link>
 			<a href @click.prevent="logOut">Logout</a>
@@ -25,13 +25,13 @@ export default {
   },
   computed: {
     currentProject() {
-      console.log(this.$store.state.project);
-      return this.$store.state.project;
+      console.log(this.$store.state.curproject);
+      return this.$store.state.curproject;
     },
-    projectOwner() {
+    isProjectOwner() {
       if (this.currentProject && this.currentProject.owner) {
-        console.log(this.currentProject.owner);
-        return true;
+        console.log(this.currentProject);
+        return this.currentProject.owner;
       }
       return false;
 	},
@@ -40,6 +40,7 @@ export default {
     },
     isAdmin() {
       if (this.currentUser && this.currentUser.roles) {
+        console.log(this.currentUser);
         return this.currentUser.roles.includes('ROLE_ADMIN');
       }
       return false;
@@ -60,12 +61,10 @@ export default {
 
 #left {
     float:left;
-    width:100px;
 }
 
 
 #right {
     float:right;
-    width:100px;
 }
 </style>
