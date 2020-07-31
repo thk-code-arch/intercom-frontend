@@ -16,11 +16,13 @@
 
 <script>
 import ProjectService from "../services/project.service";
+import Project from '../models/project';
 
 export default {
   name: "select-project",
   data: function() {
     return {
+      project: new Project('', ''),
       selectedProject: '',
       projects: [],
 
@@ -39,24 +41,33 @@ export default {
   },
   methods: {
     addProject() {
-      console.log("addProject");
-      ProjectService.addProject().then(this.$router.push('/project-settings'));
+    this.$store.dispatch('curproject/addnewProject').then(
+    () => {
+        this.$router.push('/view');
+    },
+    error => {
+        this.loading = false;
+        this.message =
+        (error.response && error.response.data) ||
+        error.message ||
+        error.toString();
+    }
+    );
     },
     SelectProject(e) {
-	const id = e.target.value;
-    ProjectService.selectProject(id).then(
-            () => {
-                this.$router.push('/view');
-              //TODO must add store dipatch after select
-            },
-            error => {
-              this.loading = false;
-              this.message =
-                (error.response && error.response.data) ||
-                error.message ||
-                error.toString();
-            }
-          );
+	this.project.id = e.target.value;
+    this.$store.dispatch('curproject/selectProject', this.project).then(
+    () => {
+        this.$router.push('/view');
+    },
+    error => {
+        this.loading = false;
+        this.message =
+        (error.response && error.response.data) ||
+        error.message ||
+        error.toString();
+    }
+    );
     }
   },
   mounted() {

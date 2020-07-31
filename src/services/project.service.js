@@ -7,9 +7,9 @@ class ProjectService {
     return axios.get(API_URL + 'get_projects', { headers:{"x-access-token": authHeader()} });
   }
 
-  selectProject(projectid) {
+  selectProject(theproject) {
       return axios.post(API_URL + 'select_project', {
-          projectid:projectid
+          projectid: theproject.id
       },{
     headers:{"x-access-token": authHeader()} 
       })

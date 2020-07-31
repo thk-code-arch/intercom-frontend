@@ -1,7 +1,8 @@
 import ProjectService from '../services/project.service';
 const theproject = JSON.parse(localStorage.getItem('project'));
-console.log(theproject)
 const initialState = theproject
+  ? { status: { Projectselected: true }, theproject }
+  : { status: { Projectselected: false }, theproject: null };
 
 export const curproject = {
   namespaced: true,
@@ -12,12 +13,46 @@ export const curproject = {
         theproject => {
           commit('selectSuccess', theproject);
           return Promise.resolve(theproject);
+        },
+        error => {
+          commit('selectFailure');
+          return Promise.reject(error);
         }
+
       );
     },
+    addnewProject({ commit }) {
+      return ProjectService.addProject().then(
+        theproject => {
+          commit('selectSuccess', theproject);
+          return Promise.resolve(theproject);
+        },
+        error => {
+          commit('selectFailure');
+          return Promise.reject(error);
+        }
+
+      );
+    },
+    unselect({ commit }) {
+      localStorage.removeItem('project');
+      commit('unselect');
+    }
   },
-  getters: {
-    owner: state => `${state.owner}`,
+  mutations: {
+    selectSuccess(state, theproject) {
+      state.status.Projectselected = true;
+      state.theproject = theproject;
+    },
+    selectFailure(state) {
+      state.status.Projectselected = false;
+      state.theproject = null;
+    },
+    unselect(state) {
+      state.status.Projectselected = false;
+      state.theproject = null;
+    }
   }
+
 };
 

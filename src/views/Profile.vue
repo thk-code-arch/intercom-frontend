@@ -58,6 +58,7 @@ export default {
  },
   methods: {
     logOut() {
+      this.$store.dispatch('curproject/unselect');
       this.$store.dispatch('auth/logout');
       this.$router.push('/login');
     }  }

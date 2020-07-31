@@ -3,12 +3,12 @@
     <div class="grid grid-cols-3 gap-4 w-full">
   <div class="flex items-start" id="menu">
         <router-link to="/projects" class="lg:p-4 py-3 px-0 border-b-2 border-tranjsparent hover:border-indigo-400"><font-awesome-icon icon="building" /> Project</router-link>
-        <router-link to="/view" class="lg:p-4 py-3 px-0 border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="eye" /> View</router-link>
+        <router-link to="/view" v-if="isProjectSelected" class="lg:p-4 py-3 px-0 border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="eye" /> View</router-link>
         <router-link to="/chat" class="lg:p-4 py-3 px-0 border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="comments" /> Chat</router-link>
         <router-link to="/learning" class="lg:p-4 py-3 px-0 border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="graduation-cap" /> Learning</router-link>
   </div>
-
-  <div class="flex items-center" id="menu">
+  <div class="flex items-center justify-center" id="menu" >
+      <div v-if="isProjectSelected"> {{currentProject.name}}</div>
   </div>
   <div class="flex items-end justify-end" id="menu">
         <router-link to="/project-settings" v-if="isProjectOwner" class="lg:p-4 py-3 px-0 border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="building" /> Edit</router-link>
@@ -32,13 +32,18 @@ export default {
   },
   computed: {
     currentProject() {
-      console.log(this.$store.state.curproject);
-      return this.$store.state.curproject;
+      console.log(this.$store.state.curproject.theproject);
+      return this.$store.state.curproject.theproject;
     },
     isProjectOwner() {
       if (this.currentProject && this.currentProject.owner) {
-        console.log(this.currentProject);
         return this.currentProject.owner;
+      }
+      return false;
+	},
+    isProjectSelected() {
+      if (this.currentProject) {
+        return this.currentProject.id;
       }
       return false;
 	},
@@ -47,7 +52,6 @@ export default {
     },
     isAdmin() {
       if (this.currentUser && this.currentUser.roles) {
-        console.log(this.currentUser);
         return this.currentUser.roles.includes('ROLE_ADMIN');
       }
       return false;
