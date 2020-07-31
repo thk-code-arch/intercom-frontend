@@ -1,6 +1,6 @@
 <template>
   <div class="flex md:flex-row-reverse flex-wrap">
-    <div class="flex h-screen w-full md:w-3/4 bg-white p-4 text-center text-gray-200">
+    <div class="p-64 flex h-screen w-full md:w-3/4 bg-white p-4 text-center text-gray-200">
         <div class="m-auto">
       <img :src="images.logo">
         </div>

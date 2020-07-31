@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -21,3 +22,17 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+
+
+axios.interceptors.response.use(function (response) {
+return response
+}, function (error) {
+console.log(error.response.data)
+if (error.response.status === 401) {
+console.log("muhaaa")
+    store.dispatch('auth/logout');
+    router.push('/login');
+}
+return Promise.reject(error)
+})
