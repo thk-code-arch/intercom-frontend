@@ -47,6 +47,7 @@ export default {
     ProjectService.selectProject(id).then(
             () => {
                 this.$router.push('/view');
+              //TODO must add store dipatch after select
             },
             error => {
               this.loading = false;
