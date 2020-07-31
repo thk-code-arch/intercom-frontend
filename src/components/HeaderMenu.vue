@@ -1,18 +1,23 @@
 <template>
   <header class="px-8 px-6 bg-white flex flex-wrap items-center py-0 py-2">
-
-  <div class="flex items-center w-auto w-full" id="menu">
-    <nav>
-      <ul class="flex items-center justify-between text-base text-gray-700 pt-4 pt-0">
-        <li><router-link to="/projects" class="lg:p-4 py-3 px-0 block border-b-2 border-tranjsparent hover:border-indigo-400"><font-awesome-icon icon="building" /> Project</router-link></li>
-        <li><router-link to="/view" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="eye" /> View</router-link></li>
-        <li><router-link to="/chat" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="comments" /> Chat</router-link></li>
-        <li><router-link to="/learning" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="graduation-cap" /> Learning</router-link></li>
-      </ul>
-    </nav>
-
+    <div class="grid grid-cols-3 gap-4 w-full">
+  <div class="flex items-start" id="menu">
+        <router-link to="/projects" class="lg:p-4 py-3 px-0 border-b-2 border-tranjsparent hover:border-indigo-400"><font-awesome-icon icon="building" /> Project</router-link>
+        <router-link to="/view" class="lg:p-4 py-3 px-0 border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="eye" /> View</router-link>
+        <router-link to="/chat" class="lg:p-4 py-3 px-0 border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="comments" /> Chat</router-link>
+        <router-link to="/learning" class="lg:p-4 py-3 px-0 border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="graduation-cap" /> Learning</router-link>
   </div>
 
+  <div class="flex items-center" id="menu">
+  </div>
+  <div class="flex items-end justify-end" id="menu">
+        <router-link to="/project-settings" v-if="isProjectOwner" class="lg:p-4 py-3 px-0 border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="building" /> Edit</router-link>
+        <router-link to="/admin"  v-if="isAdmin" class="lg:p-4 py-3 px-0 border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="lock" /> Admin</router-link>
+        <router-link to="/profile" class="lg:p-4 py-3 px-0 border-b-2 border-transparent hover:border-indigo-400">
+                <img class="rounded-full w-6 h-6 border-2 border-transparent hover:border-indigo-400" src="https://pbs.twimg.com/profile_images/1128143121475342337/e8tkhRaz_normal.jpg" alt="Andy Leverenz">
+        </router-link>
+  </div>
+    </div>
 
   </header>
 </template>

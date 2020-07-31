@@ -1,5 +1,5 @@
 <template>
-<div class="p-4 h-24 rounded-full">
+<div class="p-4 h-24">
     <!-- Chat content -->
     <div class="flex-1 flex flex-col bg-white overflow-hidden">
         <!-- Top bar -->

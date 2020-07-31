@@ -1,7 +1,6 @@
 <template>
-    <div class="parent h-full">
-<div class="div1">
-  <div id="scene-container" ref="sceneContainer"></div>
+    <div class="parent h-screen2">
+<div class="div1" ref="sceneContainer">
 </div>
 <div class="div2 bg-gray-400 bg-opacity-25"> 
     <left-sidebar/>
@@ -76,7 +75,6 @@ export default {
 
       // create renderer
       this.renderer = new THREE.WebGLRenderer({ antialias: true })
-      this.renderer.setSize(this.container.clientWidth, this.container.clientHeight)
       this.renderer.setPixelRatio(window.devicePixelRatio)
       this.renderer.gammaOutput = true
       this.renderer.gammaFactor = 2.2
@@ -178,4 +176,8 @@ grid-row-gap: 0px;
 .div1 { grid-area: 1 / 1 / 6 / 6; }
 .div2 { grid-area: 1 / 1 / 6 / 2; }
 .div3 { grid-area: 1 / 5 / 6 / 6; }
+
+.h-screen2{
+    height:calc(100vh - 5rem)!important;
+  }
 </style>

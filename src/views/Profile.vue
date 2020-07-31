@@ -1,10 +1,13 @@
 <template>
   <div class="px-4">
     <div class="max-w-3xl bg-white rounded-lg mx-auto my-16 p-16">
-      <h1 class="text-2xl font-medium mb-2">Let's Build: With Tailwind CSS</h1>
-      <h2 class="font-medium text-sm text-indigo-400 mb-4 uppercase tracking-wide">Responsive Navbar</h2>
-      <h3>
+      <h1 class="text-2xl font-medium mb-2">
         <strong>{{currentUser.username}}</strong> Profile
+      </h1>
+
+      <h2 class="font-medium text-sm text-indigo-400 mb-4 uppercase tracking-wide">Data</h2>
+      <h3>
+        <a href @click.prevent="logOut">Logout</a>
       </h3>
     <p>
       <strong>Token:</strong>
@@ -53,5 +56,10 @@ export default {
     file: ''
   }
  },
+  methods: {
+    logOut() {
+      this.$store.dispatch('auth/logout');
+      this.$router.push('/login');
+    }  }
 };
 </script>
