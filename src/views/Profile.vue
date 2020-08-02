@@ -1,8 +1,17 @@
 <template>
   <div class="px-4">
-    <div class="max-w-3xl bg-white rounded-lg mx-auto my-16 p-16">
+    <div class="max-w-6xl bg-white rounded-lg mx-auto my-8 p-8">
+        <!-- Top bar -->
+        <div class="border-b flex px-6 py-2 mb-4 items-center flex-none">
+            <div class="flex flex-col">
+              <h1 class="text-2xl font-medium mb-2"><strong>{{currentUser.username}}</strong> Profile</h1>
+                <div class="text-grey-dark text-sm truncate">
+                  Details
+                </div>
+            </div>
+        </div>
+        <!-- TEXT -->
       <h1 class="text-2xl font-medium mb-2">
-        <strong>{{currentUser.username}}</strong> Profile
       </h1>
 
       <h2 class="font-medium text-sm text-indigo-400 mb-4 uppercase tracking-wide">Data</h2>
@@ -30,7 +39,7 @@
       <li v-for="(project,index) in currentUser.projects" :key="index">{{project}}</li>
     </ul>
       <upload-files></upload-files>
-    </div>
+  </div>
   </div>
 </template>
 

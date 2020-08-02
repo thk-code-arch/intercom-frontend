@@ -14,7 +14,7 @@
         <router-link to="/project-settings" v-if="isProjectOwner" class="lg:p-4 py-3 px-0 border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="building" /> Edit</router-link>
         <router-link to="/admin"  v-if="isAdmin" class="lg:p-4 py-3 px-0 border-b-2 border-transparent hover:border-indigo-400"><font-awesome-icon icon="lock" /> Admin</router-link>
         <router-link to="/profile" class="lg:p-4 py-3 px-0 border-b-2 border-transparent hover:border-indigo-400">
-                <img class="rounded-full w-6 h-6 border-2 border-transparent hover:border-indigo-400" src="https://pbs.twimg.com/profile_images/1128143121475342337/e8tkhRaz_normal.jpg" alt="Andy Leverenz">
+          <svg class="h-6 w-6 fill-current text-black inline-block align-middle" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path></svg>
         </router-link>
   </div>
     </div>

@@ -1,16 +1,9 @@
 <template>
   <div>
-    <strong>Select Project</strong>
-     <p/>
-    <select name="projectSelect" v-model="selectedProject" @change="SelectProject" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-      <option v-for="project in projects" :key="project.id" v-bind:value="project.id"> {{ project.name }} </option>
-     </select>
-     <p/>
-     <div v-if="showaddProject">
-    <strong>New Project</strong>
-     <p/>
-     <button v-on:click="addProject" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">Add new project</button>
-     </div>
+    <div class="flex content-start flex-wrap justify-center">
+      <div class="box-border w-32 h-24 p-3 m-2 text-center border-2 border-black flex items-center justify-center" v-for="project in projects" :key="project.id"  v-on:click="Select(project)"> {{ project.name }} </div>
+      <div v-if="showaddProject" v-on:click="addProject" class="box-border w-32 h-24 p-3 m-2 border-solid border-2 border-black flex items-center justify-center"><svg class="h-8 w-8 fill-current text-black inline-block align-middle" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path></svg></div>
+    </div>
   </div>
 </template>
 
@@ -54,8 +47,8 @@ export default {
     }
     );
     },
-    SelectProject(e) {
-	this.project.id = e.target.value;
+    Select: function(project) {
+    this.project.id = project.id;
     this.$store.dispatch('curproject/selectProject', this.project).then(
     () => {
         this.$router.push('/view');
@@ -69,6 +62,7 @@ export default {
     }
     );
     }
+
   },
   mounted() {
       ProjectService.getProjects().then(
