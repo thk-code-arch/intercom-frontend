@@ -7,15 +7,6 @@ import Vuex from 'vuex'
 import './assets/styles/index.css';
 import VueFormulate from '@braid/vue-formulate'
 Vue.config.productionTip = false
-//font awesome Icons
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-import { fas } from '@fortawesome/free-solid-svg-icons'
-
-library.add(fas)
-Vue.component('font-awesome-icon', FontAwesomeIcon)// set auth header
-//delete
 
 Vue.use(VueFormulate, {
   classes: {
