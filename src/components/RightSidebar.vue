@@ -14,15 +14,17 @@
         <!-- Chat messages -->
         <div class="px-6 py-4 flex-1 overflow-y-scroll">
             <!-- A message -->
+            <div class="messages" v-for="(msg, index) in messages" :key="index">
             <div class="flex items-start mb-4 text-sm">
-                <img src="https://twitter.com/steveschoger/profile_image" class="w-10 h-10 rounded mr-3">
+                <img src="https://cdn.icon-icons.com/icons2/1509/PNG/512/twitterprofile_104337.png" class="w-10 h-10 rounded mr-3">
                 <div class="flex-1 overflow-hidden">
                     <div>
-                        <span class="font-bold">Steve Schoger</span>
-                        <span class="text-grey text-xs">11:46</span>
+                        <span class="font-bold">{{ msg.user }}</span>
+                        <span class="text-grey text-xs">13:37</span>
                     </div>
-                    <p class="text-black leading-normal">The slack from the other side.</p>
+                    <p class="text-black leading-normal">{{ msg.message }}</p>
                 </div>
+            </div>
             </div>
             <!-- A message -->
         </div>
@@ -32,8 +34,10 @@
                 <span class="text-3xl text-grey border-r-2 border-grey p-2">
                     <svg class="fill-current h-6 w-6 block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16 10c0 .553-.048 1-.601 1H11v4.399c0 .552-.447.601-1 .601-.553 0-1-.049-1-.601V11H4.601C4.049 11 4 10.553 4 10c0-.553.049-1 .601-1H9V4.601C9 4.048 9.447 4 10 4c.553 0 1 .048 1 .601V9h4.399c.553 0 .601.447.601 1z"/></svg>
                   </span>
+          <form @submit.prevent="clickButton()">
                 <input v-model="message" type="text" class="w-full px-4" placeholder="Message #general" />
-                  <button @click="sendMsg()">Send Msg</button>
+                  <button type="submit" >Send Msg</button>
+          </form>
             </div>
         </div>
     </div>
@@ -56,34 +60,37 @@
 </template>
 
 <script>
-
+import io from 'socket.io-client';
 export default {
   name: "right-sidebar",
-  data() {
-    return {
-    message: '',
-    };
-  },
-  sockets: {
-    connect: function () {
-        console.log('socket connected')
+    data() {
+        return {
+            user: 'admin',
+            message: '',
+            messages: [],
+            socket : io('https://io.bim-cloud.org')
+        }
     },
+    sockets: {
+    connect() {
+      console.log('socket connected')
+    },
+    SEND_MESSAGE() {
+      console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+    }
   },
   methods: {
-      sendMsg: function () {
-          console.log('button clicked');
-          console.log(this.message);
-          // $socket is socket.io-client instance
-          this.$socket.emit('chatMessage', this.message)
-      }
-  },
-  computed: {
+    clickButton() {
+      // this.$socket.client is `socket.io-client` instance
+      this.$socket.client.emit('SEND_MESSAGE',  {
+                message: this.message
+            });
+      this.message = '';
+    }
   },
   mounted() {
-      this.$socket.on('chatMessage',data => {
-          console.log('listen fired')
-          console.log(data);
-
+      this.socket.on('MESSAGE', (data) => {
+        this.messages = [...this.messages, data];
       });
   }
 };
