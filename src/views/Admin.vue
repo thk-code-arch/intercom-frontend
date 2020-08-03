@@ -11,6 +11,52 @@
             </div>
         </div>
         <!-- TEXT -->
+
+  <div class="p-8">
+<h2 class="text-2xl font-medium mb-2">User List</h2>
+<table class="table-auto">
+  <thead>
+    <tr>
+      <th class="px-4 py-2">id</th>
+      <th class="px-4 py-2">Username</th>
+      <th class="px-4 py-2">Fullname</th>
+      <th class="px-4 py-2">Roles</th>
+      <th class="px-4 py-2">Assigned Projects</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border px-4 py-2">id</td>
+      <td class="border px-4 py-2">Adam</td>
+      <td class="border px-4 py-2">Adam Ali</td>
+      <td class="border px-4 py-2">User</td>
+      <td class="border px-4 py-2">858</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 class="text-2xl font-medium mb-2">Project List</h2>
+<table class="table-auto">
+  <thead>
+    <tr>
+      <th class="px-4 py-2">id</th>
+      <th class="px-4 py-2">Name</th>
+      <th class="px-4 py-2">Description</th>
+      <th class="px-4 py-2">Project Owner</th>
+      <th class="px-4 py-2">Assigned Users</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border px-4 py-2">id</td>
+      <td class="border px-4 py-2">Projec</td>
+      <td class="border px-4 py-2">Adam Ali</td>
+      <td class="border px-4 py-2">User</td>
+      <td class="border px-4 py-2">858</td>
+    </tr>
+  </tbody>
+</table>
+  </div>
   </div>
   </div>
 </template>

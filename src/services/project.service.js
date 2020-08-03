@@ -1,5 +1,6 @@
 import axios from 'axios';
 import authHeader from './auth-header';
+import projectHeader from './project-header';
 const API_URL = 'https://icapi.bim-cloud.org/api/project/';
 
 class ProjectService {
@@ -20,6 +21,9 @@ class ProjectService {
 
         return response.data;
       });
+  }
+  getProjectinfo() {
+      return axios.get(API_URL + 'get_projectinfo',{ headers:{"x-access-token": authHeader(),'x-current-project': projectHeader() } });
   }
   addProject() {
       return axios.post(API_URL + 'add_project',{},{

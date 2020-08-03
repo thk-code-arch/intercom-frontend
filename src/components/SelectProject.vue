@@ -36,7 +36,7 @@ export default {
     addProject() {
     this.$store.dispatch('curproject/addnewProject').then(
     () => {
-        this.$router.push('/view');
+        this.$router.push('/project-settings');
     },
     error => {
         this.loading = false;

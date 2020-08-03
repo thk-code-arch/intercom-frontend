@@ -6,6 +6,7 @@ import store from './store'
 import Vuex from 'vuex'
 import * as VeeValidate from 'vee-validate'
 import './assets/styles/index.css';
+import VueFormulate from '@braid/vue-formulate'
 Vue.config.productionTip = false
 //font awesome Icons
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -15,6 +16,17 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 
 library.add(fas)
 Vue.component('font-awesome-icon', FontAwesomeIcon)// set auth header
+//delete
+
+Vue.use(VueFormulate, {
+  classes: {
+    outer: 'mb-4',
+    input: 'border border-gray-400 rounded px-3 py-2 leading-none focus:border-indigo-400 outline-none border-box w-full mb-1',
+    label: 'font-medium text-sm',
+    help: 'text-xs mb-1 text-gray-600',
+    error: 'text-red-700 text-xs mb-1'
+  }
+});
 Vue.use(Vuex);
 Vue.use(VeeValidate);
 new Vue({
