@@ -4,7 +4,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import Vuex from 'vuex'
-import * as VeeValidate from 'vee-validate'
 import './assets/styles/index.css';
 import VueFormulate from '@braid/vue-formulate'
 Vue.config.productionTip = false
@@ -28,7 +27,6 @@ Vue.use(VueFormulate, {
   }
 });
 Vue.use(Vuex);
-Vue.use(VeeValidate);
 new Vue({
   router,
   store,

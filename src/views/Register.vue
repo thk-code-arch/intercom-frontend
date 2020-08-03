@@ -6,7 +6,6 @@
             <label for="username">Username</label>
             <input
               v-model="user.username"
-              v-validate="'required|min:3|max:20'"
               type="text"
               class="form-control"
               name="username"
@@ -20,7 +19,6 @@
             <label for="email">Email</label>
             <input
               v-model="user.email"
-              v-validate="'required|email|max:50'"
               type="email"
               class="form-control"
               name="email"
@@ -34,7 +32,6 @@
             <label for="password">Password</label>
             <input
               v-model="user.password"
-              v-validate="'required|min:6|max:40'"
               type="password"
               class="form-control"
               name="password"
@@ -97,8 +94,6 @@ export default {
     handleRegister() {
       this.message = '';
       this.submitted = true;
-      this.$validator.validate().then(isValid => {
-        if (isValid) {
           this.$store.dispatch('auth/register', this.user).then(
             data => {
               this.message = data.message;
@@ -112,8 +107,6 @@ export default {
               this.successful = false;
             }
           );
-        }
-      });
     }
   }
 };
