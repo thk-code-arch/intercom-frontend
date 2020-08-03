@@ -13,15 +13,17 @@
       </div>
     </div>
 
-    <label class="btn btn-default">
-      <input type="file" ref="file" @change="selectFile" />
-    </label>
-
-    <button class="btn btn-success" :disabled="!selectedFiles" @click="upload">
-      Upload
-    </button>
-
-    <div class="alert alert-light" role="alert">{{ message }}</div>
+    <FormulateInput
+      ref="file"
+      type="file"
+      name="Upload IFC"
+      :disabled="!selectedFiles"
+    />
+    <a
+      @click.prevent="upload"
+    >
+      Upload the file
+    </a>
   </div>
 </template>
 
