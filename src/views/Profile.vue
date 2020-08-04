@@ -1,6 +1,6 @@
 <template>
-  <div class="px-4">
-    <div class="max-w-6xl bg-white rounded-lg mx-auto my-8 p-8">
+  <div class="flex justify-center mx-auto px-4">
+    <div class="max-w-6xl bg-white rounded-lg m-8 p-8">
         <!-- Top bar -->
         <div class="border-b flex px-6 py-2 mb-4 items-center flex-none">
             <div class="flex flex-col">
@@ -38,6 +38,22 @@
     <ul>
       <li v-for="(project,index) in currentUser.projects" :key="index">{{project}}</li>
     </ul>
+  </div>
+    <div class="max-w-lg bg-white rounded-lg m-8 p-8">
+        <!-- Top bar -->
+        <div class="border-b flex px-6 py-2 mb-4 items-center flex-none">
+            <div class="flex flex-col">
+              <h1 class="text-2xl font-medium mb-2">Profile image</h1>
+                <div class="text-grey-dark text-sm truncate">
+                  Upload Image
+                </div>
+            </div>
+        </div>
+        <!-- TEXT -->
+      <h1 class="text-2xl font-medium mb-2">
+      </h1>
+      <img :src="currentUser.profile_image" class="h-64 w-64 m-auto text-black rounded-full">
+
       <upload-files></upload-files>
   </div>
   </div>

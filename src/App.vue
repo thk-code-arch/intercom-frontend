@@ -1,5 +1,5 @@
 <template>
-<body class="h-screen justify-between antialiased bg-gray-200" id="app">
+<body class="justify-between antialiased bg-gray-200" id="app">
       <header-menu v-if="showDiv"/>
       <router-view/>
 </body>

@@ -9,10 +9,6 @@ import VueFormulate from '@braid/vue-formulate'
 
 Vue.config.productionTip = false
 
-import VueSocketIOExt from 'vue-socket.io-extended';
-import io from 'socket.io-client';
-const socket = io('https://io.bim-cloud.org');
-Vue.use(VueSocketIOExt, socket);
 
 Vue.use(VueFormulate, {
   classes: {

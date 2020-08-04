@@ -10,11 +10,6 @@ export const router = new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
-      name: 'projects',
-      component: Projects
-    },
-    {
       path: '/login',
       component: Login
     },
@@ -27,6 +22,12 @@ export const router = new Router({
       name: 'View',
       // lazy-loaded
       component: () => import('../views/View.vue')
+    },
+    {
+      path: '/chat',
+      name: 'Chat',
+      // lazy-loaded
+      component: () => import('../views/Chat.vue')
     },
     {
       path: '/profile',
