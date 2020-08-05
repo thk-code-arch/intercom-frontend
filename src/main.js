@@ -8,7 +8,8 @@ import './assets/styles/index.css';
 import VueFormulate from '@braid/vue-formulate'
 
 Vue.config.productionTip = false
-
+import VueChatScroll from 'vue-chat-scroll'
+Vue.use(VueChatScroll)
 
 Vue.use(VueFormulate, {
   classes: {

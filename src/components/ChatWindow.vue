@@ -1,29 +1,18 @@
 <template>
-<div>
     <!-- Chat content -->
-    <div class="flex-1 flex flex-col  w-full bg-white overflow-hidden">
+    <div class="my-4 h-64 flex-1 flex flex-col  w-full bg-white overflow-hidden">
         <!-- Top bar -->
         <div class="border-b flex px-6 py-2 items-center flex-none">
             <div class="flex flex-col">
-                <h3 class="text-grey-darkest mb-1 font-extrabold">#general</h3>
+                <h3 class="text-grey-darkest mb-1 font-extrabold">#ChatRoomName</h3>
                 <div class="text-grey-dark text-sm truncate">
-                    Chit-chattin' about ugly HTML and mixing of concerns.
-                </div>
-            </div>
-            <div class="ml-auto hidden md:block">
-                <div class="relative">
-                    <input type="search" placeholder="Search" class="appearance-none border border-grey rounded-lg pl-8 pr-4 py-2">
-                    <div class="absolute pin-y pin-l pl-3 flex items-center justify-center">
-                        <svg class="fill-current text-grey h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" />
-                        </svg>
-                    </div>
+                  Project Description
                 </div>
             </div>
         </div>
         <!-- Chat messages -->
         <!-- Chat messages -->
-        <div class="px-6 py-4 flex-1 overflow-y-scroll">
+        <div class="px-6 py-4 flex-1 overflow-y-scroll" v-chat-scroll>
             <!-- A message -->
             <div class="messages" v-for="(msg, index) in messages" :key="index">
             <div class="flex items-start mb-4 text-sm">
@@ -52,12 +41,12 @@
             </div>
         </div>
     </div>
-</div>
 </template>
 
 <script>
 
 import authHeader from '../services/auth-header';
+import ChatService from "../services/chat.service";
 import Vue from 'vue'
 import VueSocketIOExt from 'vue-socket.io-extended';
 import io from 'socket.io-client';
@@ -73,6 +62,12 @@ export default {
             message: '',
             messages: [],
         }
+    },
+  props: {
+    chatroomid: {
+      type: Array,
+      required: true,
+    }
     },
     sockets: {
     connect() {
@@ -94,6 +89,20 @@ export default {
             });
       this.message = '';
     }
+  },
+  created(){
+      ChatService.getChatLog(1).then(
+      response => {
+        console.log(response.data);
+      },
+      error => {
+        console.log(error);
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
   }
 };
 </script>
