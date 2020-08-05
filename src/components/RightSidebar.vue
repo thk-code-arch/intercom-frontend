@@ -12,7 +12,9 @@
         <!-- TEXT -->
         <div class="flex items-start mb-4 text-sm">
             <div class="flex-1 px-6">
-                <p class="text-black leading-normal">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et eagg</p>
+              <p class="text-black leading-normal">
+                {{ userposition }}
+              </p>
             </div>
         </div>
   </div>
@@ -24,15 +26,42 @@
 import ChatService from "../services/chat.service";
 import ChatWindow from "../components/ChatWindow";
 
+import authHeader from '../services/auth-header';
+import Vue from 'vue'
+import VueSocketIOExt from 'vue-socket.io-extended';
+import io from 'socket.io-client';
+const socket = io('https://io.bim-cloud.org', {
+  query: `token=${authHeader()}`
+});
+Vue.use(VueSocketIOExt, socket);
 export default {
   name: "right-sidebar",
   components: {
     ChatWindow,
   },
+  props:["camPos"],
   data: function() {
     return {
       projectchatroom: [],
-
+      userposition: {},
+    }
+  },
+    sockets: {
+    connect() {
+      console.log('socket connected')
+    },
+    camPos() {
+    },
+    usercamPos(data) {
+      this.userposition = data;
+    }
+  },
+  watch: {
+    camPos: function (val) {
+      // this.$socket.client is `socket.io-client` instance
+      this.$socket.client.emit('camPos',  {
+                message: val
+            });
     }
   },
   created(){

@@ -6,7 +6,7 @@
     <left-sidebar/>
 </div>
 <div class="div3 bg-gray-400 bg-opacity-25"> 
-    <right-sidebar/>
+    <right-sidebar :camPos="camPos"/>
 </div>
 </div>
 
