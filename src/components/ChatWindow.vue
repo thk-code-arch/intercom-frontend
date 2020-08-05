@@ -13,10 +13,25 @@
         <!-- Chat messages -->
         <!-- Chat messages -->
         <div class="px-6 py-4 flex-1 overflow-y-scroll" v-chat-scroll>
+            <pre>{{ hist_messages }}</pre>
+            <!-- A message -->
+            <div class="hist_messages" v-for="(hist_msg, hist_index) in hist_messages" :key="hist_index">
+
+            <div class="flex items-start mb-4 text-sm" v-if="hist_msg.user">
+                <img :src="$profile_image+hist_msg.user.profile_image" class="w-10 h-10 rounded mr-3">
+                <div class="flex-1 overflow-hidden">
+                    <div>
+                        <span class="font-bold">{{ hist_msg.user.username }}</span>
+                        <span class="text-grey text-xs"> {{ hist_msg.time }}</span>
+                    </div>
+                    <p class="text-black leading-normal">{{ hist_msg.message }}</p>
+                </div>
+            </div>
+            </div>
             <!-- A message -->
             <div class="messages" v-for="(msg, index) in messages" :key="index">
             <div class="flex items-start mb-4 text-sm">
-                <img :src="msg.profile_image" class="w-10 h-10 rounded mr-3">
+                <img :src="$profile_image+msg.profile_image" class="w-10 h-10 rounded mr-3">
                 <div class="flex-1 overflow-hidden">
                     <div>
                         <span class="font-bold">{{ msg.username }}</span>
@@ -61,6 +76,7 @@ export default {
         return {
             message: '',
             messages: [],
+            hist_messages: {},
         }
     },
   props: {
@@ -74,11 +90,9 @@ export default {
       console.log('socket connected')
     },
     SEND_MESSAGE() {
-      console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
     },
     MESSAGE(data) {
       this.messages = [...this.messages, data];
-      console.log('message receuved')
     }
   },
   methods: {
@@ -93,10 +107,10 @@ export default {
   created(){
       ChatService.getChatLog(1).then(
       response => {
-        console.log(response.data);
+        this.hist_messages = response.data.chatlogs;
+        console.log(this.hist_messages);
       },
       error => {
-        console.log(error);
         this.content =
           (error.response && error.response.data) ||
           error.message ||

@@ -27,7 +27,9 @@ export default {
       scene: null,
       camera: null,
       controls: null,
-      renderer: null    }
+      renderer: null,
+      camPos: ''
+    }
   },
   components: {
       LeftSidebar,
@@ -35,6 +37,7 @@ export default {
   },
   methods: {
     init () {
+      
       // set container
       this.container = this.$refs.sceneContainer
 

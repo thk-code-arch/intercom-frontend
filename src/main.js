@@ -40,3 +40,9 @@ console.log("muhaaa")
 }
 return Promise.reject(error)
 })
+
+
+//Global Instance Properties
+//
+Vue.prototype.$api_url = "https://icapi.bim-cloud.org/"
+Vue.prototype.$profile_image = "https://icapi.bim-cloud.org/static/profile_image/"
