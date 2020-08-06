@@ -34,6 +34,8 @@ const socket = io(process.env.VUE_APP_IO_URL, {
   query: `token=${authHeader()}`
 });
 Vue.use(VueSocketIOExt, socket);
+Vue.use(require('vue-moment'));
+import moment from 'moment'
 export default {
   name: "right-sidebar",
   components: {
@@ -44,6 +46,8 @@ export default {
     return {
       projectchatroom: [],
       userposition: {},
+      gotlastcamPos: 1,
+      mseconds: 0
     }
   },
     sockets: {
@@ -58,13 +62,19 @@ export default {
   },
   watch: {
     camPos: function (val) {
-      // this.$socket.client is `socket.io-client` instance
-      this.$socket.client.emit('camPos',  {
-                message: val
-            });
+      //dont send too much coordinates in a second
+      this.timenow =  moment();
+      this.mseconds = this.timenow.diff(this.gotlastcamPos);
+
+      if (this.mseconds > 500){
+        this.gotlastcamPos = moment();
+        this.$socket.client.emit('camPos',  {message: val});
+        }
     }
   },
   created(){
+      this.gotlastcamPos = moment();
+      console.log(this.gotlastcamPos);
       ChatService.getProjectChatroom().then(
       response => {
         this.projectchatroom = response.data.id;
