@@ -101,7 +101,7 @@ export default {
       const gltfLoader = new GLTFLoader()
       gltfLoader.setRequestHeader( { 'x-current-project': projectHeader(),"x-access-token": authHeader() } );
       this.gltf = gltfLoader.load(
-        'https://icapi.bim-cloud.org/api/project/get_projectfile',
+        process.env.VUE_APP_API_URL+'api/project/get_projectfile',
         gltf => {
           gltf.scene.traverse((o) => {
             if (o.isMesh) {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 import projectHeader from './project-header';
-const API_URL = 'https://icapi.bim-cloud.org/api/project/';
+const API_URL = process.env.VUE_APP_API_URL+'api/project/';
 
 class ProjectService {
   getProjects() {

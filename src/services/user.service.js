@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://icapi.bim-cloud.org/api/test/';
+const API_URL = process.env.VUE_APP_API_URL+'api/test/';
 
 class UserService {
   getPublicContent() {
