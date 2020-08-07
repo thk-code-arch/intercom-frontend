@@ -142,8 +142,7 @@ export default {
         dir: this.camera.getWorldDirection ( this.vector )
       }
       //send camera position to Server
-      this.$emit('camPosUpdate', this.camPos);
-      console.log(this.camPos)
+      this.$store.dispatch('viewport/setowncamPos', this.camPos)
     },
     render () {
       this.renderer.render(this.scene, this.camera)

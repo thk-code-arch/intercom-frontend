@@ -43,7 +43,11 @@ export default {
   components: {
     ChatWindow,
   },
-  props:["camPos"],
+  computed: {
+    camPosi () {
+      return this.$store.state.viewport.ownCam.position
+    }
+  },
   data: function() {
     return {
       projectchatroom: [],
@@ -63,7 +67,7 @@ export default {
     }
   },
   watch: {
-    camPos: function (val) {
+    camPosi: function (val) {
       //dont send too much coordinates in a second
       this.timenow =  moment();
       this.mseconds = this.timenow.diff(this.gotlastcamPos);

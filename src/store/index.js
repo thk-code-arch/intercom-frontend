@@ -3,12 +3,13 @@ import Vuex from 'vuex';
 
 import { auth } from './auth.module';
 import { curproject } from './project.module';
+import { viewport } from './viewport.module';
 
 Vue.use(Vuex);
-//TODO add current Project module
 export default new Vuex.Store({
   modules: {
     auth,
-    curproject
+    curproject,
+    viewport
   }
 });

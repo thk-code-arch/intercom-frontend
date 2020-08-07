@@ -1,11 +1,12 @@
 <template>
 <div class="h-screen2">
     <left-sidebar/>
-    <right-sidebar :camPos="camPos"/>
-    <view-port @camPosUpdate="camPos"/>
+    <right-sidebar/>
+    <view-port/>
 </div>
 
 </template>
+
 <script>
 import LeftSidebar from "@/components/view/LeftSidebar";
 import RightSidebar from "@/components/view/RightSidebar";
@@ -17,14 +18,5 @@ export default {
       ViewPort,
     LeftSidebar,
     RightSidebar
-  },
-  data() {
-      return {
-          camPos: '',
-      }
-  },
-}
+  }}
 </script>
-
-<style>
-</style>
