@@ -1,6 +1,8 @@
 <template>
-<div class="px-4">
+<div class="m-4 flex flex-col absolute w-64 h-auto right-0 z-10">
+    <div class="h-64">
     <ChatWindow :chatroomid="projectchatroom"/>
+    </div>
   <!-- Online Users -->
   <div class="my-4 flex-1 flex flex-col bg-white overflow-hidden">
         <!-- Top bar -->
@@ -23,10 +25,10 @@
 
 <script>
 
-import ChatService from "../services/chat.service";
-import ChatWindow from "../components/ChatWindow";
+import ChatService from "@/services/chat.service";
+import ChatWindow from "@/components/ChatWindow";
 
-import authHeader from '../services/auth-header';
+import authHeader from '@/services/auth-header';
 import Vue from 'vue'
 import VueSocketIOExt from 'vue-socket.io-extended';
 import io from 'socket.io-client';

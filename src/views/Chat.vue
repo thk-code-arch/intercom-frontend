@@ -1,6 +1,6 @@
 <template>
 
-<div class="flex">
+<div class="flex h-screen2">
     <!-- Top bar -->
     <div class="border-b flex px-6 py-2 items-center flex-none">
         <div class="flex flex-col">

@@ -37,5 +37,8 @@ created () {
   font-family: din-2014;
 }
 
+.h-screen2{
+    height:calc(100vh - 6rem)!important;
+  }
 
 </style>
