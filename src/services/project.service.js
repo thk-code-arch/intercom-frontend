@@ -23,7 +23,7 @@ class ProjectService {
       });
   }
   getProjectinfo() {
-      return axios.get(API_URL + 'get_projectinfo',{ headers:{"x-access-token": authHeader(),'x-current-project': projectHeader() } });
+      return axios.get(API_URL + 'get_projectinfo/'+projectHeader(),{ headers:{"x-access-token": authHeader() } });
   }
   addProject() {
       return axios.post(API_URL + 'add_project',{},{

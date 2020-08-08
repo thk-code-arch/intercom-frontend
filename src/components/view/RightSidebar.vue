@@ -1,5 +1,5 @@
 <template>
-<div class="m-4 flex flex-col absolute w-64 h-auto right-0 z-10">
+<div class="p-4 flex flex-col h-auto">
     <div class="h-64">
     <ChatWindow :chatroomid="projectchatroom"/>
     </div>

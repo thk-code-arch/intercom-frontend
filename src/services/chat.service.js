@@ -16,7 +16,7 @@ class ChatService {
       return axios.get(API_URL + 'log',payload);
   }
   getProjectChatroom() {
-      return axios.get(API_URL + 'get_projectroom',{ headers:{"x-access-token": authHeader(),'x-current-project': projectHeader() } });
+      return axios.get(API_URL + 'get_projectroom/'+projectHeader(),{ headers:{"x-access-token": authHeader() }});
   }
 }
 

@@ -1,5 +1,5 @@
 <template>
-<div class="m-4 flex flex-col absolute w-64 h-auto left-0 z-10">
+<div class="p-4 flex flex-col h-auto">
   <div class="flex-1 flex flex-col bg-white overflow-hidden">
         <!-- Top bar -->
         <div class="border-b flex px-6 py-2 items-center flex-none">

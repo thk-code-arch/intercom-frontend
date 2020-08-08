@@ -78,12 +78,6 @@ export default {
             hist_messages: {},
         }
     },
-  props: {
-    chatroomid: {
-      type: Array,
-      required: true,
-    }
-    },
     sockets: {
     connect() {
       console.log('socket connected')

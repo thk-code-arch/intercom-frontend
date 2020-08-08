@@ -90,9 +90,9 @@ export default {
     },
     loadModel() {
       const gltfLoader = new GLTFLoader()
-      gltfLoader.setRequestHeader( { 'x-current-project': projectHeader(),"x-access-token": authHeader() } );
+      gltfLoader.setRequestHeader( { 'x-access-token': authHeader()} );
       this.gltf = gltfLoader.load(
-        process.env.VUE_APP_API_URL+'api/project/get_projectfile',
+        process.env.VUE_APP_API_URL+'api/project/get_projectfile/'+projectHeader(),
         gltf => {
           gltf.scene.traverse((o) => {
             if (o.isMesh) {
