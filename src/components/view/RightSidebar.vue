@@ -15,7 +15,7 @@
         <div class="flex items-start mb-4 text-sm">
             <div class="flex-1 px-6">
               <p class="text-black leading-normal">
-                {{ userposition }}
+                {{ connectedPlayers }}
               </p>
             </div>
         </div>
@@ -28,16 +28,10 @@
 import ChatService from "@/services/chat.service";
 import ChatWindow from "@/components/ChatWindow";
 
-import authHeader from '@/services/auth-header';
 import Vue from 'vue'
-import VueSocketIOExt from 'vue-socket.io-extended';
-import io from 'socket.io-client';
-const socket = io(process.env.VUE_APP_IO_URL, {
-  query: `token=${authHeader()}`
-});
-Vue.use(VueSocketIOExt, socket);
 Vue.use(require('vue-moment'));
 import moment from 'moment'
+
 export default {
   name: "right-sidebar",
   components: {
@@ -46,6 +40,9 @@ export default {
   computed: {
     camPosi () {
       return this.$store.state.viewport.ownCam.position
+    },
+    connectedPlayers () {
+      return this.$store.state.viewport.players
     }
   },
   data: function() {
@@ -56,34 +53,32 @@ export default {
       mseconds: 0
     }
   },
-    sockets: {
-    connect() {
-      console.log('socket connected')
-    },
-    camPos() {
-    },
-    usercamPos(data) {
-      this.userposition = data;
-    }
-  },
   watch: {
     camPosi: function (val) {
       //dont send too much coordinates in a second
       this.timenow =  moment();
       this.mseconds = this.timenow.diff(this.gotlastcamPos);
-
       if (this.mseconds > 500){
         this.gotlastcamPos = moment();
-        this.$socket.client.emit('camPos',  {message: val});
+        console.log(val)
+        this.$store.dispatch('viewport/move');
         }
     }
   },
+  destroyed(){
+        this.$store.dispatch('viewport/byebye');
+   },
   created(){
+      //init message delay
       this.gotlastcamPos = moment();
       console.log(this.gotlastcamPos);
+      //get actaual chatroomid
       ChatService.getProjectChatroom().then(
       response => {
         this.projectchatroom = response.data.id;
+        // connect to room
+        this.$store.dispatch('viewport/newplayer');
+        this.$store.dispatch('viewport/listplayer');
       },
       error => {
         console.log(error);

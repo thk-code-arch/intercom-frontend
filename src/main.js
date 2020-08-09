@@ -11,6 +11,15 @@ Vue.config.productionTip = false
 import VueChatScroll from 'vue-chat-scroll'
 Vue.use(VueChatScroll)
 
+// SocketsIO Chat
+import VueSocketIOExt from 'vue-socket.io-extended';
+import io from 'socket.io-client';
+import authHeader from '@/services/auth-header';
+const socket = io(process.env.VUE_APP_IO_URL, {
+  query: `token=${authHeader()}`
+});
+Vue.use(VueSocketIOExt, socket);
+
 Vue.use(VueFormulate, {
   classes: {
     outer: 'mb-4',

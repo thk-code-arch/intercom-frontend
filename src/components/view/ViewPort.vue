@@ -155,6 +155,7 @@ export default {
       window.addEventListener("resize", this.resizeWindow);
     },
     destroyed() {
+      this.scene.dispose();
       window.removeEventListener("resize", this.resizeWindow);
     },
 }
