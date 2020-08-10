@@ -59,41 +59,25 @@
 
 <script>
 
-import authHeader from '../services/auth-header';
 import ChatService from "../services/chat.service";
-import Vue from 'vue'
-import VueSocketIOExt from 'vue-socket.io-extended';
-import io from 'socket.io-client';
-const socket = io(process.env.VUE_APP_IO_URL, {
-  query: `token=${authHeader()}`
-});
-Vue.use(VueSocketIOExt, socket);
 
 export default {
   name: "ChatWindow",
     data() {
         return {
             message: '',
-            messages: [],
             hist_messages: {},
         }
     },
-    sockets: {
-    connect() {
-      console.log('socket connected')
-    },
-    SEND_MESSAGE() {
-    },
-    MESSAGE(data) {
-      this.messages = [...this.messages, data];
+    computed: {
+      messages() {
+      return this.$store.state.chatroom.messages
     }
   },
   methods: {
     clickButton() {
       // this.$socket.client is `socket.io-client` instance
-      this.$socket.client.emit('SEND_MESSAGE',  {
-                message: this.message
-            });
+      this.$store.dispatch('chatroom/CHAT_sendmessage',this.message);
       this.message = '';
     }
   },

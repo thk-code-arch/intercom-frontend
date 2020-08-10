@@ -2,8 +2,8 @@ import axios from 'axios';
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
 import Vuex from 'vuex'
+import store from './store'
 import './assets/styles/index.css';
 import VueFormulate from '@braid/vue-formulate'
 
@@ -12,13 +12,46 @@ import VueChatScroll from 'vue-chat-scroll'
 Vue.use(VueChatScroll)
 
 // SocketsIO Chat
-import VueSocketIOExt from 'vue-socket.io-extended';
 import io from 'socket.io-client';
 import authHeader from '@/services/auth-header';
-const socket = io(process.env.VUE_APP_IO_URL, {
+import VueSocketIO from 'vue-socket.io'
+
+
+const playersocket = io(process.env.VUE_APP_IO_URL+'viewport', {
   query: `token=${authHeader()}`
 });
-Vue.use(VueSocketIOExt, socket);
+
+const chatsocket = io(process.env.VUE_APP_IO_URL+'chatroom', {
+  query: `token=${authHeader()}`
+});
+
+Vue.use(new VueSocketIO({
+    debug: true,
+    connection: playersocket, //options object is Optional
+    vuex: {
+      store,
+      options: { useConnectionNamespace: true },
+      actionPrefix: "PLAYER_",
+      mutationPrefix: "PLAYER_"
+    }
+  })
+);
+
+
+Vue.use(
+  new VueSocketIO({
+    connection: chatsocket,
+    debug: true,
+    vuex: {
+      store,
+      options: { useConnectionNamespace: true },
+      actionPrefix: 'CHAT_',
+      mutationPrefix: "CHAT_"
+    },
+  }),
+);
+
+
 
 Vue.use(VueFormulate, {
   classes: {

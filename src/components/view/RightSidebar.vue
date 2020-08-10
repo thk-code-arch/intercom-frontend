@@ -1,7 +1,7 @@
 <template>
 <div class="p-4 flex flex-col h-auto">
     <div class="h-64">
-    <ChatWindow :chatroomid="projectchatroom"/>
+      <ChatWindow :chatroomid="projectchatroom"/>
     </div>
   <!-- Online Users -->
   <div class="my-4 flex-1 flex flex-col bg-white overflow-hidden">
@@ -35,7 +35,7 @@ import moment from 'moment'
 export default {
   name: "right-sidebar",
   components: {
-    ChatWindow,
+        ChatWindow,
   },
   computed: {
     camPosi () {
@@ -77,7 +77,7 @@ export default {
       response => {
         this.projectchatroom = response.data.id;
         // connect to room
-        this.$store.dispatch('viewport/newplayer');
+        this.$store.dispatch('viewport/PLAYER_newplayer');
         this.$store.dispatch('viewport/listplayer');
       },
       error => {
