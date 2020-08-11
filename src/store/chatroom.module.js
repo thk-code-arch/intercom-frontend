@@ -4,28 +4,37 @@ export const chatroom = {
   namespaced: true,
   state: {
     messages:[],
-    currentchatroom:1,
+    currentchatroom:0,
   },
   actions: {
+    select_chatroom({ commit }, chatID) {
+      commit("Select_Chatroom", chatID);
+    },
     load_chatlog({ commit ,state }) {
       return ChatService.getChatLog(state.currentchatroom).then((message) => {
-		commit("CHAT_message", message.chatlogs);
+		commit("loaded_chatlog", message.data);
         this._vm.$socket.emit('join_chatroom', state.currentchatroom);
       })
     },
-    CHAT_sendmessage({ commit },data) {
+    CHAT_sendmessage({ commit, state },data) {
       console.log(data);
-      this._vm.$socket.emit('send_message', {message:data});
+      this._vm.$socket.emit('send_message', {message:data, chatroomId: state.currentchatroom});
       commit("CHAT_SENDMESSAGE");
     },
     CHAT_message({ commit }, data) {
       console.log("fromaction",data);
       return ChatService.getmsgbyid(data).then((message) => {
-		commit("CHAT_message", message.chatlogs);
+		commit("CHAT_message", message.data);
       })
     }
   },
   mutations: {
+    Select_Chatroom(state, chatID ) {
+      state.currentchatroom = chatID;
+    },
+    loaded_chatlog(state, data ) {
+      state.messages = [data];
+    },
     CHAT_message(state, data) {
       state.messages = [...state.messages, data];
     },

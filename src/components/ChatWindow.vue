@@ -15,7 +15,7 @@
         <div class="px-6 py-4 flex-1 overflow-y-scroll" v-chat-scroll>
           <pre>{{ messages }}</pre>
             <!-- A message -->
-           <div class="hist_messages" v-for="(hist_msg, hist_index) in messages[0]" :key="hist_index">
+           <div class="hist_messages" v-for="(hist_msg, hist_index) in messages" :key="hist_index">
 
             <div class="flex items-start mb-4 text-sm" v-if="hist_msg.user">
                 <img :src="$profile_image+hist_msg.user.profile_image" class="w-10 h-10 rounded mr-3">
@@ -55,10 +55,10 @@ export default {
             message: '',
         }
     },
-    computed: {
-      messages() {
-      return this.$store.state.chatroom.messages
-    }
+  computed: {
+    messages() {
+    return this.$store.state.chatroom.messages
+  }
   },
   methods: {
     clickButton() {
@@ -74,7 +74,7 @@ export default {
     }
   },
   mounted(){
-      this.$store.dispatch('iosockets/init_chatroom')
+      this.$store.dispatch('iosockets/init_chatroom');
       this.$store.dispatch('chatroom/load_chatlog');
   }
 };

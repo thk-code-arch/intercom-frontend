@@ -1,7 +1,7 @@
 <template>
 <div class="p-4 flex flex-col h-auto">
     <div class="h-64">
-      <ChatWindow :chatroomid="projectchatroom"/>
+      <ChatWindow/>
     </div>
   <!-- Online Users -->
   <div class="my-4 flex-1 flex flex-col bg-white overflow-hidden">
@@ -47,7 +47,6 @@ export default {
   },
   data: function() {
     return {
-      projectchatroom: [],
       userposition: {},
       gotlastcamPos: 1,
       mseconds: 0
@@ -75,8 +74,8 @@ export default {
       //get actaual chatroomid
       ChatService.getProjectChatroom().then(
       response => {
-        this.projectchatroom = response.data.id;
         // connect to room
+        this.$store.dispatch('chatroom/select_chatroom',response.data.id);
         this.$store.dispatch('viewport/PLAYER_newplayer');
         this.$store.dispatch('viewport/listplayer');
       },
