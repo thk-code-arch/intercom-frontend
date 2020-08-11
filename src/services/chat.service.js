@@ -9,11 +9,10 @@ class ChatService {
   }
 
   getChatLog(chatroomID) {
-      let payload = {
-      headers: {"x-access-token": authHeader()},
-      params: {chatroomId: chatroomID},
-      }
-      return axios.get(API_URL + 'log',payload);
+      return axios.get(API_URL + 'log/'+chatroomID,{ headers:{"x-access-token": authHeader() }});
+  }
+  getmsgbyid(msgID) {
+      return axios.get(API_URL + 'msgbyid/'+msgID,{ headers:{"x-access-token": authHeader() }});
   }
   getProjectChatroom() {
       return axios.get(API_URL + 'get_projectroom/'+projectHeader(),{ headers:{"x-access-token": authHeader() }});

@@ -13,8 +13,9 @@
         <!-- Chat messages -->
         <!-- Chat messages -->
         <div class="px-6 py-4 flex-1 overflow-y-scroll" v-chat-scroll>
+          <pre>{{ messages }}</pre>
             <!-- A message -->
-            <div class="hist_messages" v-for="(hist_msg, hist_index) in hist_messages" :key="hist_index">
+           <div class="hist_messages" v-for="(hist_msg, hist_index) in messages[0]" :key="hist_index">
 
             <div class="flex items-start mb-4 text-sm" v-if="hist_msg.user">
                 <img :src="$profile_image+hist_msg.user.profile_image" class="w-10 h-10 rounded mr-3">
@@ -24,19 +25,6 @@
                         <span class="text-grey text-xs"> {{ hist_msg.time }}</span>
                     </div>
                     <p class="text-black leading-normal">{{ hist_msg.message }}</p>
-                </div>
-            </div>
-            </div>
-            <!-- A message -->
-            <div class="messages" v-for="(msg, index) in messages" :key="index">
-            <div class="flex items-start mb-4 text-sm">
-                <img :src="$profile_image+msg.profile_image" class="w-10 h-10 rounded mr-3">
-                <div class="flex-1 overflow-hidden">
-                    <div>
-                        <span class="font-bold">{{ msg.username }}</span>
-                        <span class="text-grey text-xs"> {{ msg.time }}</span>
-                    </div>
-                    <p class="text-black leading-normal">{{ msg.message }}</p>
                 </div>
             </div>
             </div>
@@ -59,14 +47,12 @@
 
 <script>
 
-import ChatService from "../services/chat.service";
 
 export default {
   name: "ChatWindow",
     data() {
         return {
             message: '',
-            hist_messages: {},
         }
     },
     computed: {
@@ -81,19 +67,15 @@ export default {
       this.message = '';
     }
   },
-  created(){
-      ChatService.getChatLog(1).then(
-      response => {
-        this.hist_messages = response.data.chatlogs;
-        console.log(this.hist_messages);
-      },
-      error => {
-        this.content =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-      }
-    );
+  watch: {
+    chatroomid: function(newVal, oldVal) { // watch it
+      console.log('chatroomid  changed: ', newVal, ' | was: ', oldVal)
+      // TODO dispatch load chatlog on change
+    }
+  },
+  mounted(){
+      this.$store.dispatch('iosockets/init_chatroom')
+      this.$store.dispatch('chatroom/load_chatlog');
   }
 };
 </script>

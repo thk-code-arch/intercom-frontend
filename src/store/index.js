@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 
 import { auth } from './auth.module';
 import { curproject } from './project.module';
+import { iosockets } from './sockets.module';
 import { viewport } from './viewport.module';
 import { chatroom } from './chatroom.module';
 
@@ -11,6 +12,7 @@ export default new Vuex.Store({
   modules: {
     auth,
     curproject,
+    iosockets,
     viewport,
     chatroom
   }

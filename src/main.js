@@ -11,47 +11,6 @@ Vue.config.productionTip = false
 import VueChatScroll from 'vue-chat-scroll'
 Vue.use(VueChatScroll)
 
-// SocketsIO Chat
-import io from 'socket.io-client';
-import authHeader from '@/services/auth-header';
-import VueSocketIO from 'vue-socket.io'
-
-
-const playersocket = io(process.env.VUE_APP_IO_URL+'viewport', {
-  query: `token=${authHeader()}`
-});
-
-const chatsocket = io(process.env.VUE_APP_IO_URL+'chatroom', {
-  query: `token=${authHeader()}`
-});
-
-Vue.use(new VueSocketIO({
-    debug: true,
-    connection: playersocket, //options object is Optional
-    vuex: {
-      store,
-      options: { useConnectionNamespace: true },
-      actionPrefix: "PLAYER_",
-      mutationPrefix: "PLAYER_"
-    }
-  })
-);
-
-
-Vue.use(
-  new VueSocketIO({
-    connection: chatsocket,
-    debug: true,
-    vuex: {
-      store,
-      options: { useConnectionNamespace: true },
-      actionPrefix: 'CHAT_',
-      mutationPrefix: "CHAT_"
-    },
-  }),
-);
-
-
 
 Vue.use(VueFormulate, {
   classes: {
