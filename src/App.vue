@@ -22,9 +22,19 @@ computed:{
     },
     showSidebar() {
         return this.$route.path == '/view'
+    },
+    chatroomid() {
+    return this.$store.state.chatroom.currentchatroom
     }
 //TODO add delete localstorage when JWT Token is expired
-},
+  },
+  watch: {
+    chatroomid: function(newVal, oldVal) { // watch it
+      console.log('chatroomid  changed: ', newVal, ' | was: ', oldVal)
+      // TODO dispatch load chatlog on change
+      this.$store.dispatch('chatroom/load_chatlog',oldVal);
+    }
+  },
 created () {
     //set <header title>
 	document.title = "InterCom";

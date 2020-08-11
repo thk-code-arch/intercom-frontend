@@ -10,11 +10,11 @@ export const chatroom = {
     select_chatroom({ commit }, chatID) {
       commit("Select_Chatroom", chatID);
     },
-    load_chatlog({ commit ,state }) {
+    load_chatlog({ commit ,state }, oldroom) {
       if (state.currentchatroom !== 0){
         ChatService.getChatLog(state.currentchatroom).then((message) => {
 		commit("loaded_chatlog", message.data);
-        this._vm.$socket.emit('join_chatroom', state.currentchatroom);
+        this._vm.$socket.emit('join_chatroom',{oldRoom: oldroom, newRoom: state.currentchatroom});
         });
       }
     },

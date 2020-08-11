@@ -1,6 +1,6 @@
 <template>
 <div class="h-screen2">
-<div class="flex flex-row absolute z-10 nopointer">
+<div class="flex flex-row w-full absolute z-10 nopointer">
 
 <div class="w-full h-screen2">
 <vue-splitter>

@@ -58,22 +58,12 @@ export default {
     messages() {
     return this.$store.state.chatroom.messages
   },
-    chatroomid() {
-    return this.$store.state.chatroom.currentchatroom
-  }
   },
   methods: {
     clickButton() {
       // this.$socket.client is `socket.io-client` instance
       this.$store.dispatch('chatroom/CHAT_sendmessage',this.message);
       this.message = '';
-    }
-  },
-  watch: {
-    chatroomid: function(newVal, oldVal) { // watch it
-      console.log('chatroomid  changed: ', newVal, ' | was: ', oldVal)
-      // TODO dispatch load chatlog on change
-      this.$store.dispatch('chatroom/load_chatlog');
     }
   },
   mounted(){
