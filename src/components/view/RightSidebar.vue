@@ -75,6 +75,7 @@ export default {
       ChatService.getProjectChatroom().then(
       response => {
         // connect to room
+        console.log("step1");
         this.$store.dispatch('chatroom/select_chatroom',response.data.id);
         this.$store.dispatch('viewport/PLAYER_newplayer');
         this.$store.dispatch('viewport/listplayer');

@@ -13,7 +13,6 @@
         <!-- Chat messages -->
         <!-- Chat messages -->
         <div class="px-6 py-4 flex-1 overflow-y-scroll" v-chat-scroll>
-          <pre>{{ messages }}</pre>
             <!-- A message -->
            <div class="hist_messages" v-for="(hist_msg, hist_index) in messages" :key="hist_index">
 
@@ -58,6 +57,9 @@ export default {
   computed: {
     messages() {
     return this.$store.state.chatroom.messages
+  },
+    chatroomid() {
+    return this.$store.state.chatroom.currentchatroom
   }
   },
   methods: {
@@ -71,6 +73,7 @@ export default {
     chatroomid: function(newVal, oldVal) { // watch it
       console.log('chatroomid  changed: ', newVal, ' | was: ', oldVal)
       // TODO dispatch load chatlog on change
+      this.$store.dispatch('chatroom/load_chatlog');
     }
   },
   mounted(){
