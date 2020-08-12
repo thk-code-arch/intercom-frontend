@@ -25,7 +25,6 @@
 
 <script>
 
-import ChatService from "@/services/chat.service";
 import ChatWindow from "@/components/ChatWindow";
 
 import Vue from 'vue'
@@ -65,29 +64,18 @@ export default {
     }
   },
   destroyed(){
-        this.$store.dispatch('viewport/byebye');
+        this.$store.dispatch('viewport/leave_viewport');
    },
   created(){
       //init message delay
       this.gotlastcamPos = moment();
       console.log(this.gotlastcamPos);
-      //get actaual chatroomid
-      ChatService.getProjectChatroom().then(
-      response => {
-        // connect to room
-        console.log("step1");
-        this.$store.dispatch('chatroom/select_chatroom',response.data.id);
-        this.$store.dispatch('viewport/PLAYER_newplayer');
-        this.$store.dispatch('viewport/listplayer');
-      },
-      error => {
-        console.log(error);
-        this.content =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-      }
-    );
+  },
+  mounted(){
+      //init viewport socket
+      this.$store.dispatch('iosockets/init_viewport');
+      // join viewport room
+      this.$store.dispatch('viewport/join_viewport');
   }
 };
 </script>

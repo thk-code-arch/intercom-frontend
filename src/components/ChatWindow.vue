@@ -67,7 +67,9 @@ export default {
     }
   },
   mounted(){
+      // Init chatroom socket
       this.$store.dispatch('iosockets/init_chatroom');
+      // join chat room
       this.$store.dispatch('chatroom/load_chatlog');
   }
 };

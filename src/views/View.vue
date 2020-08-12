@@ -39,6 +39,7 @@ import LeftSidebar from "@/components/view/LeftSidebar";
 import RightSidebar from "@/components/view/RightSidebar";
 import ViewPort from "@/components/view/ViewPort.vue";
 
+import ChatService from "@/services/chat.service";
 export default {
   name: 'View',
   components: {
@@ -46,7 +47,26 @@ export default {
       ViewPort,
     LeftSidebar,
     RightSidebar
-  }}
+  },
+  created(){
+      //get actaual chatroomid
+      ChatService.getProjectChatroom().then(
+      response => {
+        // connect to room
+        console.log("step1");
+        this.$store.dispatch('chatroom/select_chatroom',response.data.id);
+        this.$store.dispatch('viewport/select_viewport',response.data.id);
+      },
+      error => {
+        console.log(error);
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
+  },
+}
 </script>
 <style>
 .allpointer{

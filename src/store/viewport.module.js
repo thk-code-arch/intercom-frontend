@@ -1,18 +1,9 @@
-//const sock = io(process.env.VUE_APP_IO_URL+'viewport', {
-//  query: `token=${authHeader()}`
-//});
-
-const player = {};
-
-const players = [];
-
 
 export const viewport = {
   namespaced: true,
   state: {
-    isconnected : false,
-    player,
-    players,
+    currentviewport:0,
+    players: [],
     ownCam: {
      position:''
     }
@@ -21,11 +12,41 @@ export const viewport = {
     setowncamPos({ commit },position) {
       commit('owncamPos', position);
     },
-    PLAYER_newplayer({ commit, rootState }) {
-      player.chatroom = rootState.curproject.theproject.id.toString();
-      this._vm.$socket.emit('newplayer', player);
-      commit("PLAYER_NEWPLAYER");
+    select_viewport({ commit }, chatID) {
+      commit("Select_Viewport", chatID);
     },
+    join_viewport({ state }, oldroom) {
+        console.log("join viwport socket");
+      if (state.currentviewport !== 0){
+        console.log("join viwport notnull");
+        this._vm.$socket.viewport.emit('join_viewport',{oldRoom: oldroom, newRoom: state.currentviewport});
+      }
+    },
+    push_position({ state }) {
+      if (state.currentviewport !== 0){
+        this._vm.$socket.viewport.emit('moveTo',{postition: state.ownCam.postition, chatroomId: state.currentviewport});
+      }
+      // push ownCam Position
+    },
+    leave_viewport({ commit, state }) {
+      if (state.currentviewport !== 0){
+        this._vm.$socket.viewport.emit('disconnect',{chatroomId: state.currentviewport});
+        commit("Select_Viewport", 0);
+      }
+      // disconnect when destroy View
+    },
+    PLAYER_getplayers({ commit }, data) {
+      // get all connected players in array
+      console.log("getplayer",data);
+      commit("get_players", data);
+    },
+    PLAYER_getpositions({ commit }, data) {
+      // update postition in player array
+      console.log("getpositions",data);
+      commit("get_positions", data);
+    },
+
+/////////////////////////////////////////////////////
 //    newplayer({ commit, rootState }) {
 //      player.chatroom = rootState.curproject.theproject.id.toString();
 //      sock.emit("connect", player, p => {
@@ -43,14 +64,15 @@ export const viewport = {
 //    byebye() {
 //      sock.emit("bye-bye",player);
 //    }
+/////////////////////////////////////////////////////
   },
   mutations: {
     owncamPos( state, position){
     state.ownCam.position = position
     },
-    PLAYER_NEWPLAYER(state) {
-      state.isconnected = true;
-    }
+    Select_Viewport(state, chatID ) {
+      state.currentviewport = chatID;
+    },
 //    updatePlayer(state, player) {
 //      state.player = player;
 //    },

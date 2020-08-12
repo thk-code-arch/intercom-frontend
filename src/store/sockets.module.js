@@ -26,10 +26,10 @@ export const iosockets = {
         Vue.use(
           new VueSocketIO({
             connection: chatsocket,
+            options: { useConnectionNamespace: true },
             debug: true,
             vuex: {
               store,
-              options: { useConnectionNamespace: true },
               actionPrefix: 'CHAT_',
               mutationPrefix: "CHAT_"
             },
@@ -39,16 +39,17 @@ export const iosockets = {
       }
     },
     init_viewport({ commit , state }) {
-      if (state.chatroomInit === false){
+      console.log("init viwport socket");
+      if (state.viewportInit === false){
         const playersocket = io(process.env.VUE_APP_IO_URL+'viewport', {
           query: `token=${authHeader()}`
         });
         Vue.use(new VueSocketIO({
             debug: true,
             connection: playersocket, //options object is Optional
+            options: { useConnectionNamespace: true },
             vuex: {
               store,
-              options: { useConnectionNamespace: true },
               actionPrefix: "PLAYER_",
               mutationPrefix: "PLAYER_"
             }

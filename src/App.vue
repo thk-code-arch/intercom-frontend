@@ -25,6 +25,9 @@ computed:{
     },
     chatroomid() {
     return this.$store.state.chatroom.currentchatroom
+    },
+    viewportid() {
+    return this.$store.state.viewport.currentviewport
     }
 //TODO add delete localstorage when JWT Token is expired
   },
@@ -33,6 +36,11 @@ computed:{
       console.log('chatroomid  changed: ', newVal, ' | was: ', oldVal)
       // TODO dispatch load chatlog on change
       this.$store.dispatch('chatroom/load_chatlog',oldVal);
+    },
+    viewportid: function(newVal, oldVal) { // watch it
+      console.log('viewportid  changed: ', newVal, ' | was: ', oldVal)
+      // TODO dispatch load chatlog on change
+      this.$store.dispatch('viewport/join_viewport',oldVal);
     }
   },
 created () {
