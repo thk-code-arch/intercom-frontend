@@ -4,9 +4,7 @@ export const viewport = {
   state: {
     currentviewport:0,
     players: [],
-    ownCam: {
-     position:''
-    }
+    camPosi: {},
   },
   actions: {
     setowncamPos({ commit },position) {
@@ -15,16 +13,17 @@ export const viewport = {
     select_viewport({ commit }, chatID) {
       commit("Select_Viewport", chatID);
     },
-    join_viewport({ state }, oldroom) {
+    join_viewport({ commit, state }, oldroom) {
         console.log("join viwport socket");
       if (state.currentviewport !== 0){
         console.log("join viwport notnull");
         this._vm.$socket.viewport.emit('join_viewport',{oldRoom: oldroom, newRoom: state.currentviewport});
+        commit("get_players", []);
       }
     },
     push_position({ state }) {
       if (state.currentviewport !== 0){
-        this._vm.$socket.viewport.emit('moveTo',{postition: state.ownCam.postition, chatroomId: state.currentviewport});
+        this._vm.$socket.viewport.emit('moveTo',{postition: state.camPosi, chatroomId: state.currentviewport});
       }
       // push ownCam Position
     },
@@ -33,58 +32,36 @@ export const viewport = {
         this._vm.$socket.viewport.emit('disconnect',{chatroomId: state.currentviewport});
         commit("Select_Viewport", 0);
       }
+      // TODO add disconnect 
       // disconnect when destroy View
     },
-    PLAYER_getplayers({ commit }, data) {
-      // get all connected players in array
-      console.log("getplayer",data);
-      commit("get_players", data);
-    },
-    PLAYER_getpositions({ commit }, data) {
-      // update postition in player array
-      console.log("getpositions",data);
-      commit("get_positions", data);
-    },
-
-/////////////////////////////////////////////////////
-//    newplayer({ commit, rootState }) {
-//      player.chatroom = rootState.curproject.theproject.id.toString();
-//      sock.emit("connect", player, p => {
-//        commit("updatePlayer", p);
-//      });
-//    },
-//    listplayer({ commit }) {
-//      sock.on("list-players", players => {
-//        commit("updatePlayers", players);
-//      });
-//    },
-//    move({ commit }) {
-//      commit("moveTo");
-//    },
-//    byebye() {
-//      sock.emit("bye-bye",player);
-//    }
-/////////////////////////////////////////////////////
+    PLAYER_getplayers({ commit, state, rootState }, data) {
+    // get all connected players in array
+    console.log(data.userid,rootState.auth.user.id);
+    if (data.userid !== rootState.auth.user.id){
+      var players = state.players;
+      var index = players.findIndex(x => x.userid==data.userid)
+      if (index === -1){
+        players.push(data);
+      }
+      else {
+        players.splice(index, 1);
+        players.push(data);
+      }
+    commit("get_players", players);
+    }
+    }
   },
   mutations: {
     owncamPos( state, position){
-    state.ownCam.position = position
+    state.camPosi = position;
     },
     Select_Viewport(state, chatID ) {
       state.currentviewport = chatID;
     },
-//    updatePlayer(state, player) {
-//      state.player = player;
-//    },
-//    updatePlayers(state, players) {
-//      players = players.filter(e => e.sID !== state.player.sID);
-//      state.players = players;
-//    },
-//    moveTo(state) {
-//      const {position} = state.ownCam;
-//      const { chatroom } = state.player;
-//      sock.emit("move-to",{ chatroom, position });
-//    },
+    get_players(state, data) {
+      state.players = data;
+    },
   }
 };
 
