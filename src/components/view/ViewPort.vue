@@ -18,8 +18,13 @@ export default {
       camera: null,
       controls: null,
       renderer: null,
-      camPos: ''
+      camPos: '',
     }
+  },
+  computed: {
+    othercamPos() {
+    return this.$store.state.viewport.othercamPos
+  }
   },
   methods: {
     resizeWindow(){
@@ -133,6 +138,13 @@ export default {
         undefined
       )
     },
+    getCameraPosition () {
+      this.camera.position.x = this.othercamPos.position.x
+      this.camera.position.y = this.othercamPos.position.y
+      this.camera.position.z = this.othercamPos.position.z
+      this.controls.update();
+      this.render()
+    },
     updateCamera () {
       this.render()
       this.camPos = {
@@ -148,16 +160,21 @@ export default {
       this.renderer.render(this.scene, this.camera)
     }
   },
+  watch: {
+    othercamPos: function() { // watch it
+      this.getCameraPosition();
+    }
+  },
   mounted () {
     this.init()
   },
   created() {
       window.addEventListener("resize", this.resizeWindow);
     },
-    destroyed() {
-      this.scene.dispose();
-      window.removeEventListener("resize", this.resizeWindow);
-    },
+  destroyed() {
+    this.scene.dispose();
+    window.removeEventListener("resize", this.resizeWindow);
+  }
 }
 </script>
 

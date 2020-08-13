@@ -5,10 +5,14 @@ export const viewport = {
     currentviewport:0,
     players: [],
     camPosi: {},
+    othercamPos: {}
   },
   actions: {
     setowncamPos({ commit },position) {
       commit('owncamPos', position);
+    },
+    getcamPos({ commit },position) {
+      commit('othercamPos', position);
     },
     select_viewport({ commit }, chatID) {
       commit("Select_Viewport", chatID);
@@ -23,7 +27,7 @@ export const viewport = {
     },
     push_position({ state }) {
       if (state.currentviewport !== 0){
-        this._vm.$socket.viewport.emit('moveTo',{postition: state.camPosi, chatroomId: state.currentviewport});
+        this._vm.$socket.viewport.emit('moveTo',{position: state.camPosi, chatroomId: state.currentviewport});
       }
       // push ownCam Position
     },
@@ -55,6 +59,9 @@ export const viewport = {
   mutations: {
     owncamPos( state, position){
     state.camPosi = position;
+    },
+    othercamPos( state, position){
+    state.othercamPos = position;
     },
     Select_Viewport(state, chatID ) {
       state.currentviewport = chatID;
