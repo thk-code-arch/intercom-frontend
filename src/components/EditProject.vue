@@ -18,12 +18,12 @@
       name="projectinfo.description"
       :options="projects"
     />
-      <upload-files></upload-files>
+    <UploadIFC/>
   </div>
 </template>
 
 <script>
-import UploadFiles from "./UploadFiles";
+import UploadIFC from "./project/UploadIFC";
 import ProjectService from "../services/project.service";
 export default {
   name: 'edit-project',
@@ -34,7 +34,7 @@ export default {
     }
   },
   components: {
-      UploadFiles
+      UploadIFC
   },
   mounted() {
       ProjectService.getProjectinfo().then(
