@@ -58,5 +58,13 @@ created () {
 .h-screen2{
     height:calc(100vh - 6rem)!important;
   }
-
+.btn {
+  @apply font-bold py-2 px-4 rounded;
+}
+.btn-blue {
+  @apply bg-gray-500 text-white;
+}
+.btn-blue:hover {
+  @apply bg-indigo-400;
+}
 </style>

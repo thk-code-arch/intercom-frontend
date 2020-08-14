@@ -15,7 +15,7 @@
         <div class="flex flex-row mb-4 p-2 text-sm">
            <div class="m-1 tooltip" v-for="(player, players) in connectedPlayers" :key="players">
                 <img :src="$profile_image+player.profile_image" class="w-10 h-10 rounded">
-                <span class='tooltip-text bg-white border p-3 mb-6 rounded'>
+                <span class='tooltip-text bg-white border w-10 h-10 items-center p-2 rounded'>
                   <svg v-on:click="getPlayercamPos(player)" viewBox="0 0 20 20" fill="currentColor" class="camera w-6 h-6"><path fill-rule="evenodd" d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path></svg>
                 </span>
            </div>

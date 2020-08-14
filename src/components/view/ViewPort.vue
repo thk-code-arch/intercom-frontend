@@ -76,7 +76,7 @@ export default {
       // create renderer
       this.renderer = new THREE.WebGLRenderer({ antialias: true })
       this.renderer.setPixelRatio(window.devicePixelRatio)
-      this.renderer.gammaOutput = true
+      this.renderer.outputEncoding = true
       this.renderer.gammaFactor = 2.2
       this.renderer.shadowMap.enabled = true
       // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
