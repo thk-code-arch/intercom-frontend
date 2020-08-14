@@ -1,6 +1,6 @@
 <template>
 <div class="p-4 flex flex-col h-auto">
-    <div class="h-64">
+    <div class="h-full">
       <ChatWindow/>
     </div>
   <!-- Online Users -->
