@@ -54,6 +54,9 @@ export const viewport = {
       }
     commit("get_players", players);
     }
+    },
+    clear({commit}){
+      commit('clear');
     }
   },
   mutations: {
@@ -69,6 +72,12 @@ export const viewport = {
     get_players(state, data) {
       state.players = data;
     },
+    clear(state) {
+      state.players =[];
+      state.camPosi ={};
+      state.othercamPos ={};
+      state.currentviewport =0;
+    }
   }
 };
 
