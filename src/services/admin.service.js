@@ -1,6 +1,6 @@
 import axios from 'axios';
 import authHeader from './auth-header';
-const API_URL = process.env.VUE_APP_API_URL+'api/admin/';
+var API_URL = process.env.VUE_APP_API_URL+'api/admin/';
 
 class AdminService {
   getUsers() {
@@ -11,6 +11,12 @@ class AdminService {
   }
   getChatrooms() {
     return axios.get(API_URL + 'get_chatrooms', { headers:{"x-access-token": authHeader()} });
+  }
+  rmRole(therole, theuserid) {
+    return axios.post(API_URL + 'rm_role/'+therole+'/'+theuserid,{}, { headers:{"x-access-token": authHeader()} });
+  }
+  addRole(therole, theuserid) {
+    return axios.post(API_URL + 'add_role/'+therole+'/'+theuserid,{},{ headers:{"x-access-token": authHeader() } });
   }
 }
 

@@ -54,12 +54,18 @@
                                     <p class="text-gray-900 whitespace-no-wrap">{{usr.createdAt | formatDate}}</p>
                                 </td>
                                 <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
-                                    <span v-for="(arole, arole_idx) in usr.roles" :key="arole_idx"
-                                        class="relative inline-block px-3 py-1 leading-tight">
+                                  <div v-for="(arole, arole_idx) in usr.roles" :key="arole_idx">
+                                    <span v-on:click="rmRole(arole.name,usr.id)" class="relative inline-block px-3 py-1 leading-tight">
                                         <span aria-hidden
                                             class="absolute inset-0 bg-gray-200 rounded-full opacity-50"></span>
                                         <span class="relative">{{arole.name}}</span>
                                     </span>
+                                    <span v-on:click="addRole(arole.name,usr.id)" v-if="arole.name !== 'admin'" class="relative inline-block px-3 py-1 leading-tight">
+                                        <span aria-hidden
+                                            class="absolute inset-0 bg-gray-200 rounded-full opacity-50"></span>
+                                        <span class="relative">+</span>
+                                    </span>
+                                  </div>
                                 </td>
                                 <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
                                     <span v-for="(aproj, aproj_idx) in usr.projects" :key="aproj_idx"
@@ -229,6 +235,38 @@ export default {
     currentUser() {
       return this.$store.state.auth.user;
     }
+  },
+  methods: {
+    rmRole(therole, theuserid) {
+      if (therole === "admin" && theuserid != this.currentUser.id){
+        AdminService.rmRole(therole, theuserid).then(
+        response => {
+          this.Users = response.data;
+        },
+        error => {
+          this.content =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+        );
+      }
+    },
+    addRole(therole, theuserid) {
+      if (therole === "user"){
+        AdminService.addRole("admin", theuserid).then(
+        response => {
+          this.Users = response.data;
+        },
+        error => {
+          this.content =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+        );
+      }
+    },
   },
   mounted() {
     if (!this.currentUser) {

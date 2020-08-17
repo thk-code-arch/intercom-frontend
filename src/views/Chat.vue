@@ -34,6 +34,11 @@ export default {
       chatrooms:[],
     };
   },
+  computed: {
+    theroom() {
+    return this.$store.state.chatroom.theroom
+  }
+  },
   methods: {
     switchRoom(id) {
         this.$store.dispatch('chatroom/select_chatroom',id);
@@ -46,7 +51,9 @@ export default {
         // connect to room
         this.chatrooms = response.data.chatrooms;
         console.log("step1");
-        //this.$store.dispatch('chatroom/select_chatroom',response.data.id);
+        if (this.theroom == 0){
+          this.$store.dispatch('chatroom/select_chatroom',this.chatrooms[0].id);
+        }
       },
       error => {
         console.log(error);
