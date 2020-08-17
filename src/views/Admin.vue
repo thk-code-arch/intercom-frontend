@@ -1,100 +1,218 @@
 <template>
-  <div class="px-4">
-    <div class="max-w-6xl p-8 mx-auto my-8 bg-white rounded-lg">
-        <!-- Top bar -->
-        <div class="flex items-center flex-none px-6 py-2 mb-4 border-b">
-            <div class="flex flex-col">
-                <h1 class="mb-2 text-2xl font-medium">Admin Dashboard</h1>
-                <div class="text-sm truncate text-grey-dark">
-                  Admin section
-               </div>
+    <div class="container px-4 mx-auto sm:px-8">
+        <div class="py-8">
+            <div>
+                <h2 class="text-2xl font-semibold leading-tight">Users</h2>
+            </div>
+            <div class="px-4 py-4 -mx-4 overflow-x-auto sm:-mx-8 sm:px-8">
+                <div class="inline-block min-w-full overflow-hidden rounded-lg ">
+                    <table class="min-w-full leading-normal">
+                        <thead>
+                            <tr>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                    Username
+                                </th>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                    email
+                                </th>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                    Created at
+                                </th>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                    Roles
+                                </th>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                    Assigned Projects
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(usr, usr_index) in Users" :key="usr_index">
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 w-10 h-10">
+                                            <img class="w-full h-full rounded-full"
+                                                :src="$profile_image+usr.profile_image"
+                                                alt="" />
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-gray-900 whitespace-no-wrap">
+                                                {{usr.username}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                    <p class="text-gray-900 whitespace-no-wrap">{{usr.email}}</p>
+                                </td>
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                    <p class="text-gray-900 whitespace-no-wrap">{{usr.createdAt | formatDate}}</p>
+                                </td>
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                    <span v-for="(arole, arole_idx) in usr.roles" :key="arole_idx"
+                                        class="relative inline-block px-3 py-1 leading-tight">
+                                        <span aria-hidden
+                                            class="absolute inset-0 bg-gray-200 rounded-full opacity-50"></span>
+                                        <span class="relative">{{arole.name}}</span>
+                                    </span>
+                                </td>
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                    <span v-for="(aproj, aproj_idx) in usr.projects" :key="aproj_idx"
+                                        class="relative inline-block px-3 py-1 leading-tight">
+                                        <span aria-hidden
+                                            class="absolute inset-0 bg-gray-200 rounded-full opacity-50"></span>
+                                        <span class="relative">{{aproj.name}}</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+            <div class="py-8">
+            <div>
+                <h2 class="text-2xl font-semibold leading-tight">Projects</h2>
+            </div>
+            <div class="px-4 py-4 -mx-4 overflow-x-auto sm:-mx-8 sm:px-8">
+                <div class="inline-block min-w-full overflow-hidden rounded-lg ">
+                    <table class="min-w-full leading-normal">
+                        <thead>
+                            <tr>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                    Name
+                                </th>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                    Description
+                                </th>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                    CreatedAt
+                                </th>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                    Project Owner
+                                </th>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                   Assigned Users
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(project, project_idx) in Projects" :key="project_idx">
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                    <p class="text-gray-900 whitespace-no-wrap">{{project.name}}</p>
+                                </td>
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                    <p class="text-gray-900 whitespace-no-wrap">{{project.description}}</p>
+                                </td>
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                        {{project.createdAt | formatDate}}
+                                    </p>
+                                </td>
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                    <p class="text-gray-900 whitespace-no-wrap">{{project.owner}}</p>
+                                </td>
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                    <span v-for="(auser, auser_idx) in project.users" :key="auser_idx"
+                                        class="relative inline-block px-3 py-1 leading-tight">
+                                        <span aria-hidden
+                                            class="absolute inset-0 bg-gray-200 rounded-full opacity-50"></span>
+                                        <span class="relative">{{auser.username}}</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+            <div class="py-8">
+            <div>
+                <h2 class="text-2xl font-semibold leading-tight">Chatrooms</h2>
+            </div>
+            <div class="px-4 py-4 -mx-4 overflow-x-auto sm:-mx-8 sm:px-8">
+                <div class="inline-block min-w-full overflow-hidden rounded-lg ">
+                    <table class="min-w-full leading-normal">
+                        <thead>
+                            <tr>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                    Name
+                                </th>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                    Description
+                                </th>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                    Created at
+                                </th>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                    Roomtype
+                                </th>
+                                <th
+                                    class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-100 border-b-2 border-gray-200">
+                                    Assigned Users
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(room, room_idx) in Chatrooms" :key="room_idx">
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                  <p class="text-gray-900 whitespace-no-wrap">
+                                    {{room.name}}
+                                  </p>
+                                </td>
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                  <p class="text-gray-900 whitespace-no-wrap">
+                                    {{room.description}}
+                                  </p>
+                                </td>
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                  <p class="text-gray-900 whitespace-no-wrap">
+                                    {{room.createdAt | formatDate}}
+                                  </p>
+                                </td>
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                  <p class="text-gray-900 whitespace-no-wrap">
+                                    {{room.roomtype}}
+                                  </p>
+                                </td>
+                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                                    <span v-for="(cuser, cuser_idx) in room.users" :key="cuser_idx"
+                                        class="relative inline-block px-3 py-1 leading-tight">
+                                        <span aria-hidden
+                                            class="absolute inset-0 bg-gray-200 rounded-full opacity-50"></span>
+                                        <span class="relative">{{cuser.username}}</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        <!-- TEXT -->
-
-  <div class="p-8">
-<h2 class="mb-2 text-2xl font-medium">User List</h2>
-<table class="table-auto">
-  <thead>
-    <tr>
-      <th class="px-4 py-2">
-        <svg viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6 user"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-      </th>
-      <th class="px-4 py-2">id</th>
-      <th class="px-4 py-2">Username</th>
-      <th class="px-4 py-2">email</th>
-      <th class="px-4 py-2">Roles</th>
-      <th class="px-4 py-2">Assigned Projects</th>
-    </tr>
-  </thead>
-  <tbody v-for="(usr, usr_index) in Users" :key="usr_index">
-    <tr>
-      <td class="px-4 py-2 border">
-        <img :src="$profile_image+usr.profile_image" class="w-10 h-10 mr-3 rounded">
-      </td>
-      <td class="px-4 py-2 border">{{usr.id}}</td>
-      <td class="px-4 py-2 border">{{usr.username}}</td>
-      <td class="px-4 py-2 border">{{usr.email}}</td>
-      <td class="px-4 py-2 border">
-        <span v-for="(arole, arole_idx) in usr.roles" :key="arole_idx">{{arole.name}}</span>
-      </td>
-      <td class="px-4 py-2 border">
-        <span v-for="(aproj, aproj_idx) in usr.projects" :key="aproj_idx"> ({{aproj.name}})</span>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 class="mb-2 text-2xl font-medium">Project List</h2>
-<table class="table-auto">
-  <thead>
-    <tr>
-      <th class="px-4 py-2">Name</th>
-      <th class="px-4 py-2">Description</th>
-      <th class="px-4 py-2">Project Owner</th>
-      <th class="px-4 py-2">Assigned Users</th>
-    </tr>
-  </thead>
-  <tbody v-for="(project, project_idx) in Projects" :key="project_idx">
-    <tr>
-      <td class="px-4 py-2 border">{{project.name}}</td>
-      <td class="px-4 py-2 border">{{project.description}}</td>
-      <td class="px-4 py-2 border">{{project.owner}}</td>
-      <td class="px-4 py-2 border">
-        <span v-for="(auser, auser_idx) in project.users" :key="auser_idx"> ({{auser.username}})</span>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<h2 class="mb-2 text-2xl font-medium">Chatroom List</h2>
-<table class="table-auto">
-  <thead>
-    <tr>
-      <th class="px-4 py-2">ID</th>
-      <th class="px-4 py-2">Name</th>
-      <th class="px-4 py-2">Description</th>
-      <th class="px-4 py-2">Roomtype</th>
-      <th class="px-4 py-2">Assigned Users</th>
-    </tr>
-  </thead>
-  <tbody v-for="(room, room_idx) in Chatrooms" :key="room_idx">
-    <tr>
-      <td class="px-4 py-2 border">{{room.id}}</td>
-      <td class="px-4 py-2 border">{{room.name}}</td>
-      <td class="px-4 py-2 border">{{room.description}}</td>
-      <td class="px-4 py-2 border">{{room.roomtype}}</td>
-      <td class="px-4 py-2 border">
-        <span v-for="(cuser, cuser_idx) in room.users" :key="cuser_idx"> ({{cuser.username}})</span>
-      </td>
-    </tr>
-  </tbody>
-</table>
-  </div>
-  </div>
-  </div>
+    </div>
 </template>
-
 <script>
+import Vue from 'vue';
+import moment from 'moment';
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return moment(String(value)).format('DD/MM/YYYY HH:mm')
+  }
+});
 import AdminService from "@/services/admin.service";
 export default {
   name: 'Admin',
@@ -127,7 +245,7 @@ export default {
         error.message ||
         error.toString();
     }
-  );
+    );
     AdminService.getProjects().then(
     response => {
       this.Projects = response.data;
@@ -138,7 +256,7 @@ export default {
         error.message ||
         error.toString();
     }
-  );
+    );
     AdminService.getChatrooms().then(
     response => {
       this.Chatrooms = response.data;
@@ -149,7 +267,7 @@ export default {
         error.message ||
         error.toString();
     }
-  );
+    );
   }
 };
 </script>
