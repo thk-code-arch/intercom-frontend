@@ -58,6 +58,11 @@ export const iosockets = {
         commit('viewport_initiated');
       }
     },
+    close_sockets({ commit }) {
+      this._vm.$socket.viewport.close();
+      this._vm.$socket.chatroom.close();
+      commit('closeSockets');
+    }
   },
   mutations: {
     chatroom_initiated(state) {
@@ -65,6 +70,10 @@ export const iosockets = {
     },
     viewport_initiated(state) {
       state.viewportInit = true;
+    },
+    closeSockets(state) {
+      state.viewportInit = false;
+      state.chatroomInit = false;
     }
   }
 };

@@ -55,7 +55,10 @@ export const viewport = {
     commit("get_players", players);
     }
     },
-    clear({commit}){
+    clear({commit, state}){
+      if (state.currentviewport !== 0){
+        this._vm.$socket.viewport.emit('disconnect',{chatroomId: state.currentviewport});
+      }
       commit('clear');
     }
   },

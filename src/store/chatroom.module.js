@@ -29,7 +29,10 @@ export const chatroom = {
 		commit("message", message.data);
       })
     },
-    clear({commit}){
+    clear({commit, state}){
+      if (state.currentchatroom !== 0){
+      this._vm.$socket.chatroom.emit('disconnect',{chatroomId: state.currentchatroom});
+      }
       commit('clear');
     }
   },
