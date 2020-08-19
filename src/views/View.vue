@@ -1,6 +1,6 @@
 <template>
 <div class="h-screen2">
-<div class="flex flex-row w-full absolute z-10 nopointer">
+<div class="absolute z-10 flex flex-row w-full nopointer">
 
 <div class="w-full h-screen2">
 <vue-splitter>
@@ -68,14 +68,5 @@ export default {
   },
 }
 </script>
-<style>
-.allpointer{
-  pointer-events: all;
-}
-.nopointer{
-  pointer-events: none;
-}
-.splitter{
-  pointer-events: all;
-}
-</style>
+
+

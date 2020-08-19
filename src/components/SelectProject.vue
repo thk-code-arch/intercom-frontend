@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="flex content-start flex-wrap justify-center">
-      <div class="box-border w-32 h-24 p-3 m-2 text-center border-2 border-black flex items-center justify-center" v-for="project in projects" :key="project.id"  v-on:click="Select(project)"> {{ project.name }} </div>
-      <div v-if="showaddProject" v-on:click="addProject" class="box-border w-32 h-24 p-3 m-2 border-solid border-2 border-black flex items-center justify-center"><svg class="h-8 w-8 fill-current text-black inline-block align-middle" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path></svg></div>
+    <div class="flex flex-wrap content-start justify-center">
+      <div class="flex items-center justify-center w-32 h-24 p-3 m-2 text-center border-2 border-black cursor-pointer box-border" v-for="project in projects" :key="project.id"  v-on:click="Select(project)"> {{ project.name }} </div>
+      <div v-if="showaddProject" v-on:click="addProject" class="cursor-pointer box-border w-32 h-24 p-3 m-2 border-solid border-2 border-black flex items-center justify-center"><svg class="inline-block w-8 h-8 text-black align-middle fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path></svg></div>
     </div>
   </div>
 </template>

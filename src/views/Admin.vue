@@ -55,12 +55,12 @@
                                 </td>
                                 <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
                                   <div v-for="(arole, arole_idx) in usr.roles" :key="arole_idx">
-                                    <span v-on:click="rmRole(arole.name,usr.id)" class="relative inline-block px-3 py-1 leading-tight">
+                                    <span v-on:click="rmRole(arole.name,usr.id)" class="relative inline-block px-3 py-1 leading-tight cursor-pointer">
                                         <span aria-hidden
                                             class="absolute inset-0 bg-gray-200 rounded-full opacity-50"></span>
                                         <span class="relative">{{arole.name}}</span>
                                     </span>
-                                    <span v-on:click="addRole(arole.name,usr.id)" v-if="arole.name !== 'admin'" class="relative inline-block px-3 py-1 leading-tight">
+                                    <span v-on:click="addRole(arole.name,usr.id)" v-if="arole.name !== 'admin'" class="relative inline-block px-3 py-1 leading-tight cursor-pointer">
                                         <span aria-hidden
                                             class="absolute inset-0 bg-gray-200 rounded-full opacity-50"></span>
                                         <span class="relative">+</span>

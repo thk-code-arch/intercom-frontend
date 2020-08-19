@@ -16,3 +16,12 @@
 .tooltip:hover .tooltip-text {
   visibility: visible;
 }
+.allpointer{
+  pointer-events: all;
+}
+.nopointer{
+  pointer-events: none;
+}
+.splitter{
+  pointer-events: all;
+}

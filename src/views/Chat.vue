@@ -6,7 +6,7 @@
       <div class="flex flex-col w-full">
             <h1 class="mb-1 font-extrabold text-grey-darkest">Chatrooms</h1>
            <div class="" v-for="(room, room_index) in chatrooms" :key="room_index">
-            <div v-on:click="switchRoom(room.id)" class="w-full p-2 m-2 bg-white rounded-sm">
+            <div v-on:click="switchRoom(room.id)" class="w-full p-2 m-2 bg-white rounded-sm cursor-pointer">
               <h2 class="font-extrabold">#{{room.name}}</h2>
               <span class="italic">{{room.description}}</span>
             </div>

@@ -5,9 +5,13 @@ export const viewport = {
     currentviewport:0,
     players: [],
     camPosi: {},
-    othercamPos: {}
+    othercamPos: {},
+    materials:{}
   },
   actions: {
+    setmaterialList({ commit },materials) {
+      commit('materialList', materials);
+    },
     setowncamPos({ commit },position) {
       commit('owncamPos', position);
     },
@@ -63,6 +67,9 @@ export const viewport = {
     }
   },
   mutations: {
+    materialList( state, materials){
+    state.materials = materials;
+    },
     owncamPos( state, position){
     state.camPosi = position;
     },
