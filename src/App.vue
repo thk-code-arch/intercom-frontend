@@ -56,7 +56,7 @@ created () {
 }
 
 .h-screen2{
-    height:calc(100vh - 6rem)!important;
+    height:calc(100vh - 9rem)!important;
   }
 .btn {
   @apply font-bold py-2 px-4 rounded;

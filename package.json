@@ -19,6 +19,7 @@
     "three": "^0.118.3",
     "vue": "^2.6.11",
     "vue-chat-scroll": "^1.4.0",
+    "vue-fixed-header": "^3.2.14",
     "vue-moment": "^4.1.0",
     "vue-router": "^3.2.0",
     "vue-socket.io": "^3.0.9",
