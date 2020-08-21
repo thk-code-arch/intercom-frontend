@@ -1,5 +1,5 @@
 <template>
-<div class="bg-gray-200" id="app">
+<div id="app">
       <header-menu v-if="showDiv"/>
       <router-view/>
 </div>
@@ -56,8 +56,8 @@ created () {
 }
 
 .h-screen2{
-    height:calc(100vh - 9rem)!important;
-  }
+    height:calc(100vh - var(--header-height))!important;
+}
 .btn {
   @apply font-bold py-2 px-4 rounded;
 }

@@ -1,5 +1,5 @@
 <template>
-<div class="h-screen2">
+<div class="h-screen2" :style="styleHeight">
 <div class="absolute z-10 flex flex-row w-full nopointer">
 
 <div class="w-full h-screen2">
@@ -47,6 +47,17 @@ export default {
       ViewPort,
     LeftSidebar,
     RightSidebar
+  },
+  computed: {
+    viewHeight () {
+      const headerHeight = document.getElementById('top').clientHeight;
+      return `${headerHeight}px`
+    },
+    styleHeight () {
+      return {
+        '--header-height': this.viewHeight
+      }
+    }
   },
   created(){
       //get actaual chatroomid

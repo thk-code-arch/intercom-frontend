@@ -10,11 +10,12 @@
     </div>
     <div id="menu" class="flex-col items-center self-end hidden w-full h-full py-1 pb-4 sm:w-auto sm:self-center sm:flex sm:flex-row sm:py-0 sm:pb-0">
           <div v-if="isProjectSelected" class="relative">
-            <button @click="PisOpen = !PisOpen" class="relative z-10 block h-8 mr-2 overflow-hidden bg-gray-200 rounded-full focus:outline-none focus:border-white">
-              <span class="m-3 text-sm">{{currentProject.name}}</span>
+            <button @click="PisOpen = !PisOpen" class="relative z-10 flex justify-start block h-10 p-2 mr-2 overflow-hidden bg-gray-200 rounded-full focus:outline-none focus:border-white">
+              <span class="m-auto">{{currentProject.name}}</span>
+                <svg v-on:click="closeProject()" viewBox="0 0 20 20" fill="currentColor" class="h-5 m-auto x-circle" style="--darkreader-inline-fill:currentColor;" data-darkreader-inline-fill=""><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
             </button>
-            <button v-if="PisOpen" @click="PisOpen = false" tabindex="-1" class="fixed inset-0 w-full h-full bg-black opacity-50 cursor-default"></button>
-            <div v-if="PisOpen" class="absolute right-0 w-48 py-2 mt-2 bg-white rounded-lg shadow-xl">
+            <button v-if="PisOpen && isProjectOwner" @click="PisOpen = false" tabindex="-1" class="fixed inset-0 w-full h-full cursor-default"></button>
+            <div v-if="PisOpen && isProjectOwner" class="absolute right-0 w-48 py-2 mt-2 bg-white rounded-lg shadow-xl">
                 <router-link v-on:click.native="PisOpen = false" to="/project-settings" v-if="isProjectOwner" class="block px-4 py-2 text-gray-800 hover:bg-indigo-400 hover:text-white"><svg class="inline-block w-5 h-5 text-black align-middle fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"></path></svg> Edit</router-link>
             </div>
           </div>
@@ -22,7 +23,7 @@
             <button @click="isOpen = !isOpen" class="relative z-10 block w-10 h-10 overflow-hidden border-2 border-gray-600 rounded-full focus:outline-none focus:border-white">
                 <img :src="currentUser.profile_image" class="object-cover w-full h-full">
             </button>
-            <button v-if="isOpen" @click="isOpen = false" tabindex="-1" class="fixed inset-0 w-full h-full bg-black opacity-50 cursor-default"></button>
+            <button v-if="isOpen" @click="isOpen = false" tabindex="-1" class="fixed inset-0 w-full h-full cursor-default"></button>
             <div v-if="isOpen" class="absolute right-0 w-48 py-2 mt-2 bg-white rounded-lg shadow-xl">
               <router-link v-on:click.native="isOpen = false" to="/profile" class="block px-4 py-2 text-gray-800 hover:bg-indigo-400 hover:text-white">Profile settings</router-link>
               <router-link v-on:click.native="isOpen = false" to="/admin"  v-if="isAdmin" class="block px-4 py-2 text-gray-800 hover:bg-indigo-400 hover:text-white"><svg class="inline-block w-5 h-5 text-black align-middle fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg> Admin</router-link>
@@ -106,19 +107,13 @@ export default {
       this.$store.dispatch('chatroom/clear');
       this.$store.dispatch('iosockets/close_sockets');
       this.$router.push('/login');
+    },
+    closeProject() {
+      this.$store.dispatch('curproject/unselect');
+      this.$store.dispatch('viewport/clear');
+      this.$router.push('/projects');
     }
   },
-  created() {
-    const handleEscape = (e) => {
-      if (e.key === 'Esc' || e.key === 'Escape') {
-        this.isOpen = false
-      }
-    }
-    document.addEventListener('keydown', handleEscape)
-    this.$once('hook:beforeDestroy', () => {
-      document.removeEventListener('keydown', handleEscape)
-    })
-  }
 };
 </script>
 <style>

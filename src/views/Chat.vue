@@ -1,6 +1,6 @@
 <template>
 
-<div class="flex h-screen2">
+<div class="flex h-screen2" :style="styleHeight">
     <!-- Channel bar -->
     <div class="flex flex-none w-1/5 px-6 py-2 border-b">
       <div class="flex flex-col w-full">
@@ -36,8 +36,17 @@ export default {
   },
   computed: {
     theroom() {
-    return this.$store.state.chatroom.theroom
-  }
+      return this.$store.state.chatroom.theroom
+    },
+    viewHeight () {
+      const headerHeight = document.getElementById('top').clientHeight;
+      return `${headerHeight}px`
+    },
+    styleHeight () {
+      return {
+        '--header-height': this.viewHeight
+      }
+    }
   },
   methods: {
     switchRoom(id) {
