@@ -1,5 +1,5 @@
 <template>
-<div class="cursor-move scene-container" ref="sceneContainer">
+<div class="outline-none cursor-move scene-container" ref="sceneContainer">
 </div>
 
 </template>
