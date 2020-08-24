@@ -10,7 +10,8 @@ import VueFormulate from '@braid/vue-formulate'
 Vue.config.productionTip = false
 import VueChatScroll from 'vue-chat-scroll'
 Vue.use(VueChatScroll)
-
+import Embed from 'v-video-embed'
+Vue.use(Embed);
 
 Vue.use(VueFormulate, {
   classes: {

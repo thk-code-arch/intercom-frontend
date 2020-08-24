@@ -23,7 +23,9 @@
                         <span class="font-bold">{{ hist_msg.user.username }}</span>
                         <span class="text-xs text-grey"> {{ hist_msg.time }}</span>
                     </div>
-                    <p class="leading-normal text-black">{{ hist_msg.message }}</p>
+                    <p class="leading-normal text-black">
+                      {{hist_msg.message}}
+                    </p>
                 </div>
             </div>
             </div>

@@ -17,6 +17,7 @@
     "stats.js": "^0.17.0",
     "tailwindcss": "^1.6.0",
     "three": "^0.118.3",
+    "v-video-embed": "^1.0.7",
     "vue": "^2.6.11",
     "vue-chat-scroll": "^1.4.0",
     "vue-fixed-header": "^3.2.14",

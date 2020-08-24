@@ -1,4 +1,5 @@
 <template>
+ <div class="container px-4 mx-auto sm:px-8">
   <div class="flex justify-center px-4 mx-auto">
     <div class="max-w-6xl p-8 m-8 bg-white rounded-lg">
         <!-- Top bar -->
@@ -56,6 +57,7 @@
       <upload-files></upload-files>
   </div>
   </div>
+ </div>
 </template>
 
 <script>

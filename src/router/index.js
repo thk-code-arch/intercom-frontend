@@ -35,6 +35,12 @@ export const router = new Router({
       component: () => import('../views/Chat.vue')
     },
     {
+      path: '/learning',
+      name: 'Learning',
+      // lazy-loaded
+      component: () => import('../views/Learning.vue')
+    },
+    {
       path: '/profile',
       name: 'profile',
       // lazy-loaded
