@@ -40,6 +40,7 @@
 </template>
 <script>
 import FetchService from "@/services/fetch.service.js"
+import LearningService from "@/services/learning.service.js"
 export default {
   name:'AddVideo',
   components:{
@@ -49,6 +50,22 @@ export default {
   methods: {
     handleFetch(){
       FetchService.fetchVideo(this.scrapeurl)
+        .then(response => {
+          this.scrapedObject = response.data;
+        })
+        .catch(() => {
+          console.log("error");
+        });
+    },
+    handlePostVideo(){
+      LearningService.addLearning({
+        "category": "Video",
+        "url": this.scrapeurl,
+        "thumbnail": this.scrapedObject.cachedImage,
+        "title":this.scrapedObject.title,
+        "description":this.scrapedObject.description,
+        "type": "PUBLIC"
+      })
         .then(response => {
           this.scrapedObject = response.data;
         })
