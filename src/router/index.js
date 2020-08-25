@@ -37,8 +37,14 @@ export const router = new Router({
     {
       path: '/learning',
       name: 'Learning',
+      redirect: '/learning/list',
       // lazy-loaded
-      component: () => import('../views/Learning.vue')
+      component: () => import('../views/Learning.vue'),
+            children: [
+        { path: 'list', component: () => import('../components/learning/list-learnings.vue')},
+        { path: 'show/:id', component: () => import('../components/learning/show-learning.vue')},
+        { path: 'add', component: () => import('../components/learning/add-learning.vue')}
+      ]
     },
     {
       path: '/profile',
