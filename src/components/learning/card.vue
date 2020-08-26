@@ -1,16 +1,14 @@
 <template>
-<div class="max-w-sm overflow-hidden bg-white rounded">
-    <video-embed css="w-full" :src="url"></video-embed>
+<div v-on:click="showFull()" class="max-w-sm overflow-hidden bg-white rounded cursor-pointer">
+<img class="" :src="theLearning.thumbnail">
   <div class="px-6 py-4">
-    <div class="mb-2 text-xl font-bold">The Coldest Sunset</div>
+    <div class="mb-2 text-xl font-bold">{{ theLearning.title }}</div>
     <p class="text-base text-gray-700">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
+      {{ theLearning.description }}
     </p>
   </div>
   <div class="px-6 pt-4 pb-2">
-    <span class="inline-block px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-full">#photography</span>
-    <span class="inline-block px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-full">#travel</span>
-    <span class="inline-block px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-full">#winter</span>
+    <span class="inline-block px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-full">{{ theLearning.category }}</span>
   </div>
 </div>
 </template>
@@ -18,7 +16,13 @@
 <script>
 export default {
   name:'Learning-Card',
-  component:{
+  props: {
+    theLearning: Object
+  },
+  methods: {
+    showFull() {
+      this.$router.push('/learning/show/'+this.theLearning.id);
+    },
   },
   data() {
     return {
@@ -27,8 +31,3 @@ export default {
   }
 }
 </script>
-<style>
-.embed-responsive-item{
-width:100%
-}
-</style>

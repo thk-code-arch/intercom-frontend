@@ -69,7 +69,6 @@ export default {
     }
   },
   mounted(){
-        console.log("1 learning ,,,",this.$route.params.id);
       //get actaual chatroomid
       LearningService.getLearning(this.$route.params.id).then(
       response => {
