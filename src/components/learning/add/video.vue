@@ -67,7 +67,7 @@ export default {
         "type": "PUBLIC"
       })
         .then(response => {
-          this.scrapedObject = response.data;
+          this.$router.push('/learning/show/'+response.data.id);
         })
         .catch(() => {
           console.log("error");

@@ -1,6 +1,6 @@
 <template>
   <div class="px-4">
-    <div class="w-full p-8 mx-auto my-8 bg-white rounded-lg">
+    <div class="container p-8 mx-auto my-8 bg-white rounded-lg">
         <!-- Top bar -->
         <div class="flex items-center flex-none px-6 py-2 mb-4 border-b">
             <div class="flex flex-col">

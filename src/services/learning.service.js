@@ -18,6 +18,7 @@ class LearningService {
     return axios.get(API_URL + 'public',{ headers:{"x-access-token": authHeader() } });
   }
   getLearning(learningId) {
+    console.log("learning ,,,");
     return axios.get(API_URL + 'show/'+learningId,{ headers:{"x-access-token": authHeader() } });
   }
 }
