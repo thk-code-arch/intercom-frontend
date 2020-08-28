@@ -17,11 +17,6 @@ export const router = new Router({
       path: '/login',
       component: Login,
     },
-// TODO add register + invite + email verification
-//    {
-//      path: '/register',
-//      component: Register
-//    },
     {
       path: '/view',
       name: 'View',

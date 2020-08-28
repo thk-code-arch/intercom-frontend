@@ -6,7 +6,7 @@
 </template>
 <script>
 
-import HeaderMenu from "./components/HeaderMenu";
+import HeaderMenu from "./components/header/HeaderMenu";
 export default {
   name: "App",
   data() {
@@ -65,6 +65,6 @@ created () {
   @apply bg-gray-500 text-white;
 }
 .btn-blue:hover {
-  @apply bg-indigo-400;
+  @apply bg-codearch-500;
 }
 </style>
