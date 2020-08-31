@@ -13,8 +13,6 @@ Vue.use(VueChatScroll)
 import Embed from 'v-video-embed'
 Vue.use(Embed);
 
-import browserDetect from "vue-browser-detect-plugin";
-Vue.use(browserDetect);
 
 Vue.use(VueFormulate, {
   classes: {
