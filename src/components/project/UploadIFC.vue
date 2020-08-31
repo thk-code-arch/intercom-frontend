@@ -2,34 +2,27 @@
   <div>
     <div v-if="currentFile" class="progress">
       <div
-        class="progress-bar progress-bar-info progress-bar-striped"
-        role="progressbar"
-        :aria-valuenow="progress"
-        aria-valuemin="0"
-        aria-valuemax="100"
-        :style="{ width: progress + '%' }"
       >
         {{ progress }}%
       </div>
     </div>
 
-    <FormulateInput
-      ref="file"
-      type="file"
-      name="Upload IFC"
-      :disabled="!selectedFiles"
-    />
-    <a
-      @click.prevent="upload"
-    >
-      Upload the file
-    </a>
+    <label class="">
+      <input type="file" ref="file" @change="selectFile" />
+    </label>
+
+    <button class="btn btn-blue" :disabled="!selectedFiles" @click="upload">
+      Upload
+    </button>
+
+    <div v-if="message">
+      <a :href="$app_url+message">Logfile</a>
+    </div>
   </div>
 </template>
 
 <script>
 import UploadService from "@/services/file.service";
-
 export default {
   name: "UploadIFC",
   data() {
@@ -37,8 +30,7 @@ export default {
       selectedFiles: undefined,
       currentFile: undefined,
       progress: 0,
-      message: "",
-
+      message: '',
       fileInfos: []
     };
   },
@@ -46,26 +38,19 @@ export default {
     selectFile() {
       this.selectedFiles = this.$refs.file.files;
     },
-
     upload() {
       this.progress = 0;
-
       this.currentFile = this.selectedFiles.item(0);
-      UploadService.upload(this.currentFile, event => {
+      UploadService.uploadifc(this.currentFile, event => {
         this.progress = Math.round((100 * event.loaded) / event.total);
       })
         .then(response => {
-          this.message = response.data.message;
-          console.log(this.message);
+          this.message = response.data.data.logfile;
         })
-        .catch(() => {
-          this.progress = 0;
-          this.message = "Could not upload the file!";
-          this.currentFile = undefined;
-        });
-
       this.selectedFiles = undefined;
     }
+  },
+  mounted() {
   }
 };
 </script>

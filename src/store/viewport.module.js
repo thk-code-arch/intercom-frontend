@@ -5,9 +5,13 @@ export const viewport = {
     currentviewport:0,
     players: [],
     camPosi: {},
-    othercamPos: {}
+    othercamPos: {},
+    materials:{}
   },
   actions: {
+    setmaterialList({ commit },materials) {
+      commit('materialList', materials);
+    },
     setowncamPos({ commit },position) {
       commit('owncamPos', position);
     },
@@ -54,9 +58,18 @@ export const viewport = {
       }
     commit("get_players", players);
     }
+    },
+    clear({commit, state}){
+      if (state.currentviewport !== 0){
+        this._vm.$socket.viewport.emit('disconnect',{chatroomId: state.currentviewport});
+      }
+      commit('clear');
     }
   },
   mutations: {
+    materialList( state, materials){
+    state.materials = materials;
+    },
     owncamPos( state, position){
     state.camPosi = position;
     },
@@ -69,6 +82,12 @@ export const viewport = {
     get_players(state, data) {
       state.players = data;
     },
+    clear(state) {
+      state.players =[];
+      state.camPosi ={};
+      state.othercamPos ={};
+      state.currentviewport =0;
+    }
   }
 };
 

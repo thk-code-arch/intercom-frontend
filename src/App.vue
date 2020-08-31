@@ -1,12 +1,12 @@
 <template>
-<div class="bg-gray-200" id="app">
+<div id="app">
       <header-menu v-if="showDiv"/>
       <router-view/>
 </div>
 </template>
 <script>
 
-import HeaderMenu from "./components/HeaderMenu";
+import HeaderMenu from "./components/header/HeaderMenu";
 export default {
   name: "App",
   data() {
@@ -56,7 +56,15 @@ created () {
 }
 
 .h-screen2{
-    height:calc(100vh - 6rem)!important;
-  }
-
+    height:calc(100vh - var(--header-height))!important;
+}
+.btn {
+  @apply font-bold py-2 px-4 rounded;
+}
+.btn-blue {
+  @apply bg-gray-500 text-white;
+}
+.btn-blue:hover {
+  @apply bg-codearch-500;
+}
 </style>

@@ -5,6 +5,7 @@ export const chatroom = {
   state: {
     messages:[],
     currentchatroom:0,
+    theroom:[]
   },
   actions: {
     select_chatroom({ commit }, chatID) {
@@ -14,6 +15,7 @@ export const chatroom = {
       if (state.currentchatroom !== 0){
         ChatService.getChatLog(state.currentchatroom).then((message) => {
 		commit("loaded_chatlog", message.data);
+        commit("loaded_theroom", {name: message.data.name,description: message.data.description});
         this._vm.$socket.chatroom.emit('join_chatroom',{oldRoom: oldroom, newRoom: state.currentchatroom});
         });
       }
@@ -26,6 +28,12 @@ export const chatroom = {
       return ChatService.getmsgbyid(data).then((message) => {
 		commit("message", message.data);
       })
+    },
+    clear({commit, state}){
+      if (state.currentchatroom !== 0){
+      this._vm.$socket.chatroom.emit('disconnect',{chatroomId: state.currentchatroom});
+      }
+      commit('clear');
     }
   },
   mutations: {
@@ -35,10 +43,18 @@ export const chatroom = {
     loaded_chatlog(state, data ) {
       state.messages = data.chatlogs;
     },
+    loaded_theroom(state, data ) {
+      state.theroom = data;
+    },
     message(state, data) {
       state.messages = [...state.messages, data];
     },
     CHAT_SENDMESSAGE() {
+    },
+    clear(state) {
+      state.messages =[];
+      state.theroom =[];
+      state.currentchatroom =0;
     }
   }
 };

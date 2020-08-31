@@ -1,6 +1,6 @@
 <template>
-<div class="h-screen2">
-<div class="flex flex-row w-full absolute z-10 nopointer">
+<div class="h-screen2" :style="styleHeight">
+<div class="absolute z-10 flex flex-row w-full nopointer">
 
 <div class="w-full h-screen2">
 <vue-splitter>
@@ -48,6 +48,17 @@ export default {
     LeftSidebar,
     RightSidebar
   },
+  computed: {
+    viewHeight () {
+      const headerHeight = document.getElementById('top').clientHeight;
+      return `${headerHeight}px`
+    },
+    styleHeight () {
+      return {
+        '--header-height': this.viewHeight
+      }
+    }
+  },
   created(){
       //get actaual chatroomid
       ChatService.getProjectChatroom().then(
@@ -68,14 +79,5 @@ export default {
   },
 }
 </script>
-<style>
-.allpointer{
-  pointer-events: all;
-}
-.nopointer{
-  pointer-events: none;
-}
-.splitter{
-  pointer-events: all;
-}
-</style>
+
+

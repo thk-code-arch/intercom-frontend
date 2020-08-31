@@ -1,5 +1,5 @@
 <template>
-<div class="scene-container" ref="sceneContainer">
+<div class="outline-none cursor-move scene-container" ref="sceneContainer">
 </div>
 
 </template>
@@ -76,7 +76,7 @@ export default {
       // create renderer
       this.renderer = new THREE.WebGLRenderer({ antialias: true })
       this.renderer.setPixelRatio(window.devicePixelRatio)
-      this.renderer.gammaOutput = true
+      this.renderer.outputEncoding = true
       this.renderer.gammaFactor = 2.2
       this.renderer.shadowMap.enabled = true
       // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
@@ -96,6 +96,7 @@ export default {
     loadModel() {
       const gltfLoader = new GLTFLoader()
       gltfLoader.setRequestHeader( { 'x-access-token': authHeader()} );
+      const materials = [];
       this.gltf = gltfLoader.load(
         process.env.VUE_APP_API_URL+'api/project/get_projectfile/'+projectHeader(),
         gltf => {
@@ -104,9 +105,11 @@ export default {
               o.castShadow = true;
               o.receiveShadow = true;
               o.matrixAutoUpdate = false // this object is static
+              //adding materials to a list
+              if ( o.material ) materials.push( o.material );
             }
           });
-
+          this.$store.dispatch('viewport/setmaterialList', materials)
           const box = new THREE.Box3().setFromObject( gltf.scene );
           const size = box.getSize( new THREE.Vector3() ).length();
           const center = box.getCenter( new THREE.Vector3() );

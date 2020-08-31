@@ -15,13 +15,8 @@ export const router = new Router({
     },
     {
       path: '/login',
-      component: Login
+      component: Login,
     },
-// TODO add register + invite + email verification
-//    {
-//      path: '/register',
-//      component: Register
-//    },
     {
       path: '/view',
       name: 'View',
@@ -33,6 +28,18 @@ export const router = new Router({
       name: 'Chat',
       // lazy-loaded
       component: () => import('../views/Chat.vue')
+    },
+    {
+      path: '/learning',
+      name: 'Learning',
+      redirect: '/learning/list',
+      // lazy-loaded
+      component: () => import('../views/Learning.vue'),
+            children: [
+        { path: 'list', component: () => import('../components/learning/list-learnings.vue')},
+        { path: 'show/:id', component: () => import('../components/learning/show-learning.vue')},
+        { path: 'add', component: () => import('../components/learning/add-learning.vue')}
+      ]
     },
     {
       path: '/profile',
@@ -61,7 +68,7 @@ export const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/register', '/home'];
+  const publicPages = ['/login'];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem('user');
 

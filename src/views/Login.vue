@@ -1,53 +1,56 @@
 <template>
-  <div class="flex md:flex-row-reverse flex-wrap">
-    <div class="p-64 flex h-screen w-full md:w-3/4 bg-white p-4 text-center text-gray-200">
+  <div class="flex flex-wrap md:flex-row-reverse">
+    <div class="flex w-full h-screen p-4 p-64 text-center text-gray-200 bg-white md:w-3/4">
         <div class="m-auto">
       <img :src="images.logo">
         </div>
     </div>
-      <div class="flex h-screen w-full md:w-1/4 bg-gray-200 p-4 text-center text-gray-700">
+      <div class="flex w-full h-screen p-4 text-center text-gray-700 bg-gray-200 md:w-1/4">
         <div class="m-auto">
-            <div class="bg-white rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
-<FormulateForm @submit="login">
-    <FormulateInput
-      type="text"
-      name="username"
-      v-model="user.username"
-      label="Username"
-      validation="required"
-    />
-    <FormulateInput
-      type="password"
-      name="password"
-      v-model="user.password"
-      label="Password"
-      validation="required"
-    />
-    <p>{{ message.message }}</p>
-<FormulateInput label="Login" type="submit" />
-  </FormulateForm>
-            </div>
+          <component v-bind:is="currentTabComponent"></component>
+      <div
+        v-for="tab in tabs"
+        v-bind:key="tab">
+      <button
+        v-if="currentTab != tab.component"
+        v-on:click="currentTab = tab.component"
+        class="w-full p-1 m-1 border rounded white"
+      >
+        {{ tab.name }}
+      </button>
+      </div>
         </div>
       </div>
   </div>
 </template>
 
 <script>
-import User from '../models/user';
 
+import SignIn from '@/components/login/signin';
+import Register from '@/components/login/register';
 export default {
   name: 'Login',
+  components: {
+    SignIn,
+    Register
+  },
   data() {
     return {
-      user: new User('', ''),
-      loading: false,
-      message: '',
+      currentTab: "SignIn",
+      tabs: [
+        {name: "Register", component: "Register"},
+        {name: "Forgot Password!", component: "ForgotPassword"},
+        {name: "Sign In", component: "SignIn"}
+      ],
       images: {
           logo: require('../assets/logo.png')
       }
     };
   },
   computed: {
+    currentTabComponent: function() {
+      return this.currentTab;
+    },
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
     }
@@ -55,25 +58,6 @@ export default {
   created() {
     if (this.loggedIn) {
       this.$router.push('/projects');
-    }
-  },
-  methods: {
-    login() {
-      this.loading = true;
-        if (this.user.username && this.user.password) {
-          this.$store.dispatch('auth/login', this.user).then(
-            () => {
-                this.$router.push('/projects');
-            },
-            error => {
-              this.loading = false;
-              this.message =
-                (error.response && error.response.data) ||
-                error.message ||
-                error.toString();
-            }
-          );
-        }
     }
   }
 };
