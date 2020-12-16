@@ -1,0 +1,8 @@
+FROM node:14.5.0-slim
+# Create app directory
+WORKDIR /usr/src/app
+RUN npm install -g serve
+COPY . .
+EXPOSE 8080
+RUN npm install && npm run build
+CMD serve -s dist -l 8080
