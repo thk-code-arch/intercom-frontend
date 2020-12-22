@@ -10,7 +10,7 @@ import axios from "axios";
 Vue.prototype.$profile_image =
   process.env.VUE_APP_API_URL + "static/profile_image/";
 Vue.prototype.$app_url = process.env.VUE_APP_API_URL;
-const API_URL = process.env.VUE_APP_API_URL;
+const API_URL = process.env.VUE_APP_API_URL+'api/';
 
 Vue.prototype.$http = axios.create({
   baseURL: API_URL,
@@ -41,7 +41,7 @@ Vue.prototype.$http.interceptors.request.use(
       config.headers["Authorization"] = "Bearer " + user.accessToken;
     }
     config.headers["Content-Type"] = "application/json";
-    console.log(config);
+    console.log("httpconf:",config);
     return config;
   },
   (error) => {

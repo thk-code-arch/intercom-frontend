@@ -11,7 +11,7 @@ class UploadService {
     formData.append("project", file);
     var header = {
     headers: {
-            "x-access-token": authHeader(),
+            "Authorization": authHeader(),
             "Content-Type": "multipart/form-data",
         },
         onUploadProgress}
@@ -25,7 +25,7 @@ class UploadService {
     formData.append("project", file);
     var header = {
     headers: {
-            "x-access-token": authHeader(),
+            "Authorization": authHeader(),
             "Content-Type": "multipart/form-data",
         },
         onUploadProgress}

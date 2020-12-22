@@ -1,18 +1,14 @@
 import axios from 'axios';
 import authHeader from './auth-header';
-import projectHeader from './project-header';
 const API_URL = process.env.VUE_APP_API_URL+'api/project/';
 
 class ProjectService {
-  getProjects() {
-    return axios.get(API_URL + 'get_projects', { headers:{"x-access-token": authHeader()} });
-  }
 
   selectProject(theproject) {
       return axios.post(API_URL + 'select_project', {
           projectid: theproject.id
       },{
-    headers:{"x-access-token": authHeader()} 
+    headers:{"Authorization": authHeader()} 
       })
       .then(response => {
         if (response.data.name) {
@@ -22,12 +18,9 @@ class ProjectService {
         return response.data;
       });
   }
-  getProjectinfo() {
-      return axios.get(API_URL + 'get_projectinfo/'+projectHeader(),{ headers:{"x-access-token": authHeader() } });
-  }
   addProject() {
       return axios.post(API_URL + 'add_project',{},{
-    headers:{"x-access-token": authHeader()} 
+    headers:{"Authorization": authHeader()} 
       })
       .then(response => {
         if (response.data.name) {

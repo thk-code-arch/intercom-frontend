@@ -18,47 +18,47 @@
       name="projectinfo.description"
       :options="projects"
     />
-    <UploadIFC/>
+    <UploadIFC />
   </div>
 </template>
 
 <script>
 import UploadIFC from "./project/UploadIFC";
-import ProjectService from "../services/project.service";
+import projectHeader from "../services/project-header";
 export default {
-  name: 'edit-project',
-  data: function() {
+  name: "edit-project",
+  data: function () {
     return {
       projectinfo: [],
       projects: [],
-    }
+    };
   },
   components: {
-      UploadIFC
+    UploadIFC,
   },
   mounted() {
-      ProjectService.getProjectinfo().then(
-      response => {
+    this.$http.get("/project/get_projectinfo/" + projectHeader()).then(
+      (response) => {
         this.projectinfo = response.data;
       },
-      error => {
+      (error) => {
         this.content =
           (error.response && error.response.data) ||
           error.message ||
           error.toString();
       }
     );
-      ProjectService.getProjects().then(
-      response => {
+    this.$http.get("/project/get_projects").then(
+      (response) => {
         this.projects = response.data;
       },
-      error => {
+      (error) => {
         this.content =
           (error.response && error.response.data) ||
           error.message ||
           error.toString();
       }
     );
-  }
+  },
 };
 </script>

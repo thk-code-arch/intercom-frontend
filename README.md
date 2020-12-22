@@ -9,7 +9,7 @@ First clone repo and CD into it.
 Set api URL
 
 ```bash
-echo "VUE_APP_API_URL=https://DEVAPIURL.com" > .env.development
+echo "VUE_APP_API_URL=https://DEVAPIURL.com/" > .env.development
 ```
 
 Install dependecies
