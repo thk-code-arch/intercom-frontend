@@ -28,11 +28,11 @@
         </p>
         <p>
           <strong>Id:</strong>
-          {{ currentUser.user.id }}
+          {{ currentUser.id }}
         </p>
         <p>
           <strong>Email:</strong>
-          {{ currentUser.user.email }}
+          {{ currentUser.email }}
         </p>
         <strong>Authorities:</strong>
         <ul>
@@ -58,7 +58,7 @@
         <!-- TEXT -->
         <h1 class="mb-2 text-2xl font-medium"></h1>
         <img
-          :src="currentUser.user.profile_image"
+          :src="currentUser.profile_image"
           class="w-64 h-64 m-auto text-black rounded-full"
         />
 

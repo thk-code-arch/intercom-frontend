@@ -65,7 +65,7 @@
               class="relative z-10 block w-10 h-10 overflow-hidden border-2 rounded-full border-codearch-500 focus:outline-none focus:border-white"
             >
               <img
-                :src="currentUser.user.profile_image"
+                :src="currentUser.profile_image"
                 class="object-cover w-full h-full"
               />
             </button>
@@ -238,7 +238,7 @@ export default {
     },
     isAdmin() {
       if (this.currentUser && this.currentUser.roles) {
-        return this.currentUser.roles.includes("ROLE_ADMIN");
+        return this.currentUser.roles.includes("admin");
       }
       return false;
     },
