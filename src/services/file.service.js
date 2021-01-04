@@ -3,8 +3,7 @@ import authHeader from './auth-header';
 import projectHeader from './project-header';
 
 const API_URL = process.env.VUE_APP_API_URL+'api/';
-
-class UploadService {
+class UploadService  {
   upload(file, onUploadProgress) {
     let formData = new FormData();
 
@@ -25,12 +24,11 @@ class UploadService {
     formData.append("project", file);
     var header = {
     headers: {
-            "Authorization": authHeader(),
             "Content-Type": "multipart/form-data",
         },
         onUploadProgress}
     console.log(header);
-    return axios.post(API_URL+'uploadifc/'+projectHeader(), formData, header);
+    return this.$http.post('project/uploadifc/'+projectHeader(), formData, header);
   }
 }
 

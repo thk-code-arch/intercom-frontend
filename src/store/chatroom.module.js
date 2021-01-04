@@ -14,8 +14,9 @@ export const chatroom = {
     load_chatlog({ commit ,state }, oldroom) {
       if (state.currentchatroom !== 0){
         ChatService.getChatLog(state.currentchatroom).then((message) => {
-		commit("loaded_chatlog", message.data[0]);
-        commit("loaded_theroom", {name: message.data[0].name,description: message.data[0].description});
+		commit("loaded_chatlog", message.data);
+          console.log(message.data.chatlog)
+        commit("loaded_theroom", {name: message.data.name,description: message.data.description});
         this._vm.$socket.chatroom.emit('join_chatroom',{oldRoom: oldroom, newRoom: state.currentchatroom});
         });
       }

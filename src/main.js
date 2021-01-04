@@ -34,6 +34,7 @@ Vue.prototype.$http.interceptors.response.use(
   }
 );
 
+
 Vue.prototype.$http.interceptors.request.use(
   (config) => {
     const user = JSON.parse(localStorage.getItem("user"));
