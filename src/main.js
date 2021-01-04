@@ -42,7 +42,7 @@ Vue.prototype.$http.interceptors.request.use(
       config.headers["Authorization"] = "Bearer " + user.accessToken;
     }
     config.headers["Content-Type"] = "application/json";
-    console.log("httpconf:",config);
+    console.log("$http axios request",config);
     return config;
   },
   (error) => {

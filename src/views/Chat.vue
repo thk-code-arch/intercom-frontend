@@ -21,7 +21,6 @@
 
 <script>
 import ChatWindow from "../components/ChatWindow";
-import ChatService from "@/services/chat.service";
 export default {
   name: "Chat",
   components: {
@@ -53,7 +52,7 @@ export default {
   },
   created() {
     //get actaual chatroomid
-    ChatService.getChatRooms().then(
+    this.$http.get("chat/get_chatrooms").then(
       (response) => {
         // connect to room
         this.chatrooms = response.data[0].chatrooms;

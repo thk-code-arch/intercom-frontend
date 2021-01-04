@@ -1,10 +1,7 @@
 <template>
   <div>
     <div v-if="currentFile" class="progress">
-      <div
-      >
-        {{ progress }}%
-      </div>
+      <div>{{ progress }}%</div>
     </div>
 
     <label class="">
@@ -16,7 +13,7 @@
     </button>
 
     <div v-if="message">
-      <a :href="$app_url+message">Logfile</a>
+      <a :href="$app_url + message">Logfile</a>
     </div>
   </div>
 </template>
@@ -30,8 +27,8 @@ export default {
       selectedFiles: undefined,
       currentFile: undefined,
       progress: 0,
-      message: '',
-      fileInfos: []
+      message: "",
+      fileInfos: [],
     };
   },
   methods: {
@@ -41,16 +38,14 @@ export default {
     upload() {
       this.progress = 0;
       this.currentFile = this.selectedFiles.item(0);
-      UploadService.uploadifc(this.currentFile, event => {
+      UploadService.uploadifc(this.currentFile, (event) => {
         this.progress = Math.round((100 * event.loaded) / event.total);
-      })
-        .then(response => {
-          this.message = response.data.data.logfile;
-        })
+      }).then((response) => {
+        this.message = response.data.logfile;
+      });
       this.selectedFiles = undefined;
-    }
+    },
   },
-  mounted() {
-  }
+  mounted() {},
 };
 </script>

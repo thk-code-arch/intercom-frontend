@@ -1,5 +1,3 @@
-import ChatService from "@/services/chat.service";
-
 export const chatroom = {
   namespaced: true,
   state: {
@@ -13,7 +11,7 @@ export const chatroom = {
     },
     load_chatlog({ commit ,state }, oldroom) {
       if (state.currentchatroom !== 0){
-        ChatService.getChatLog(state.currentchatroom).then((message) => {
+        this._vm.$http.get('chat/log/'+state.currentchatroom).then((message) => {
 		commit("loaded_chatlog", message.data);
           console.log(message.data.chatlog)
         commit("loaded_theroom", {name: message.data.name,description: message.data.description});
@@ -26,7 +24,7 @@ export const chatroom = {
       commit("CHAT_SENDMESSAGE");
     },
     CHAT_message({ commit }, data) {
-      return ChatService.getmsgbyid(data).then((message) => {
+    return this._vm.$http.get('chat/msgbyid/'+data).then((message) => {
 		commit("message", message.data);
       })
     },

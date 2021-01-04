@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import Project from "../models/project";
+import Project from "@/models/project";
 
 export default {
   name: "select-project",
