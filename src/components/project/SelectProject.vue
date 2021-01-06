@@ -9,10 +9,10 @@
       >
         <span class="text-2xl text-gray-700"> {{ project.name }} </span>
       </div>
-      <div
+      <router-link
+        to="/new-project"
         class="w-1/4 h-32 m-2 bg-white rounded cursor-pointer"
         v-if="showaddProject"
-        v-on:click="addProject"
       >
         <svg
           class="inline-block w-full h-full p-12 text-gray-700 fill-current"
@@ -24,7 +24,7 @@
             clip-rule="evenodd"
           ></path>
         </svg>
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -56,7 +56,7 @@ export default {
     addProject() {
       this.$store.dispatch("curproject/addnewProject").then(
         () => {
-          this.$router.push("/project-settings");
+          this.$router.push("/new-project");
         },
         (error) => {
           this.loading = false;
