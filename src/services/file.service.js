@@ -1,36 +1,18 @@
-import axios from 'axios';
-import authHeader from './auth-header';
 import projectHeader from './project-header';
-
-const API_URL = process.env.VUE_APP_API_URL+'api/';
-
-class UploadService {
-  upload(file, onUploadProgress) {
-    let formData = new FormData();
-
-    formData.append("project", file);
-    var header = {
-    headers: {
-            "x-access-token": authHeader(),
-            "Content-Type": "multipart/form-data",
-        },
-        onUploadProgress}
-    console.log(header);
-    return axios.post(API_URL, formData, header);
-  }
+import Vue from 'vue'
+class UploadService  {
 
   uploadifc(file, onUploadProgress) {
     let formData = new FormData();
 
-    formData.append("project", file);
+    formData.append("file", file);
     var header = {
     headers: {
-            "x-access-token": authHeader(),
             "Content-Type": "multipart/form-data",
         },
         onUploadProgress}
     console.log(header);
-    return axios.post(API_URL+'uploadifc/'+projectHeader(), formData, header);
+    return Vue.prototype.$http.post('project/uploadifc/'+projectHeader(), formData, header);
   }
 }
 

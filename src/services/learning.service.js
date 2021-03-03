@@ -11,15 +11,15 @@ class LearningService {
     "title":theLearning.title,
     "description":theLearning.description,
     "type": theLearning.type,
-	}, { headers:{"x-access-token": authHeader()} });
+	}, { headers:{"Authorization": authHeader()} });
   }
 
   getAllLearningPublic() {
-    return axios.get(API_URL + 'public',{ headers:{"x-access-token": authHeader() } });
+    return axios.get(API_URL + 'public',{ headers:{"Authorization": authHeader() } });
   }
   getLearning(learningId) {
     console.log("learning ,,,");
-    return axios.get(API_URL + 'show/'+learningId,{ headers:{"x-access-token": authHeader() } });
+    return axios.get(API_URL + 'show/'+learningId,{ headers:{"Authorization": authHeader() } });
   }
 }
 

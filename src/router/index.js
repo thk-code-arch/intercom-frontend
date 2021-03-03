@@ -54,8 +54,14 @@ export const router = new Router({
       component: () => import('../views/Admin.vue')
     },
     {
+      path: '/new-project',
+      name: 'new-project',
+      // lazy-loaded
+      component: () => import('../views/ProjectSettings.vue')
+    },
+    {
       path: '/project-settings',
-      name: 'Project-Settings',
+      name: 'project-settings',
       // lazy-loaded
       component: () => import('../views/ProjectSettings.vue')
     },

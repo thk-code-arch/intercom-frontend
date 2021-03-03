@@ -8,7 +8,7 @@ class MaintenanceService {
     "title": report.title,
     "label": report.label,
     "context": report.context,
-	}, { headers:{"x-access-token": authHeader()} });
+	}, { headers:{"Authorization": authHeader()} });
   }
 }
 
