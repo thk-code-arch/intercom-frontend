@@ -12,9 +12,16 @@
     <div class="p-8">
       <!-- TEXT -->
       <FormulateForm
+        v-if="currentState.state == 'new-project'"
         @submit="submitNewProject"
         v-model="newProject"
         :schema="newProjectSchema"
+      />
+      <FormulateForm
+        v-if="currentState.state == 'project-settings'"
+        @submit="submitEditProject"
+        v-model="projectinfo"
+        :schema="editProjectSchema"
       />
       <UploadIFC v-if="currentState.state == 'project-settings'" />
     </div>
@@ -55,7 +62,7 @@ export default {
         {
           type: "select",
           label: "Optional: Select parent project",
-          name: "parentprojectid",
+          name: "parentProject",
           placeholder: "Parent project",
           options: {},
         },
@@ -64,7 +71,23 @@ export default {
           label: "Save project",
         },
       ],
-      projectinfo: [],
+      projectinfo: {},
+      editProjectSchema: [
+        {
+          label: "Project name",
+          name: "name",
+          validation: "required",
+        },
+        {
+          label: "Project description",
+          name: "description",
+          validation: "required",
+        },
+        {
+          type: "submit",
+          label: "Update Project settings",
+        },
+      ],
       projects: [],
     };
   },
@@ -95,6 +118,25 @@ export default {
         }
       );
     },
+    submitEditProject() {
+      this.$http
+        .post("/project/edit_project", {
+          name: this.projectinfo.name,
+          description: this.projectinfo.description,
+          id: this.projectinfo.id,
+        })
+        .then(
+          (response) => {
+            this.$store.dispatch("curproject/selectProject", response.data);
+          },
+          (error) => {
+            this.content =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
+          }
+        );
+    },
   },
   mounted() {
     if (this.currentState.state !== "new-project") {
@@ -112,12 +154,11 @@ export default {
     }
     this.$http.get("/project/get_projects").then(
       (response) => {
-        this.newProjectSchema[2].options = response.data.map(
-          ({ id, name }) => ({
-            label: name,
-            value: id,
-          })
-        );
+        const projects = response.data.filter((p) => p.parentProject === null);
+        this.newProjectSchema[2].options = projects.map(({ id, name }) => ({
+          label: name,
+          value: id,
+        }));
       },
       (error) => {
         this.content =
