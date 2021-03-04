@@ -8,6 +8,7 @@
         v-on:click="Select(project)"
       >
         <span class="text-2xl text-gray-700"> {{ project.name }} </span>
+        <span class="text-xs text-gray-700"> {{ project.description }} </span>
       </div>
       <router-link
         to="/new-project"
@@ -39,6 +40,7 @@ export default {
       project: new Project("", ""),
       selectedProject: "",
       projects: [],
+      subprojects: [],
     };
   },
   computed: {
@@ -68,25 +70,47 @@ export default {
       );
     },
     Select: function (project) {
-      this.project.id = project.id;
-      this.$store.dispatch("curproject/selectProject", this.project).then(
-        () => {
-          this.$router.push("/view");
-        },
-        (error) => {
-          this.loading = false;
-          this.message =
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString();
-        }
-      );
+      if (project.sub === undefined || project.sub.length === 0) {
+        this.project.id = project.id;
+        this.$store.dispatch("curproject/selectProject", this.project).then(
+          () => {
+            this.$router.push("/view");
+          },
+          (error) => {
+            this.loading = false;
+            this.message =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
+          }
+        );
+      }
+      if (project.sub.length !== 0) {
+        console.log("has subs");
+        this.projects = this.subprojects.filter(
+          (p) => p.parentProject === project.id
+        );
+        project.sub = [];
+        this.projects.unshift(project);
+      }
     },
   },
   mounted() {
     this.$http.get("project/get_projects").then(
       (response) => {
-        this.projects = response.data;
+        this.projects = response.data.filter((p) => p.parentProject === null);
+        this.subprojects = response.data.filter(
+          (p) => p.parentProject !== null
+        );
+        for (var i = 0; i < this.projects.length; i++) {
+          this.projects[i]["sub"] = [];
+          const found = this.subprojects.find(
+            (sp) => sp["parentProject"] === this.projects[i].id
+          );
+          if (found) {
+            this.projects[i]["sub"].push(found.id);
+          }
+        }
       },
       (error) => {
         this.content =

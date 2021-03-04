@@ -62,7 +62,7 @@ export default {
         {
           type: "select",
           label: "Optional: Select parent project",
-          name: "parentprojectid",
+          name: "parentProject",
           placeholder: "Parent project",
           options: {},
         },
@@ -154,12 +154,11 @@ export default {
     }
     this.$http.get("/project/get_projects").then(
       (response) => {
-        this.newProjectSchema[2].options = response.data.map(
-          ({ id, name }) => ({
-            label: name,
-            value: id,
-          })
-        );
+        const projects = response.data.filter((p) => p.parentProject === null);
+        this.newProjectSchema[2].options = projects.map(({ id, name }) => ({
+          label: name,
+          value: id,
+        }));
       },
       (error) => {
         this.content =
