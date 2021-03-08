@@ -6,17 +6,29 @@ export const viewport = {
     players: [],
     camPosi: {},
     othercamPos: {},
-    materials:{}
+    materials:{},
+    takeScreenshot:false,
+    imgDataurl:""
   },
   actions: {
+    // Read materials List from GLTF (not as usefull...)
     setmaterialList({ commit },materials) {
       commit('materialList', materials);
     },
+    // set own camera postion -> send to Server
     setowncamPos({ commit },position) {
       commit('owncamPos', position);
     },
+    // Takeover camera position -> receive from Server
     getcamPos({ commit },position) {
       commit('othercamPos', position);
+    },
+    // Take screenshots
+    takeScreenshot({ commit }) {
+      commit('takeScreenshotNow');
+    },
+    imgStore({ commit },dataUrl) {
+      commit('storeImage',dataUrl);
     },
     select_viewport({ commit }, chatID) {
       commit("Select_Viewport", chatID);
@@ -75,6 +87,12 @@ export const viewport = {
     },
     othercamPos( state, position){
     state.othercamPos = position;
+    },
+    takeScreenshotNow(state){
+    state.takeScreenshot = !state.takeScreenshot;
+    },
+    storeImage(state, dataUrl){
+    state.imgDataurl = dataUrl;
     },
     Select_Viewport(state, chatID ) {
       state.currentviewport = chatID;

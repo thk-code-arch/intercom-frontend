@@ -27,6 +27,9 @@ export default {
     othercamPos() {
       return this.$store.state.viewport.othercamPos;
     },
+    takeScreenshotNow() {
+      return this.$store.state.viewport.takeScreenshot;
+    },
   },
   methods: {
     resizeWindow() {
@@ -186,21 +189,24 @@ export default {
       this.$store.dispatch("viewport/setowncamPos", this.camPos);
     },
     takeScreenshot() {
-      var dataURL = this.renderer.domElement.toDataURL();
-      var link = document.createElement("a");
-      link.download = "demo.png";
-      link.href = dataURL;
-      link.target = "_blank";
-      link.click();
+      this.render();
+      this.$store.dispatch(
+        "viewport/imgStore",
+        this.renderer.domElement.toDataURL()
+      );
     },
     render() {
       this.renderer.render(this.scene, this.camera);
     },
   },
   watch: {
-    othercamPos: function () {
+    othercamPos() {
       // watch it
       this.getCameraPosition();
+    },
+    takeScreenshotNow() {
+      console.log("takeScreenshot");
+      this.takeScreenshot();
     },
   },
   mounted() {

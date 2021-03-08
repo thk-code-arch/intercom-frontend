@@ -1,11 +1,9 @@
 <template>
   <!--Modal-->
   <div
-    class="fixed top-0 left-0 z-20 flex items-center justify-center w-full h-full modal"
+    class="fixed top-0 left-0 z-20 flex items-center justify-center w-full h-full"
   >
-    <div
-      class="absolute w-full h-full bg-gray-900 opacity-50 modal-overlay"
-    ></div>
+    <div class="absolute w-full h-full bg-gray-900 opacity-50"></div>
     <div
       class="z-50 w-11/12 mx-auto overflow-y-auto bg-white rounded modal-container lg:max-w-4xl md:max-w-md"
     >
@@ -44,27 +42,23 @@
 
         <!--Body-->
         <!--Footer-->
-        <div v-if="selType == 'sent'" class="flex justify-end pt-2">
-          <button
-            v-on:click="exitButton()"
-            class="p-3 px-4 text-white rounded-lg bg-codearch-500 modal-close hover:bg-codearch-300"
-          >
-            Close
-          </button>
-        </div>
+        Footre Footre
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import MaintenanceService from "@/services/maintenance.service.js";
 export default {
-  name: "BugReport",
+  name: "ScreenshotFullScreen",
   data() {
     return {};
   },
-  computed: {},
+  computed: {
+    screenshotDataUrl() {
+      return this.$store.state.viewport.imgDataurl;
+    },
+  },
   mounted() {},
   methods: {
     exitButton() {},
