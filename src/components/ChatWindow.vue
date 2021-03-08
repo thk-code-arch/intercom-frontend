@@ -9,9 +9,9 @@
         <h3 class="mb-1 font-extrabold text-grey-darkest">
           #{{ theroom.name }}
         </h3>
-        <div class="text-sm truncate text-grey-dark">
+        <p class="text-sm break-words text-grey-dark">
           {{ theroom.description }}
-        </div>
+        </p>
       </div>
     </div>
     <!-- Chat messages -->

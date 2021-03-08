@@ -45,10 +45,10 @@ export const viewport = {
     },
     PLAYER_getplayers({ commit, state, rootState }, data) {
     // get all connected players in array
-    console.log(data.userid,rootState.auth.user.id);
-    if (data.userid !== rootState.auth.user.id){
+    console.log(data.userId,rootState.auth.user.id);
+    if (data.userId !== rootState.auth.user.id){
       var players = state.players;
-      var index = players.findIndex(x => x.userid==data.userid)
+      var index = players.findIndex(x => x.userId==data.userId)
       if (index === -1){
         players.push(data);
       }
