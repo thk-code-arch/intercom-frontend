@@ -55,7 +55,7 @@ export default {
     this.$http.get("chat/get_chatrooms").then(
       (response) => {
         // connect to room
-        this.chatrooms = response.data[0].chatrooms;
+        this.chatrooms = response.data;
         if (this.theroom == 0) {
           this.$store.dispatch(
             "chatroom/select_chatroom",
