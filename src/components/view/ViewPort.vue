@@ -1,5 +1,6 @@
 <template>
   <div
+    id="threejs"
     class="outline-none cursor-move scene-container"
     ref="sceneContainer"
   ></div>
@@ -184,6 +185,14 @@ export default {
       //send camera position to Server
       this.$store.dispatch("viewport/setowncamPos", this.camPos);
     },
+    takeScreenshot() {
+      var dataURL = this.renderer.domElement.toDataURL();
+      var link = document.createElement("a");
+      link.download = "demo.png";
+      link.href = dataURL;
+      link.target = "_blank";
+      link.click();
+    },
     render() {
       this.renderer.render(this.scene, this.camera);
     },
@@ -199,6 +208,7 @@ export default {
   },
   created() {
     window.addEventListener("resize", this.resizeWindow);
+    this.takeScreenshot();
   },
   destroyed() {
     this.scene.dispose();
