@@ -75,10 +75,6 @@ export default {
       showModal: false,
     };
   },
-  components: {
-    PScene,
-    PCircle,
-  },
 
   computed: {
     screenshotDataUrl() {
