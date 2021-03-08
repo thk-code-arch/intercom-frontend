@@ -1,77 +1,98 @@
 <template>
-  <!--Modal-->
-  <div
-    class="fixed top-0 left-0 z-20 flex items-center justify-center w-full h-full"
-  >
-    <div class="absolute w-full h-full bg-gray-900 opacity-50"></div>
-    <div
-      class="z-50 w-11/12 mx-auto overflow-y-auto bg-white rounded modal-container lg:max-w-4xl md:max-w-md"
+  <div>
+    <button
+      class="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase rounded shadow outline-none bg-codearch-500 active:bg-codearch-600 focus:outline-none"
+      type="button"
+      style="transition: all 0.15s ease"
+      v-on:click="toggleModal()"
     >
-      <!-- Add margin if you want to see some of the overlay behind the modal-->
-      <div class="px-6 py-4 text-left modal-content">
-        <!--Title-->
-        <div class="flex items-center justify-between pb-3">
-          <p class="text-2xl font-bold">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="inline-block w-4 h-4 text-black fill-current"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M7.074 1.408c0-.778.641-1.408 1.431-1.408.942 0 1.626.883 1.38 1.776-.093.336-.042.695.138.995.401.664 1.084 1.073 1.977 1.078.88-.004 1.572-.408 1.977-1.078.181-.299.231-.658.138-.995-.246-.892.436-1.776 1.38-1.776.79 0 1.431.63 1.431 1.408 0 .675-.482 1.234-1.118 1.375-.322.071-.6.269-.769.548-.613 1.017.193 1.917.93 2.823-1.21.562-2.524.846-3.969.846-1.468 0-2.771-.277-3.975-.84.748-.92 1.555-1.803.935-2.83-.168-.279-.446-.477-.768-.548-.636-.14-1.118-.699-1.118-1.374zm13.485 14.044h2.387c.583 0 1.054-.464 1.054-1.037s-.472-1.037-1.054-1.037h-2.402c-.575 0-1.137-.393-1.227-1.052-.092-.677.286-1.147.765-1.333l2.231-.866c.541-.21.807-.813.594-1.346-.214-.533-.826-.795-1.367-.584l-2.294.891c-.329.127-.734.036-.926-.401-.185-.423-.396-.816-.62-1.188-1.714.991-3.62 1.501-5.7 1.501-2.113 0-3.995-.498-5.703-1.496-.217.359-.421.738-.601 1.146-.227.514-.646.552-.941.437l-2.295-.89c-.542-.21-1.153.051-1.367.584-.213.533.053 1.136.594 1.346l2.231.866c.496.192.854.694.773 1.274-.106.758-.683 1.111-1.235 1.111h-2.402c-.582 0-1.054.464-1.054 1.037s.472 1.037 1.054 1.037h2.387c.573 0 1.159.372 1.265 1.057.112.728-.228 1.229-.751 1.462l-2.42 1.078c-.53.236-.766.851-.526 1.373s.865.753 1.395.518l2.561-1.14c.307-.137.688-.106.901.259 1.043 1.795 3.143 3.608 6.134 3.941 2.933-.327 5.008-2.076 6.073-3.837.261-.432.628-.514.963-.364l2.561 1.14c.529.236 1.154.005 1.395-.518.24-.522.004-1.137-.526-1.373l-2.42-1.078c-.495-.221-.867-.738-.763-1.383.128-.803.717-1.135 1.276-1.135z"
-              />
-            </svg>
-          </p>
+      Screenshot
+    </button>
+    <div
+      v-if="showModal"
+      class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
+    >
+      <div class="relative w-auto max-w-full px-12 mx-auto">
+        <!--content-->
+        <div
+          class="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none"
+        >
+          <!--header-->
           <div
-            v-on:click="exitButton()"
-            class="z-50 cursor-pointer modal-close"
+            class="flex items-start justify-between p-2 border-b border-gray-300 border-solid rounded-t"
           >
-            <svg
-              class="text-black fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 18 18"
+            <button
+              class="float-right p-1 ml-auto text-3xl font-semibold leading-none text-black bg-transparent border-0 outline-none opacity-5 focus:outline-none"
+              v-on:click="toggleModal()"
             >
-              <path
-                d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"
-              ></path>
-            </svg>
+              <span
+                class="block w-6 h-6 text-2xl text-black bg-transparent outline-none opacity-5 focus:outline-none"
+              >
+                ×
+              </span>
+            </button>
+          </div>
+          <!--body-->
+          <div class="relative flex-auto p-2">
+            <img :src="screenshotDataUrl" />
+            <p class="my-4 text-lg leading-relaxed text-gray-600"></p>
+          </div>
+          <!--footer-->
+          <div
+            class="flex items-center justify-end p-6 border-t border-gray-300 border-solid rounded-b"
+          >
+            <button
+              class="px-4 py-2 mb-1 mr-1 text-sm font-bold uppercase outline-none text-codearch-400 background-transparent focus:outline-none"
+              type="button"
+              style="transition: all 0.15s ease"
+              v-on:click="toggleModal()"
+            >
+              Close
+            </button>
+            <button
+              class="px-4 py-2 mb-1 mr-1 text-sm font-bold uppercase bg-transparent border border-solid rounded outline-none text-codearch-400 border-codearch-400 hover:bg-codearch-400 hover:text-white active:bg-red-600 focus:outline-none"
+              type="button"
+              style="transition: all 0.15s ease"
+              v-on:click="toggleModal()"
+            >
+              Save
+            </button>
           </div>
         </div>
-
-        <!--Body-->
-        <!--Footer-->
-        Footre Footre
       </div>
     </div>
+    <div v-if="showModal" class="fixed inset-0 z-40 bg-black opacity-50"></div>
   </div>
 </template>
+
 
 <script>
 export default {
   name: "ScreenshotFullScreen",
+
   data() {
-    return {};
+    return {
+      showModal: false,
+    };
   },
+  components: {
+    PScene,
+    PCircle,
+  },
+
   computed: {
     screenshotDataUrl() {
       return this.$store.state.viewport.imgDataurl;
     },
   },
-  mounted() {},
   methods: {
-    exitButton() {},
+    toggleModal() {
+      this.takeScreenshot();
+      this.showModal = !this.showModal;
+    },
+    takeScreenshot() {
+      this.$store.dispatch("viewport/takeScreenshot");
+    },
   },
 };
 </script>
-<style>
-.modal {
-  transition: opacity 0.25s ease;
-}
-body.modal-active {
-  overflow-x: hidden;
-  overflow-y: visible !important;
-}
-</style>
-
