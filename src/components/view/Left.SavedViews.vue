@@ -12,7 +12,6 @@
       <div class="flex-1 px-6">
         <svg
           class="w-10 h-10 rounded cursor-pointer"
-          v-on:click="takeScreenshot()"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
@@ -34,8 +33,6 @@
 </template>
 
 <script>
-import html2canvas from "html2canvas";
-
 export default {
   name: "left-savedviews",
   data() {
@@ -43,16 +40,6 @@ export default {
       image: "",
     };
   },
-  methods: {
-    takeScreenshot() {
-      html2canvas(document.getElementById("threejs"))
-        .then((img) => {
-          this.image = img.toDataURL("image/png");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-  },
+  methods: {},
 };
 </script>
