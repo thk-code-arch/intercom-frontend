@@ -31,6 +31,9 @@ export default {
     takeScreenshotNow() {
       return this.$store.state.viewport.takeScreenshot;
     },
+    connectedPlayers() {
+      return this.$store.state.viewport.players;
+    },
   },
   methods: {
     resizeWindow() {
@@ -46,22 +49,24 @@ export default {
     },
     insertAvatar() {
       // sample Box from docs
-      const geometry = new THREE.BoxGeometry(1, 1, 1);
-      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-      this.avatar = new THREE.Mesh(geometry, material);
-      //cube.scene.position.x += 1;
-      //cube.scene.position.y += 2;
-      //cube.scene.position.z += 1;
-      this.avatar.name = "admin";
-      console.log(this.scene.add(this.avatar));
+      Array.prototype.forEach.call(this.connectedPlayers, (player) => {
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        this.avatar = new THREE.Mesh(geometry, material);
+        this.avatar.name = player.username;
+        this.scene.add(this.avatar);
+      });
     },
     updateAvatar() {
-      var selectedAvatar = this.scene.getObjectByName("admin");
-      console.log(selectedAvatar);
-      selectedAvatar.position.x = this.camera.position.x;
-      selectedAvatar.position.y = this.camera.position.y;
-      selectedAvatar.position.z = 1;
-      this.scene.add(selectedAvatar);
+      Array.prototype.forEach.call(this.connectedPlayers, (player) => {
+        console.log("arraylength", player);
+        var selectedAvatar = this.scene.getObjectByName(player.username);
+        console.log("arraylength", player.position);
+        selectedAvatar.position.x = player.position.x;
+        selectedAvatar.position.y = player.position.y;
+        selectedAvatar.position.z = player.position.z;
+        this.scene.add(selectedAvatar);
+      });
     },
     init() {
       // set container
@@ -222,6 +227,12 @@ export default {
     },
   },
   watch: {
+    connectedPlayers(oldval, newval) {
+      if (oldval.length !== newval.length) {
+        this.insertAvatar();
+      }
+      this.updateCamera();
+    },
     othercamPos() {
       // watch it
       this.getCameraPosition();
