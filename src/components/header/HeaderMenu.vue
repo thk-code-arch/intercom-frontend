@@ -3,7 +3,7 @@
     <fixed-header>
       <div
         id="top-menu"
-        class="flex items-center justify-between w-full px-4 px-6 py-1 bg-white border-b-2 border-blue-900 z-49 navbar"
+        class="z-40 flex items-center justify-between w-full px-4 px-6 py-1 bg-white border-b-2 border-blue-900 navbar"
       >
         <div class="self-center">
           <img class="w-24" :src="images.logo" />

@@ -21,6 +21,7 @@ export default {
       controls: null,
       renderer: null,
       camPos: "",
+      avatar: null,
     };
   },
   computed: {
@@ -42,6 +43,25 @@ export default {
         this.container.clientWidth / this.container.clientHeight;
       this.camera.updateProjectionMatrix();
       this.render();
+    },
+    insertAvatar() {
+      // sample Box from docs
+      const geometry = new THREE.BoxGeometry(1, 1, 1);
+      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      this.avatar = new THREE.Mesh(geometry, material);
+      //cube.scene.position.x += 1;
+      //cube.scene.position.y += 2;
+      //cube.scene.position.z += 1;
+      this.avatar.name = "admin";
+      console.log(this.scene.add(this.avatar));
+    },
+    updateAvatar() {
+      var selectedAvatar = this.scene.getObjectByName("admin");
+      console.log(selectedAvatar);
+      selectedAvatar.position.x = this.camera.position.x;
+      selectedAvatar.position.y = this.camera.position.y;
+      selectedAvatar.position.z = 1;
+      this.scene.add(selectedAvatar);
     },
     init() {
       // set container
@@ -111,6 +131,7 @@ export default {
       this.vector = new THREE.Vector3();
 
       this.loadModel();
+      this.insertAvatar();
       this.render();
     },
     loadModel() {
@@ -178,7 +199,7 @@ export default {
       this.render();
     },
     updateCamera() {
-      this.render();
+      this.updateAvatar();
       this.camPos = {
         x: this.camera.position.x,
         y: this.camera.position.y,
@@ -187,6 +208,7 @@ export default {
       };
       //send camera position to Server
       this.$store.dispatch("viewport/setowncamPos", this.camPos);
+      this.render();
     },
     takeScreenshot() {
       this.render();

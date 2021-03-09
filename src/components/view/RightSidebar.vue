@@ -60,13 +60,12 @@ export default {
     };
   },
   watch: {
-    camPosi: function (val) {
+    camPosi() {
       //dont send too much coordinates in a second
       this.timenow = moment();
       this.mseconds = this.timenow.diff(this.gotlastcamPos);
       if (this.mseconds > 500) {
         this.gotlastcamPos = moment();
-        console.log(val);
         this.$store.dispatch("viewport/push_position");
       }
     },

@@ -178,6 +178,17 @@
                     ></span>
                     <span class="relative">{{ auser.username }}</span>
                   </span>
+                  <span class="relative inline-block px-3 py-1 leading-tight">
+                    <span
+                      aria-hidden
+                      class="absolute inset-0 bg-gray-200 rounded-full opacity-50"
+                    ></span>
+                    <span class="relative"
+                      ><ManageUsers
+                        v-bind:project="project"
+                        v-bind:allUsers="Users"
+                    /></span>
+                  </span>
                 </td>
               </tr>
             </tbody>
@@ -267,6 +278,7 @@
 <script>
 import Vue from "vue";
 import moment from "moment";
+import ManageUsers from "@/components/admin/ManageUsers";
 Vue.filter("formatDate", function (value) {
   if (value) {
     return moment(String(value)).format("DD/MM/YYYY HH:mm");
@@ -275,7 +287,9 @@ Vue.filter("formatDate", function (value) {
 import AdminService from "@/services/admin.service";
 export default {
   name: "Admin",
-  components: {},
+  components: {
+    ManageUsers,
+  },
   data() {
     return {
       Users: [],
