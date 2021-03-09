@@ -29,16 +29,17 @@
           <!--body-->
           <div class="relative flex-auto p-2">
             <p class="my-4 text-lg leading-relaxed text-gray-600">
-              {{ allUsers }}
+              {{ selectedUsers }}
             </p>
             <span
-              v-for="(cuser, cuser_idx) in allUsers"
+              v-for="(cuser, cuser_idx) in usersNotInProject"
               :key="cuser_idx"
               class="relative inline-block px-3 py-1 leading-tight"
             >
               <span
                 aria-hidden
                 class="absolute inset-0 bg-gray-200 rounded-full opacity-50"
+                v-on:click="selectUser(cuser.email)"
               ></span>
               <span class="relative">{{ cuser.username }}</span>
             </span>
@@ -86,9 +87,20 @@ export default {
       selectedUsers: [],
     };
   },
-
-  computed: {},
+  computed: {
+    usersNotInProject() {
+      let usersInProject = this.project.users.map(({ id }) => id);
+      return this.allUsers.filter((u) => !usersInProject.includes(u.id));
+    },
+  },
   methods: {
+    selectUser(email) {
+      console.log(email);
+      if (!this.selectedUsers.includes(email)) {
+        this.selectedUsers.push(email);
+        console.log(email);
+      }
+    },
     toggleModal() {
       this.showModal = !this.showModal;
     },
