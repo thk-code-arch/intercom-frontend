@@ -43,7 +43,7 @@
                     <div class="flex-shrink-0 w-10 h-10">
                       <img
                         class="w-full h-full rounded-full"
-                        :src="$profile_image + usr.profile_image"
+                        :src="usr.profile_image"
                         alt=""
                       />
                     </div>
