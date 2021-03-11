@@ -59,9 +59,7 @@ export default {
     },
     updateAvatar() {
       Array.prototype.forEach.call(this.connectedPlayers, (player) => {
-        console.log("arraylength", player);
         var selectedAvatar = this.scene.getObjectByName(player.username);
-        console.log("arraylength", player.position);
         selectedAvatar.position.x = player.position.x;
         selectedAvatar.position.y = player.position.y;
         selectedAvatar.position.z = player.position.z;
@@ -203,13 +201,22 @@ export default {
       this.controls.update();
       this.render();
     },
+    roundNumbers(obj) {
+      Object.entries(obj).forEach(([key, value]) => {
+        if (typeof value === "number") {
+          // obj[key] = value.toFixed(2) // 1.9999 -> "2.00"
+          obj[key] = +value.toFixed(2); // 1.9999 -> 2
+        }
+      });
+      return obj;
+    },
     updateCamera() {
       this.updateAvatar();
       this.camPos = {
-        x: this.camera.position.x,
-        y: this.camera.position.y,
-        z: this.camera.position.z,
-        dir: this.camera.getWorldDirection(this.vector),
+        x: this.camera.position.x.toFixed(2),
+        y: this.camera.position.y.toFixed(2),
+        z: this.camera.position.z.toFixed(2),
+        dir: this.roundNumbers(this.camera.getWorldDirection(this.vector)),
       };
       //send camera position to Server
       this.$store.dispatch("viewport/setowncamPos", this.camPos);

@@ -1,113 +1,110 @@
-
 export const viewport = {
   namespaced: true,
   state: {
-    currentviewport:0,
+    currentviewport: 0,
     players: [],
     camPosi: {},
     othercamPos: {},
-    materials:{},
-    takeScreenshot:false,
-    imgDataurl:""
+    materials: {},
+    takeScreenshot: false,
+    imgDataurl: "",
   },
   actions: {
     // Read materials List from GLTF (not as usefull...)
-    setmaterialList({ commit },materials) {
-      commit('materialList', materials);
+    setmaterialList({ commit }, materials) {
+      commit("materialList", materials);
     },
     // set own camera postion -> send to Server
-    setowncamPos({ commit },position) {
-      commit('owncamPos', position);
+    setowncamPos({ commit }, position) {
+      commit("owncamPos", position);
     },
     // Takeover camera position -> receive from Server
-    getcamPos({ commit },position) {
-      commit('othercamPos', position);
+    getcamPos({ commit }, position) {
+      commit("othercamPos", position);
     },
     // Take screenshots
     takeScreenshot({ commit }) {
-      commit('takeScreenshotNow');
+      commit("takeScreenshotNow");
     },
-    imgStore({ commit },dataUrl) {
-      commit('storeImage',dataUrl);
+    imgStore({ commit }, dataUrl) {
+      commit("storeImage", dataUrl);
     },
     select_viewport({ commit }, chatID) {
       commit("Select_Viewport", chatID);
     },
     join_viewport({ commit, state }, oldroom) {
-        console.log("join viwport socket");
-      if (state.currentviewport !== 0){
+      console.log("join viwport socket");
+      if (state.currentviewport !== 0) {
         console.log("join viwport notnull");
-        this._vm.$socket.viewport.emit('join_viewport',{oldRoom: oldroom, newRoom: state.currentviewport});
+        this._vm.$socket.viewport.emit("join_viewport", {
+          oldRoom: oldroom,
+          newRoom: state.currentviewport,
+        });
         commit("get_players", []);
       }
     },
     push_position({ state }) {
-      if (state.currentviewport !== 0){
-        this._vm.$socket.viewport.emit('moveTo',{position: state.camPosi, chatroomId: state.currentviewport});
+      if (state.currentviewport !== 0) {
+        this._vm.$socket.viewport.emit("moveTo", {
+          position: state.camPosi,
+          chatroomId: state.currentviewport,
+        });
       }
       // push ownCam Position
     },
     leave_viewport({ commit, state }) {
-      if (state.currentviewport !== 0){
-        this._vm.$socket.viewport.emit('disconnect',{chatroomId: state.currentviewport});
+      if (state.currentviewport !== 0) {
+        this._vm.$socket.viewport.emit("disconnect", {
+          chatroomId: state.currentviewport,
+        });
         commit("Select_Viewport", 0);
       }
-      // TODO add disconnect 
+      // TODO add disconnect
       // disconnect when destroy View
     },
-    PLAYER_getplayers({ commit, state, rootState }, data) {
-    // get all connected players in array
-    console.log(data.userId,rootState.auth.user.id);
-    if (data.userId !== rootState.auth.user.id){
-      var players = state.players;
-      var index = players.findIndex(x => x.userId==data.userId)
-      if (index === -1){
-        players.push(data);
-      }
-      else {
-        players.splice(index, 1);
-        players.push(data);
-      }
-    commit("get_players", players);
-    }
+    PLAYER_getplayers({ commit, rootState }, data) {
+      // get all connected players in array
+      let players = Object.keys(data)
+        .map((key) => data[key])
+        .filter((key) => key.userId !== rootState.auth.user.id);
+      commit("get_players", players);
     },
-    clear({commit, state}){
-      if (state.currentviewport !== 0){
-        this._vm.$socket.viewport.emit('disconnect',{chatroomId: state.currentviewport});
+    clear({ commit, state }) {
+      if (state.currentviewport !== 0) {
+        this._vm.$socket.viewport.emit("disconnect", {
+          chatroomId: state.currentviewport,
+        });
       }
-      commit('clear');
-    }
+      commit("clear");
+    },
   },
   mutations: {
-    materialList( state, materials){
-    state.materials = materials;
+    materialList(state, materials) {
+      state.materials = materials;
     },
-    owncamPos( state, position){
-    state.camPosi = position;
+    owncamPos(state, position) {
+      state.camPosi = position;
     },
-    othercamPos( state, position){
-    state.othercamPos = position;
+    othercamPos(state, position) {
+      state.othercamPos = position;
     },
-    takeScreenshotNow(state){
-    state.takeScreenshot = !state.takeScreenshot;
+    takeScreenshotNow(state) {
+      state.takeScreenshot = !state.takeScreenshot;
     },
-    storeImage(state, dataUrl){
-    state.imgDataurl = dataUrl;
+    storeImage(state, dataUrl) {
+      state.imgDataurl = dataUrl;
     },
-    Select_Viewport(state, chatID ) {
+    Select_Viewport(state, chatID) {
       state.currentviewport = chatID;
     },
     get_players(state, data) {
       state.players = data;
     },
     clear(state) {
-      state.players =[];
-      state.camPosi ={};
-      state.othercamPos ={};
-      state.currentviewport =0;
-    }
-  }
+      state.players = [];
+      state.camPosi = {};
+      state.othercamPos = {};
+      state.currentviewport = 0;
+    },
+  },
 };
-
-
-
