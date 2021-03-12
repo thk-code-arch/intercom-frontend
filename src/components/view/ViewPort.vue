@@ -1,11 +1,13 @@
 <template>
   <div
+    id="threejs"
     class="outline-none cursor-move scene-container"
     ref="sceneContainer"
   ></div>
 </template>
 <script>
 import * as THREE from "three";
+//import { makeTextSprite } from "./utils/models";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import authHeader from "@/services/auth-header";
@@ -20,11 +22,18 @@ export default {
       controls: null,
       renderer: null,
       camPos: "",
+      avatar: null,
     };
   },
   computed: {
     othercamPos() {
       return this.$store.state.viewport.othercamPos;
+    },
+    takeScreenshotNow() {
+      return this.$store.state.viewport.takeScreenshot;
+    },
+    connectedPlayers() {
+      return this.$store.state.viewport.players;
     },
   },
   methods: {
@@ -38,6 +47,32 @@ export default {
         this.container.clientWidth / this.container.clientHeight;
       this.camera.updateProjectionMatrix();
       this.render();
+    },
+    insertAvatar() {
+      // sample Box from docs
+      Array.prototype.forEach.call(this.connectedPlayers, (player) => {
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        this.avatar = new THREE.Mesh(geometry, material);
+        this.avatar.name = player.username;
+        this.scene.add(this.avatar);
+        //var spritey = makeTextSprite(" Hello, ", {
+        //  fontsize: 24,
+        //  borderColor: { r: 255, g: 0, b: 0, a: 1.0 },
+        //  backgroundColor: { r: 255, g: 100, b: 100, a: 0.8 },
+        //});
+        //spritey.position.set(-85, 105, 55);
+        //this.scene.add(spritey);
+      });
+    },
+    updateAvatar() {
+      Array.prototype.forEach.call(this.connectedPlayers, (player) => {
+        var selectedAvatar = this.scene.getObjectByName(player.username);
+        selectedAvatar.position.x = player.position.x;
+        selectedAvatar.position.y = player.position.y;
+        selectedAvatar.position.z = player.position.z;
+        this.scene.add(selectedAvatar);
+      });
     },
     init() {
       // set container
@@ -107,13 +142,41 @@ export default {
       this.vector = new THREE.Vector3();
 
       this.loadModel();
+      this.loadAvatar(1, "test");
+      this.insertAvatar();
       this.render();
+    },
+    loadAvatar(avatarId, name) {
+      const gltfLoader = new GLTFLoader();
+      gltfLoader.setRequestHeader({ Authorization: authHeader() });
+      gltfLoader.load(
+        process.env.VUE_APP_API_URL + `api/avatar/get_avatarfile/${avatarId}`,
+        (gltf) => {
+          //gltf.scene.position.x += position.x;
+          //gltf.scene.position.y += position.y;
+          //gltf.scene.position.z += position.z;
+          //const box = new THREE.Box3().setFromObject(gltf.scene);
+          //const size = box.getSize(new THREE.Vector3()).length();
+          //const center = box.getCenter(new THREE.Vector3());
+
+          //gltf.scene.position.x += gltf.scene.position.x - center.x;
+          //gltf.scene.position.y += gltf.scene.position.y - center.y;
+          //gltf.scene.position.z += gltf.scene.position.z - center.z;
+          //this.scene.add(gltf.scene);
+          //this.render();
+
+          gltf.scene.scale.set(0.07, 0.07, 0.07);
+          gltf.name = name;
+          const root = gltf.scene;
+          this.scene.add(root);
+        }
+      );
     },
     loadModel() {
       const gltfLoader = new GLTFLoader();
       gltfLoader.setRequestHeader({ Authorization: authHeader() });
       const materials = [];
-      this.gltf = gltfLoader.load(
+      gltfLoader.load(
         process.env.VUE_APP_API_URL +
           "api/project/get_projectfile/" +
           projectHeader(),
@@ -161,9 +224,7 @@ export default {
 
           this.scene.add(gltf.scene);
           this.render();
-        },
-        undefined,
-        undefined
+        }
       );
     },
     getCameraPosition() {
@@ -173,25 +234,52 @@ export default {
       this.controls.update();
       this.render();
     },
+    roundNumbers(obj) {
+      Object.entries(obj).forEach(([key, value]) => {
+        if (typeof value === "number") {
+          // obj[key] = value.toFixed(2) // 1.9999 -> "2.00"
+          obj[key] = +value.toFixed(2); // 1.9999 -> 2
+        }
+      });
+      return obj;
+    },
     updateCamera() {
-      this.render();
+      this.updateAvatar();
       this.camPos = {
-        x: this.camera.position.x,
-        y: this.camera.position.y,
-        z: this.camera.position.z,
-        dir: this.camera.getWorldDirection(this.vector),
+        x: this.camera.position.x.toFixed(2),
+        y: this.camera.position.y.toFixed(2),
+        z: this.camera.position.z.toFixed(2),
+        dir: this.roundNumbers(this.camera.getWorldDirection(this.vector)),
       };
       //send camera position to Server
       this.$store.dispatch("viewport/setowncamPos", this.camPos);
+      this.render();
+    },
+    takeScreenshot() {
+      this.render();
+      this.$store.dispatch(
+        "viewport/imgStore",
+        this.renderer.domElement.toDataURL()
+      );
     },
     render() {
       this.renderer.render(this.scene, this.camera);
     },
   },
   watch: {
-    othercamPos: function () {
+    connectedPlayers(oldval, newval) {
+      if (oldval.length !== newval.length) {
+        this.insertAvatar();
+      }
+      this.updateCamera();
+    },
+    othercamPos() {
       // watch it
       this.getCameraPosition();
+    },
+    takeScreenshotNow() {
+      console.log("takeScreenshot");
+      this.takeScreenshot();
     },
   },
   mounted() {
@@ -199,6 +287,7 @@ export default {
   },
   created() {
     window.addEventListener("resize", this.resizeWindow);
+    this.takeScreenshot();
   },
   destroyed() {
     this.scene.dispose();

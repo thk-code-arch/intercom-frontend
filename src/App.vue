@@ -58,6 +58,9 @@ export default {
 .h-screen2 {
   height: calc(100vh - var(--header-height)) !important;
 }
+.max-h-screen2 {
+  height: calc(100vh - var(--header-height)) !important;
+}
 .btn {
   @apply font-bold py-2 px-4 rounded;
 }
