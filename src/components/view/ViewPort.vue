@@ -7,7 +7,7 @@
 </template>
 <script>
 import * as THREE from "three";
-import { makeTextSprite } from "./utils/models";
+//import { makeTextSprite } from "./utils/models";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import authHeader from "@/services/auth-header";
@@ -56,13 +56,13 @@ export default {
         this.avatar = new THREE.Mesh(geometry, material);
         this.avatar.name = player.username;
         this.scene.add(this.avatar);
-        var spritey = makeTextSprite(" Hello, ", {
-          fontsize: 24,
-          borderColor: { r: 255, g: 0, b: 0, a: 1.0 },
-          backgroundColor: { r: 255, g: 100, b: 100, a: 0.8 },
-        });
-        spritey.position.set(-85, 105, 55);
-        this.scene.add(spritey);
+        //var spritey = makeTextSprite(" Hello, ", {
+        //  fontsize: 24,
+        //  borderColor: { r: 255, g: 0, b: 0, a: 1.0 },
+        //  backgroundColor: { r: 255, g: 100, b: 100, a: 0.8 },
+        //});
+        //spritey.position.set(-85, 105, 55);
+        //this.scene.add(spritey);
       });
     },
     updateAvatar() {
@@ -142,38 +142,41 @@ export default {
       this.vector = new THREE.Vector3();
 
       this.loadModel();
-      this.loadAvatar();
+      this.loadAvatar(1, "test");
       this.insertAvatar();
       this.render();
     },
-    loadAvatar() {
+    loadAvatar(avatarId, name) {
       const gltfLoader = new GLTFLoader();
       gltfLoader.setRequestHeader({ Authorization: authHeader() });
-      this.gltf = gltfLoader.load(
-        "https://dev.icapi.bim-cloud.org/files/avatar.gltf",
+      gltfLoader.load(
+        process.env.VUE_APP_API_URL + `api/avatar/get_avatarfile/${avatarId}`,
         (gltf) => {
           //gltf.scene.position.x += position.x;
           //gltf.scene.position.y += position.y;
           //gltf.scene.position.z += position.z;
-          const box = new THREE.Box3().setFromObject(gltf.scene);
+          //const box = new THREE.Box3().setFromObject(gltf.scene);
           //const size = box.getSize(new THREE.Vector3()).length();
-          const center = box.getCenter(new THREE.Vector3());
+          //const center = box.getCenter(new THREE.Vector3());
 
-          gltf.scene.position.x += gltf.scene.position.x - center.x;
-          gltf.scene.position.y += gltf.scene.position.y - center.y;
-          gltf.scene.position.z += gltf.scene.position.z - center.z;
-          this.scene.add(gltf.scene);
-          this.render();
-        },
-        undefined,
-        undefined
+          //gltf.scene.position.x += gltf.scene.position.x - center.x;
+          //gltf.scene.position.y += gltf.scene.position.y - center.y;
+          //gltf.scene.position.z += gltf.scene.position.z - center.z;
+          //this.scene.add(gltf.scene);
+          //this.render();
+
+          gltf.scene.scale.set(0.07, 0.07, 0.07);
+          gltf.name = name;
+          const root = gltf.scene;
+          this.scene.add(root);
+        }
       );
     },
     loadModel() {
       const gltfLoader = new GLTFLoader();
       gltfLoader.setRequestHeader({ Authorization: authHeader() });
       const materials = [];
-      this.gltf = gltfLoader.load(
+      gltfLoader.load(
         process.env.VUE_APP_API_URL +
           "api/project/get_projectfile/" +
           projectHeader(),
@@ -221,9 +224,7 @@ export default {
 
           this.scene.add(gltf.scene);
           this.render();
-        },
-        undefined,
-        undefined
+        }
       );
     },
     getCameraPosition() {
