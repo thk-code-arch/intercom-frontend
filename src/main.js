@@ -7,8 +7,6 @@ import "./assets/styles/index.css";
 import VueFormulate from "@braid/vue-formulate";
 
 import axios from "axios";
-Vue.prototype.$profile_image =
-  process.env.VUE_APP_API_URL + "static/profile_image/";
 Vue.prototype.$app_url = process.env.VUE_APP_API_URL;
 const API_URL = process.env.VUE_APP_API_URL+'/api/';
 
