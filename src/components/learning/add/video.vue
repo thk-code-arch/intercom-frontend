@@ -43,7 +43,6 @@
   </div>
 </template>
 <script>
-import LearningService from "@/services/learning.service.js";
 export default {
   name: "AddVideo",
   components: {},
@@ -60,14 +59,15 @@ export default {
         });
     },
     handlePostVideo() {
-      LearningService.addLearning({
-        category: "Video",
-        url: this.scrapeurl,
-        thumbnail: this.scrapedObject.cachedImage,
-        title: this.scrapedObject.title,
-        description: this.scrapedObject.description,
-        type: "PUBLIC",
-      })
+      this.$http
+        .post("learning/add", {
+          category: "Video",
+          url: this.scrapeurl,
+          thumbnail: this.scrapedObject.thumbnail,
+          title: this.scrapedObject.title,
+          description: this.scrapedObject.description,
+          type: "PUBLIC",
+        })
         .then((response) => {
           this.$router.push("/learning/show/" + response.data.id);
         })

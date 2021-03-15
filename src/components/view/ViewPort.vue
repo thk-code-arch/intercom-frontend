@@ -117,8 +117,13 @@ export default {
 
       // add controls
       this.controls = new OrbitControls(this.camera, this.container);
-      // call this only in static scenes (i.e., if there is no animation loop)
-      this.controls.addEventListener("change", this.updateCamera);
+      //this.controls.target = new THREE.Vector3(0, 0, 0);
+      this.controls.keys = {
+        LEFT: 65, //left arrow
+        UP: 87, // up arrow
+        RIGHT: 68, // right arrow
+        BOTTOM: 83, // down arrow
+      };
 
       // create renderer
       this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -265,6 +270,14 @@ export default {
     render() {
       this.renderer.render(this.scene, this.camera);
     },
+    handleMouseWheel(event) {
+      if (event.deltaY < 0) {
+        this.camera.position.z -= 1;
+      } else if (event.deltaY > 0) {
+        this.camera.position.z += 1;
+      }
+      this.updateCamera();
+    },
   },
   watch: {
     connectedPlayers(oldval, newval) {
@@ -284,14 +297,16 @@ export default {
   },
   mounted() {
     this.init();
+    this.controls.addEventListener("change", this.updateCamera);
+    // call this only in static scenes (i.e., if there is no animation loop)
   },
   created() {
     window.addEventListener("resize", this.resizeWindow);
-    this.takeScreenshot();
   },
   destroyed() {
     this.scene.dispose();
     window.removeEventListener("resize", this.resizeWindow);
+    this.controls.removeEventListener("change", this.updateCamera);
   },
 };
 </script>
