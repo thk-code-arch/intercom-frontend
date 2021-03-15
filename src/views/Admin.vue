@@ -284,7 +284,7 @@ Vue.filter("formatDate", function (value) {
     return moment(String(value)).format("DD/MM/YYYY HH:mm");
   }
 });
-import AdminService from "@/services/admin.service";
+
 export default {
   name: "Admin",
   components: {
@@ -305,7 +305,7 @@ export default {
   methods: {
     rmRole(therole, theuserid) {
       if (therole === "admin" && theuserid != this.currentUser.id) {
-        AdminService.rmRole(therole, theuserid).then(
+        this.$http.post(`admin/rm_role/admin/${theuserid}`, {}).then(
           (response) => {
             this.Users = response.data;
           },
@@ -320,7 +320,7 @@ export default {
     },
     addRole(therole, theuserid) {
       if (therole === "user") {
-        AdminService.addRole("admin", theuserid).then(
+        this.$http.post(`admin/add_role/admin/${theuserid}`, {}).then(
           (response) => {
             this.Users = response.data;
           },

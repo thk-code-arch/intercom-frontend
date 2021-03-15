@@ -10,22 +10,44 @@
         <span class="text-2xl text-gray-700"> {{ project.name }} </span>
         <span class="text-xs text-gray-700"> {{ project.description }} </span>
       </div>
-      <router-link
-        to="/new-project"
-        class="w-1/4 h-32 m-2 bg-white rounded cursor-pointer"
-        v-if="showaddProject"
-      >
-        <svg
-          class="inline-block w-full h-full p-12 text-gray-700 fill-current"
-          viewBox="0 0 20 20"
+      <div class="flex flex-wrap justify-center w-full">
+        <div
+          v-on:click="clickBack()"
+          class="w-1/4 h-32 m-2 bg-white rounded cursor-pointer"
+          v-if="showBackButton"
         >
-          <path
-            fill-rule="evenodd"
-            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-            clip-rule="evenodd"
-          ></path>
-        </svg>
-      </router-link>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            class="inline-block w-full h-full p-12 text-gray-700 fill-current"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
+        </div>
+        <router-link
+          to="/new-project"
+          class="w-1/4 h-32 m-2 bg-white rounded cursor-pointer"
+          v-if="showaddProject"
+        >
+          <svg
+            class="inline-block w-full h-full p-12 text-gray-700 fill-current"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -40,7 +62,9 @@ export default {
       project: new Project("", ""),
       selectedProject: "",
       projects: [],
+      mainprojects: [],
       subprojects: [],
+      showBackButton: false,
     };
   },
   computed: {
@@ -55,6 +79,10 @@ export default {
     },
   },
   methods: {
+    clickBack() {
+      this.projects = this.mainprojects;
+      this.showBackButton = false;
+    },
     addProject() {
       this.$store.dispatch("curproject/addnewProject").then(
         () => {
@@ -87,6 +115,8 @@ export default {
       }
       if (project.sub.length !== 0) {
         console.log("has subs");
+        this.mainprojects = this.projects;
+        this.showBackButton = true;
         this.projects = this.subprojects.filter(
           (p) => p.parentProject === project.id
         );
