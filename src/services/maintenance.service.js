@@ -1,6 +1,6 @@
 import axios from 'axios';
 import authHeader from './auth-header';
-const API_URL = process.env.VUE_APP_API_URL+'api/maintenance/';
+const API_URL = process.env.VUE_APP_API_URL+'/api/maintenance/';
 
 class MaintenanceService {
   sendReport(report) {

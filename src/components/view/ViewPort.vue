@@ -150,7 +150,7 @@ export default {
       const gltfLoader = new GLTFLoader();
       gltfLoader.setRequestHeader({ Authorization: authHeader() });
       gltfLoader.load(
-        process.env.VUE_APP_API_URL + `api/avatar/get_avatarfile/${avatarId}`,
+        process.env.VUE_APP_API_URL + `/api/avatar/get_avatarfile/${avatarId}`,
         (gltf) => {
           //gltf.scene.position.x += position.x;
           //gltf.scene.position.y += position.y;
@@ -178,7 +178,7 @@ export default {
       const materials = [];
       gltfLoader.load(
         process.env.VUE_APP_API_URL +
-          "api/project/get_projectfile/" +
+          "/api/project/get_projectfile/" +
           projectHeader(),
         (gltf) => {
           gltf.scene.traverse((o) => {
