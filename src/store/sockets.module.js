@@ -26,7 +26,7 @@ export const iosockets = {
           new VueSocketIO({
             connection: chatsocket,
             options: { useConnectionNamespace: true },
-            debug: true,
+            debug: false,
             vuex: {
               store,
               actionPrefix: "CHAT_",
@@ -45,7 +45,7 @@ export const iosockets = {
         });
         Vue.use(
           new VueSocketIO({
-            debug: true,
+            debug: false,
             connection: playersocket, //options object is Optional
             options: { useConnectionNamespace: true },
             vuex: {
