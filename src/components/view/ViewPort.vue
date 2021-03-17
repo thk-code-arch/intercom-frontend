@@ -137,23 +137,26 @@ export default {
       this.render();
     },
     loadAvatar(avatarId, name) {
-      const gltfLoader = new GLTFLoader();
-      gltfLoader.setRequestHeader({ Authorization: authHeader() });
-      gltfLoader.load(
-        process.env.VUE_APP_API_URL + `/api/avatar/get_avatarfile/${avatarId}`,
-        (gltf) => {
-          gltf.scene.scale.set(0.4, 0.4, 0.4);
-          gltf.scene.name = name;
-          // add Text
-          var myText = new SpriteText(name);
-          myText.textHeight = 2;
-          myText.strokeWidth = 1;
-          myText.strokeColor = "black";
-          myText.position.y = gltf.scene.position.y - 3;
-          gltf.scene.add(myText);
-          this.scene.add(gltf.scene);
-        }
-      );
+      if (!this.scene.getObjectByName(name)) {
+        const gltfLoader = new GLTFLoader();
+        gltfLoader.setRequestHeader({ Authorization: authHeader() });
+        gltfLoader.load(
+          process.env.VUE_APP_API_URL +
+            `/api/avatar/get_avatarfile/${avatarId}`,
+          (gltf) => {
+            gltf.scene.scale.set(0.4, 0.4, 0.4);
+            gltf.scene.name = name;
+            // add Text
+            var myText = new SpriteText(name);
+            myText.textHeight = 2;
+            myText.strokeWidth = 1;
+            myText.strokeColor = "black";
+            myText.position.y = gltf.scene.position.y - 3;
+            gltf.scene.add(myText);
+            this.scene.add(gltf.scene);
+          }
+        );
+      }
     },
     moveAvatar(avatarName, player) {
       const selAvatar = this.scene.getObjectByName(avatarName);
