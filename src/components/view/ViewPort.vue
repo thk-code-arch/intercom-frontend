@@ -131,9 +131,7 @@ export default {
 
       // create Vector to calculate Camera Direction
       this.vector = new THREE.Vector3();
-
       this.loadModel();
-      this.insertAvatar();
       this.render();
     },
     loadAvatar(avatarId, name) {

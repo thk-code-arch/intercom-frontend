@@ -19,9 +19,9 @@ export const router = new Router({
     },
     {
       path: '/view',
-      name: 'View',
+      name: 'TheView',
       // lazy-loaded
-      component: () => import('../views/View.vue')
+      component: () => import('../views/TheView.vue')
     },
     {
       path: '/chat',
