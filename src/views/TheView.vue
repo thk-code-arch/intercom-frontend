@@ -42,7 +42,7 @@ import RightSidebar from "@/components/view/RightSidebar";
 import ViewPort from "@/components/view/ViewPort.vue";
 import projectHeader from "@/services/project-header";
 export default {
-  name: "View",
+  name: "TheView",
   components: {
     VueSplitter,
     ViewPort,
