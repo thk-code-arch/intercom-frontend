@@ -59,7 +59,8 @@ export const viewport = {
         });
         commit("Select_Viewport", 0);
       }
-      // TODO add disconnect
+      // TODO add disconnect: emit disconnect on disconnect
+      // Remove disconnect players from array
       // disconnect when destroy View
     },
     PLAYER_getplayers({ commit, rootState }, data) {
