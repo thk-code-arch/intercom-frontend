@@ -68,8 +68,58 @@
           </div>
           <!--footer-->
           <div
-            class="flex items-center justify-end p-6 border-t border-gray-300 border-solid rounded-b"
+            class="flex items-center justify-between p-6 border-t border-gray-300 border-solid rounded-b"
           >
+            <div class="flex flex-row">
+              <div class="w-8 h-8 m-2" v-on:click="setTool('selectMode')">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="text-red-800 bg-red-200 rounded"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="{2}"
+                    d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"
+                  />
+                </svg>
+              </div>
+              <div class="w-8 h-8 m-2" v-on:click="setTool('text', text)">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="text-red-800 bg-red-200 rounded"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                  />
+                </svg>
+              </div>
+              <div class="w-8 h-8 m-2" v-on:click="setTool('freeDrawing', pen)">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  class="text-red-800 bg-red-200 rounded"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                  />
+                </svg>
+              </div>
+            </div>
             <button
               class="px-4 py-2 mb-1 mr-1 text-sm font-bold uppercase outline-none text-codearch-400 background-transparent focus:outline-none"
               type="button"
@@ -103,6 +153,14 @@ export default {
   data() {
     return {
       showModal: false,
+      text: {
+        fontFamily: "Verdana",
+        fill: "red",
+      },
+      pen: {
+        stroke: "red",
+        strokeWidth: "3",
+      },
     };
   },
   components: { Editor },
@@ -123,12 +181,13 @@ export default {
   },
   mounted() {
     this.$refs.editor.setBackgroundImage(this.$store.state.viewport.imgDataurl);
-    this.$refs.editor.set(this.editor.mode, this.editor.options);
-    let circleModeParams = { fill: "blue", stroke: "white" };
-    this.$refs.editor.set("circle", circleModeParams);
   },
   updated() {},
   methods: {
+    setTool(type, toolOptions) {
+      this.currentActiveMethod = type;
+      this.$refs.editor.set(type, toolOptions);
+    },
     toggleModal() {
       this.$emit("toggleScreenshotModal");
     },
