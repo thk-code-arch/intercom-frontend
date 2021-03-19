@@ -3,7 +3,7 @@
     <fixed-header>
       <div
         id="top-menu"
-        class="z-40 flex items-center justify-between w-full px-4 px-6 py-1 bg-white border-b-2 border-blue-900 navbar"
+        class="flex items-center justify-between w-full px-4 px-6 py-1 bg-white border-b-2 border-blue-900 navbar"
       >
         <div class="self-center">
           <img class="w-24" :src="images.logo" />
@@ -38,7 +38,7 @@
             ></button>
             <div
               v-if="PisOpen && isProjectOwner"
-              class="absolute right-0 w-48 py-2 mt-2 bg-white rounded-lg shadow-xl"
+              class="absolute right-0 z-40 w-48 py-2 mt-2 bg-white rounded-lg shadow-xl"
             >
               <router-link
                 v-on:click.native="PisOpen = false"
@@ -77,7 +77,7 @@
             ></button>
             <div
               v-if="isOpen"
-              class="absolute right-0 w-48 py-2 mt-2 bg-white rounded-lg shadow-xl"
+              class="absolute right-0 z-40 w-48 py-2 mt-2 bg-white rounded-lg shadow-xl"
             >
               <router-link
                 v-on:click.native="isOpen = false"

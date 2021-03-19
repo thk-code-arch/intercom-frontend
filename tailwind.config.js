@@ -24,6 +24,9 @@ module.exports = {
         '96': '24rem',
         '128': '32rem',
       },
+      zIndex: {
+         '60': '60',
+        }
     },
     container: {
         center: true,
