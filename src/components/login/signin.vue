@@ -1,6 +1,6 @@
 <template>
-<div class="flex flex-col px-8 pt-6 pb-8 mb-4 bg-white rounded">
-  <FormulateForm @submit="login">
+  <div class="flex flex-col px-8 pt-6 pb-8 mb-4 bg-white rounded">
+    <FormulateForm @submit="login">
       <FormulateInput
         type="text"
         name="username"
@@ -15,42 +15,42 @@
         label="Password"
         validation="required"
       />
-      <p>{{ message.message }}</p>
-    <FormulateInput label="Login" type="submit" />
-  </FormulateForm>
-</div>
+      <p class="text-red-500">{{ message.error }}</p>
+      <FormulateInput label="Login" type="submit" />
+    </FormulateForm>
+  </div>
 </template>
 
 <script>
-import User from '@/models/user';
+import User from "@/models/user";
 
 export default {
-  name: 'SignIn',
+  name: "SignIn",
   data() {
     return {
-      user: new User('', ''),
+      user: new User("", ""),
       loading: false,
-      message: '',
+      message: {},
     };
   },
   methods: {
     login() {
       this.loading = true;
-        if (this.user.username && this.user.password) {
-          this.$store.dispatch('auth/login', this.user).then(
-            () => {
-                this.$router.push('/projects');
-            },
-            error => {
-              this.loading = false;
-              this.message =
-                (error.response && error.response.data) ||
-                error.message ||
-                error.toString();
-            }
-          );
-        }
-    }
-  }
+      if (this.user.username && this.user.password) {
+        this.$store.dispatch("auth/login", this.user).then(
+          () => {
+            this.$router.push("/projects");
+          },
+          (error) => {
+            this.loading = false;
+            this.message =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
+          }
+        );
+      }
+    },
+  },
 };
 </script>

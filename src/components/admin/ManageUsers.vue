@@ -5,7 +5,7 @@
       v-if="showModal"
       class="fixed inset-0 z-50 flex items-center justify-center max-w-4xl overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
     >
-      <div class="relative w-auto max-w-full px-12 mx-auto">
+      <div class="relative w-3/4 max-w-full px-12 mx-auto">
         <!--content-->
         <div
           class="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none"
@@ -27,22 +27,13 @@
             </button>
           </div>
           <!--body-->
+          <FormulateForm
+            @submit="submitNewUsers"
+            v-model="selectedUsers"
+            :schema="addUsersForm"
+          />
           <div class="relative flex-auto p-2">
-            <p class="my-4 text-lg leading-relaxed text-gray-600">
-              {{ selectedUsers }}
-            </p>
-            <span
-              v-for="(cuser, cuser_idx) in usersNotInProject"
-              :key="cuser_idx"
-              class="relative inline-block px-3 py-1 leading-tight"
-            >
-              <span
-                aria-hidden
-                class="absolute inset-0 bg-gray-200 rounded-full opacity-50"
-                v-on:click="selectUser(cuser.email)"
-              ></span>
-              <span class="relative">{{ cuser.username }}</span>
-            </span>
+            <p class="my-4 text-lg leading-relaxed text-gray-600"></p>
           </div>
           <!--footer-->
           <div
@@ -84,27 +75,71 @@ export default {
   data() {
     return {
       showModal: false,
-      selectedUsers: [],
+      selectedUsers: { email: [], textUsers: "" },
+      addUsersForm: [
+        {
+          label: "Select users",
+          name: "email",
+          type: "checkbox",
+          options: {},
+        },
+        {
+          label: "Add new Users by email in commaseperated list.",
+          name: "textUsers",
+          type: "textarea",
+        },
+        {
+          type: "submit",
+          label: "Add users",
+        },
+      ],
     };
   },
   computed: {
     usersNotInProject() {
       let usersInProject = this.project.users.map(({ id }) => id);
+
       return this.allUsers.filter((u) => !usersInProject.includes(u.id));
     },
   },
+  updated() {
+    this.addUsersForm[0].options = this.usersNotInProject.map(
+      ({ email, username }) => ({
+        label: username,
+        value: email,
+      })
+    );
+  },
   methods: {
-    selectUser(email) {
-      console.log(email);
-      if (!this.selectedUsers.includes(email)) {
-        this.selectedUsers.push(email);
-        console.log(email);
-      }
-    },
     toggleModal() {
       this.showModal = !this.showModal;
     },
-    addUsers() {},
+    reqBody() {
+      const req = new Object();
+      if (this.selectedUsers.email.length > 0) {
+        req.email = this.selectedUsers.email;
+      }
+      if (this.selectedUsers.textUsers !== "") {
+        req.newUsers = this.selectedUsers.textUsers.split(",");
+      }
+      req.projectId = this.project.id;
+      console.log(req);
+      return req;
+    },
+    submitNewUsers() {
+      this.$http.post("/admin/add_users_to_project", this.reqBody()).then(
+        (response) => {
+          console.log(response.data);
+          this.toggleModal();
+        },
+        (error) => {
+          this.content =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
   },
 };
 </script>
