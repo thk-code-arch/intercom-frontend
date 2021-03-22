@@ -120,22 +120,17 @@
                 </svg>
               </div>
             </div>
-            <button
-              class="px-4 py-2 mb-1 mr-1 text-sm font-bold uppercase outline-none text-codearch-400 background-transparent focus:outline-none"
-              type="button"
-              style="transition: all 0.15s ease"
-              v-on:click="toggleModal()"
-            >
-              Close
-            </button>
-            <button
-              class="px-4 py-2 mb-1 mr-1 text-sm font-bold uppercase bg-transparent border border-solid rounded outline-none text-codearch-400 border-codearch-400 hover:bg-codearch-400 hover:text-white active:bg-red-600 focus:outline-none"
-              type="button"
-              style="transition: all 0.15s ease"
-              v-on:click="toggleModal()"
-            >
-              Save
-            </button>
+            <FormulateForm @submit="uploadImage" class="flex flex-row">
+              <FormulateInput
+                type="text"
+                name="description"
+                v-model="description"
+                placeholder="Set description"
+                validation="required"
+                class="p-4"
+              />
+              <FormulateInput label="Save" type="submit" class="p-4" />
+            </FormulateForm>
           </div>
         </div>
       </div>
@@ -153,6 +148,7 @@ export default {
   data() {
     return {
       showModal: false,
+      description: "",
       text: {
         fontFamily: "Verdana",
         fill: "red",
@@ -190,6 +186,39 @@ export default {
     },
     toggleModal() {
       this.$emit("toggleScreenshotModal");
+    },
+    async uploadImage() {
+      const base64 = await this.$refs.editor.saveImage();
+      return fetch(base64)
+        .then((res) => res.blob())
+        .then((blob) => {
+          const fd = new FormData();
+          var today = new Date();
+          var date =
+            today.getFullYear() +
+            "-" +
+            (today.getMonth() + 1) +
+            "-" +
+            today.getDate();
+          var time =
+            today.getHours() +
+            "-" +
+            today.getMinutes() +
+            "-" +
+            today.getSeconds();
+          const file = new File([blob], `${date}-${time}.png`);
+          fd.append("file", file);
+          fd.append("description", this.description);
+          this.$http.post("storage/upload_enc_image", fd).then(
+            (response) => {
+              console.log(response);
+              this.$emit("toggleScreenshotModal");
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        });
     },
   },
 };
