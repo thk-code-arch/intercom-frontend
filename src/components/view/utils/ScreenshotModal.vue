@@ -141,6 +141,7 @@
 
 <script>
 import Editor from "vue-image-markup";
+import projectHeader from "../../../services/project-header";
 
 export default {
   name: "ScreenshotModal",
@@ -186,6 +187,7 @@ export default {
     },
     toggleModal() {
       this.$emit("toggleScreenshotModal");
+      this.$emit("getScreenshots");
     },
     async uploadImage() {
       const base64 = await this.$refs.editor.saveImage();
@@ -209,10 +211,11 @@ export default {
           const file = new File([blob], `${date}-${time}.png`);
           fd.append("file", file);
           fd.append("description", this.description);
-          this.$http.post("storage/upload_enc_image", fd).then(
+          fd.append("projectId", projectHeader());
+          this.$http.post("storage/upload_project_screenshot", fd).then(
             (response) => {
               console.log(response);
-              this.$emit("toggleScreenshotModal");
+              this.toggleModal;
             },
             (error) => {
               console.log(error);
