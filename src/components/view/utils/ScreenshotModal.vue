@@ -215,7 +215,7 @@ export default {
           this.$http.post("storage/upload_project_screenshot", fd).then(
             (response) => {
               console.log(response);
-              this.toggleModal;
+              this.toggleModal();
             },
             (error) => {
               console.log(error);
