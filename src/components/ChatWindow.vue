@@ -34,7 +34,7 @@
               <span class="text-xs text-grey"> {{ hist_msg.time }}</span>
             </div>
             <p class="leading-normal text-black">
-              {{ hist_msg.message }}
+              <vue-markdown :source="hist_msg.message" />
             </p>
           </div>
         </div>
@@ -70,6 +70,8 @@
 </template>
 
 <script>
+import VueMarkdown from "vue-markdown-render";
+
 export default {
   name: "ChatWindow",
   data() {
@@ -77,6 +79,7 @@ export default {
       message: "",
     };
   },
+  components: { VueMarkdown },
   computed: {
     messages() {
       return this.$store.state.chatroom.messages;

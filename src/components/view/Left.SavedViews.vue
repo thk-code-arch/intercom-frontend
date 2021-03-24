@@ -14,9 +14,8 @@
       </button>
     </div>
     <!-- TEXT -->
-    <div class="flex items-start mb-4 text-sm">
-      <div class="flex-1 px-6">
-        <p class="leading-normal text-black"></p>
+    <div class="max-h-full flex items-start mb-4 text-sm">
+      <div class="flex-1 px-6 overflow-y-scroll">
         <ScreenshotModal
           @toggleScreenshotModal="toggleScreenshotModal()"
           @getScreenshots="getScreenshots()"

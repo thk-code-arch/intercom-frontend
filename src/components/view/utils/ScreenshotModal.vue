@@ -179,11 +179,16 @@ export default {
   mounted() {
     this.$refs.editor.setBackgroundImage(this.$store.state.viewport.imgDataurl);
   },
-  updated() {},
   methods: {
     setTool(type, toolOptions) {
       this.currentActiveMethod = type;
       this.$refs.editor.set(type, toolOptions);
+    },
+    broadcastImageInChat(thumbnail, description) {
+      const message = `![SavedView](${
+        this.$app_url + thumbnail
+      } "${description}")`;
+      this.$store.dispatch("chatroom/CHAT_sendmessage", message);
     },
     toggleModal() {
       this.$emit("toggleScreenshotModal");
@@ -215,6 +220,10 @@ export default {
           this.$http.post("storage/upload_project_screenshot", fd).then(
             (response) => {
               console.log(response);
+              this.broadcastImageInChat(
+                response.data.thumbnail,
+                response.data.description
+              );
               this.toggleModal();
             },
             (error) => {
