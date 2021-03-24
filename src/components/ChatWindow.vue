@@ -4,16 +4,18 @@
     class="flex flex-col flex-1 max-w-full max-h-full overflow-hidden bg-white"
   >
     <!-- Top bar -->
-    <div class="flex items-center flex-none px-6 py-2 border-b">
-      <div class="flex flex-col">
-        <h3 class="mb-1 font-extrabold text-grey-darkest">
-          #{{ theroom.name }}
-        </h3>
-        <p class="text-sm break-words text-grey-dark">
-          {{ theroom.description }}
-        </p>
+    <router-link to="/chat">
+      <div class="flex items-center flex-none px-6 py-2 border-b">
+        <div class="flex flex-col">
+          <h3 class="mb-1 font-extrabold text-grey-darkest">
+            #{{ theroom.name }}
+          </h3>
+          <p class="text-sm break-words text-grey-dark">
+            {{ theroom.description }}
+          </p>
+        </div>
       </div>
-    </div>
+    </router-link>
     <!-- Chat messages -->
     <!-- Chat messages -->
     <div class="flex-1 px-6 py-4 overflow-y-scroll" v-chat-scroll>
