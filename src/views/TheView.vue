@@ -1,17 +1,19 @@
 <template>
-  <div class="h-screen2 relative" :style="styleHeight">
+  <div class="relative h-screen2" :style="styleHeight">
     <div
-      class="absolute nopointer top-0 flex flex-row justify-between w-full h-screen2 z-10"
+      class="absolute top-0 z-10 flex flex-row justify-between w-full nopointer h-screen2"
     >
       <div
-        class="w-4/12 bg-gray-200 border-r-2 border-gray-500 h-screen2 bg-opacity-50 allpointer"
+        class="bg-gray-200 border-r-2 border-gray-500 h-screen2 bg-opacity-50 allpointer"
+        v-bind:class="[leftSidebar]"
       >
         <left-sidebar />
       </div>
 
-      <div class="w-full h-screen2 nopointer"></div>
+      <div class="h-screen2 nopointer"></div>
       <div
-        class="w-4/12 bg-gray-200 border-l-2 border-gray-500 h-screen2 bg-opacity-50 allpointer"
+        class="bg-gray-200 border-l-2 border-gray-500 h-screen2 bg-opacity-50 allpointer"
+        v-bind:class="[rightSidebar]"
       >
         <right-sidebar />
       </div>
@@ -32,6 +34,12 @@ export default {
     LeftSidebar,
     RightSidebar,
   },
+  data() {
+    return {
+      rightSidebar: "w-1/5",
+      leftSidebar: "w-1/5",
+    };
+  },
   computed: {
     viewHeight() {
       const headerHeight = document.getElementById("top").clientHeight;
@@ -41,6 +49,12 @@ export default {
       return {
         "--header-height": this.viewHeight,
       };
+    },
+  },
+  methods: {
+    openSidebar(left, right) {
+      this.leftSidebar = left;
+      this.rightSidebar = right;
     },
   },
   created() {
