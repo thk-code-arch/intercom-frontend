@@ -7,14 +7,13 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
+  "//": "// TODO remove vue-moment",
   "dependencies": {
     "@braid/vue-formulate": "^2.5.2",
-    "@rmp135/vue-splitter": "^1.4.0",
     "autoprefixer": "^9.8.6",
     "axios": "^0.21.1",
     "core-js": "^3.9.1",
     "socket.io-client": "2.4.0",
-    "stats.js": "^0.17.0",
     "tailwindcss": "^1.9.6",
     "three": "^0.126.1",
     "three-spritetext": "^1.6.1",
