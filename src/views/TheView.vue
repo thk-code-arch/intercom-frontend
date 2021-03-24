@@ -1,42 +1,26 @@
 <template>
-  <div class="h-screen2" :style="styleHeight">
-    <div class="absolute z-10 flex flex-row w-full nopointer">
-      <div class="w-full h-screen2">
-        <vue-splitter>
-          <div
-            slot="left-pane"
-            class="bg-gray-200 bg-opacity-50 h-screen2 allpointer"
-          >
-            <left-sidebar />
-          </div>
-          <div slot="right-pane">
-            <div class="w-16 h-screen2 allpointer"></div>
-          </div>
-        </vue-splitter>
+  <div class="h-screen2 relative" :style="styleHeight">
+    <div
+      class="absolute nopointer top-0 flex flex-row justify-between w-full h-screen2 z-10"
+    >
+      <div
+        class="w-4/12 bg-gray-200 border-r-2 border-gray-500 h-screen2 bg-opacity-50 allpointer"
+      >
+        <left-sidebar />
       </div>
 
       <div class="w-full h-screen2 nopointer"></div>
-
-      <div class="w-full h-screen2">
-        <vue-splitter>
-          <div slot="left-pane" class="flex justify-end">
-            <div class="w-16 h-screen2 allpointer"></div>
-          </div>
-          <div
-            slot="right-pane"
-            class="bg-gray-200 bg-opacity-50 h-screen2 allpointer"
-          >
-            <right-sidebar />
-          </div>
-        </vue-splitter>
+      <div
+        class="w-4/12 bg-gray-200 border-l-2 border-gray-500 h-screen2 bg-opacity-50 allpointer"
+      >
+        <right-sidebar />
       </div>
     </div>
-    <view-port />
+    <ViewPort />
   </div>
 </template>
 
 <script>
-import VueSplitter from "@rmp135/vue-splitter";
 import LeftSidebar from "@/components/view/LeftSidebar";
 import RightSidebar from "@/components/view/RightSidebar";
 import ViewPort from "@/components/view/ViewPort.vue";
@@ -44,7 +28,6 @@ import projectHeader from "@/services/project-header";
 export default {
   name: "TheView",
   components: {
-    VueSplitter,
     ViewPort,
     LeftSidebar,
     RightSidebar,

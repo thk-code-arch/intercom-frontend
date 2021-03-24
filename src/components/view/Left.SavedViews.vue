@@ -14,31 +14,45 @@
       </button>
     </div>
     <!-- TEXT -->
-    <div class="flex items-start mb-4 text-sm">
-      <div class="flex-1 px-6">
-        <p class="leading-normal text-black"></p>
+    <div class="max-h-full flex items-start mb-4 text-sm">
+      <div class="flex-1 px-6 overflow-y-scroll">
         <ScreenshotModal
           @toggleScreenshotModal="toggleScreenshotModal()"
+          @getScreenshots="getScreenshots()"
           v-if="ScreenshotModalIsOpen"
         />
       </div>
+    </div>
+    <div
+      class=""
+      v-for="(screenshot, screnshot_idx) in screenshots"
+      :key="screnshot_idx"
+    >
+      <Screenshot-Card v-bind:screenshot="screenshot" />
     </div>
   </div>
 </template>
 
 <script>
 import ScreenshotModal from "./utils/ScreenshotModal";
+import ScreenshotCard from "./utils/ScreenshotCard";
+import projectHeader from "../../services/project-header";
 export default {
   name: "left-savedviews",
   data() {
     return {
       image: "",
       ScreenshotModalIsOpen: false,
+      screenshots: [],
     };
   },
   computed: {},
   components: {
     ScreenshotModal,
+    ScreenshotCard,
+  },
+  mounted() {
+    this.getScreenshots();
   },
   methods: {
     takeScreenshot() {
@@ -47,6 +61,20 @@ export default {
     },
     toggleScreenshotModal() {
       this.ScreenshotModalIsOpen = !this.ScreenshotModalIsOpen;
+    },
+    getScreenshots() {
+      this.$http.get(`storage/get_project_screenshot/${projectHeader()}`).then(
+        (response) => {
+          this.screenshots = response.data;
+        },
+        (error) => {
+          console.log(error);
+          this.content =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
     },
   },
 };
