@@ -4,17 +4,33 @@
       class="absolute top-0 z-10 flex flex-row justify-between w-full nopointer h-screen2"
     >
       <div
-        class="bg-gray-200 border-r-2 border-gray-500 h-screen2 bg-opacity-50 allpointer"
+        class="flex flex-row justify-between bg-gray-200 border-r-2 border-gray-500 h-screen2 bg-opacity-50 allpointer"
         v-bind:class="[leftSidebar]"
       >
         <left-sidebar />
+        <div class="flex flex-col justify-between w-6 h-full">
+          <div class="flex"></div>
+          <div
+            class="flex h-32 cursor-pointer bg-codearch-500"
+            v-on:click="openSidebar('w-4/5', 'w-1/5')"
+          ></div>
+          <div class="flex"></div>
+        </div>
       </div>
 
       <div class="h-screen2 nopointer"></div>
       <div
-        class="bg-gray-200 border-l-2 border-gray-500 h-screen2 bg-opacity-50 allpointer"
+        class="flex flex-row justify-between bg-gray-200 border-l-2 border-gray-500 h-screen2 bg-opacity-50 allpointer"
         v-bind:class="[rightSidebar]"
       >
+        <div class="flex flex-col justify-between w-6 h-full">
+          <div class="flex"></div>
+          <div
+            class="flex h-32 cursor-pointer bg-codearch-500"
+            v-on:click="openSidebar('w-1/5', 'w-4/5')"
+          ></div>
+          <div class="flex"></div>
+        </div>
         <right-sidebar />
       </div>
     </div>
@@ -53,8 +69,13 @@ export default {
   },
   methods: {
     openSidebar(left, right) {
-      this.leftSidebar = left;
-      this.rightSidebar = right;
+      if (this.leftSidebar !== this.rightSidebar) {
+        this.leftSidebar = "w-1/5";
+        this.rightSidebar = "w-1/5";
+      } else {
+        this.leftSidebar = left;
+        this.rightSidebar = right;
+      }
     },
   },
   created() {

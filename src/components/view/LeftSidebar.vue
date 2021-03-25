@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-full p-4">
+  <div class="flex w-full flex-col h-full p-4">
     <!-- Menu buttons -->
     <div class="flex flex-row mb-4">
       <div
@@ -44,12 +44,27 @@
         </svg>
       </div>
       <div
-        v-on:click="currentTab = 'Learning'"
+        v-on:click="currentTab = 'Files'"
         class="flex justify-center w-full p-4 ml-2 bg-white cursor-pointer"
       >
-        <svg viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6 book-open">
+        <svg
+          class="w-6 h-6"
+          data-darkreader-inline-fill=""
+          data-darkreader-inline-stroke=""
+          fill="none"
+          stroke="currentColor"
+          style="
+            --darkreader-inline-fill: none;
+            --darkreader-inline-stroke: currentColor;
+          "
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
-            d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
           ></path>
         </svg>
       </div>
@@ -62,7 +77,7 @@
 import Issues from "./Left.Issues";
 import Materials from "./Left.Materials";
 import SavedViews from "./Left.SavedViews";
-import Learning from "./Left.Learning";
+import Files from "./Left.Files.vue";
 
 export default {
   name: "left-sidebar",
@@ -70,7 +85,7 @@ export default {
     Issues,
     Materials,
     SavedViews,
-    Learning,
+    Files,
   },
   data() {
     return {

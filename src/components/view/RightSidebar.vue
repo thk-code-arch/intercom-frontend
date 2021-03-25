@@ -1,10 +1,8 @@
 <template>
-  <div class="flex flex-col h-full p-4">
-    <div class="h-full">
-      <ChatWindow />
-      <OnlineUsers v-if="connectedPlayers.length > 0" />
-      <!-- Online Users -->
-    </div>
+  <div class="h-full w-full flex flex-col h-full p-4">
+    <ChatWindow />
+    <OnlineUsers v-if="connectedPlayers.length > 0" />
+    <!-- Online Users -->
   </div>
 </template>
 
