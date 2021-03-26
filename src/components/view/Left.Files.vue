@@ -13,15 +13,19 @@
         + Upload
       </label>
     </div>
-    <!-- TEXT -->
-    <div class="flex items-start mb-4 text-sm">
+    <div class="flex items-start h-full mb-4 overflow-y-scroll text-sm">
       <div class="flex-1 px-6">
-        <p class="leading-normal text-black">
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-          nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-          sed diam voluptua. At vero eos et accusam et justo duo dolores et eagg
-        </p>
+        <div
+          class=""
+          v-for="(listFile, listFile_idx) in pfiles"
+          :key="listFile_idx"
+        >
+          <a :href="$app_url + listFile.filepath" target="_blank">
+            {{ listFile.description }}
+          </a>
+        </div>
       </div>
+      <!-- TEXT -->
     </div>
   </div>
 </template>
@@ -31,9 +35,28 @@ import projectHeader from "../../services/project-header";
 export default {
   name: "left-learning",
   data() {
-    return {};
+    return {
+      pfiles: [],
+    };
+  },
+  mounted() {
+    this.getFiles();
   },
   methods: {
+    getFiles() {
+      this.$http.get(`storage/get_project_file/${projectHeader()}`).then(
+        (response) => {
+          this.pfiles = response.data;
+        },
+        (error) => {
+          console.log(error);
+          this.content =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
     selectFile() {
       this.selectedFiles = this.$refs.file.files;
       this.upload();
@@ -45,6 +68,7 @@ export default {
       this.$http.post("storage/upload_project_file", fd).then(
         (response) => {
           console.log(response);
+          this.getFiles();
         },
         (error) => {
           console.log(error);
