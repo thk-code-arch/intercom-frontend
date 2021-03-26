@@ -6,11 +6,12 @@
         <h3 class="mb-1 font-extrabold text-grey-darkest">Files</h3>
         <div class="text-sm truncate text-grey-dark">Files</div>
       </div>
-      <button
+      <label
         class="flex flex-col inline-block px-3 py-1 mb-2 mr-2 font-semibold text-white bg-gray-800 rounded-full"
       >
+        <input type="file" ref="file" @change="selectFile" hidden />
         + Upload
-      </button>
+      </label>
     </div>
     <!-- TEXT -->
     <div class="flex items-start mb-4 text-sm">
@@ -26,10 +27,30 @@
 </template>
 
 <script>
+import projectHeader from "../../services/project-header";
 export default {
   name: "left-learning",
   data() {
     return {};
+  },
+  methods: {
+    selectFile() {
+      this.selectedFiles = this.$refs.file.files;
+      this.upload();
+    },
+    upload() {
+      const fd = new FormData();
+      fd.append("file", this.selectedFiles.item(0));
+      fd.append("projectId", projectHeader());
+      this.$http.post("storage/upload_project_file", fd).then(
+        (response) => {
+          console.log(response);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
   },
 };
 </script>
