@@ -10,7 +10,7 @@
             </div>
         </div>
         <!-- TEXT -->
-        <div class="flex items-start h-64 mb-4 overflow-y-scroll text-sm">
+        <div class="flex items-start h-full mb-4 overflow-y-scroll text-sm">
             <div class="flex-1 px-6">
               <p class="leading-normal text-black">
 
@@ -26,16 +26,14 @@
 </template>
 
 <script>
-
 export default {
   name: "left-materials",
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     materials() {
-    return this.$store.state.viewport.materials
+      return this.$store.state.viewport.materials;
     },
   },
 };

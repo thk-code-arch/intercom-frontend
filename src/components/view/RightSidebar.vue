@@ -1,39 +1,14 @@
 <template>
-  <div class="flex flex-col h-auto p-4">
-    <div class="h-64">
-      <ChatWindow />
-    </div>
+  <div class="h-full w-full flex flex-col h-full p-4">
+    <ChatWindow />
+    <OnlineUsers v-if="connectedPlayers.length > 0" />
     <!-- Online Users -->
-    <div
-      v-if="connectedPlayers.length > 0"
-      class="flex flex-col flex-1 my-4 overflow-hidden bg-white"
-    >
-      <!-- Top bar -->
-      <div class="flex items-center flex-none px-6 py-2 border-b">
-        <div class="flex flex-col">
-          <h3 class="mb-1 font-extrabold text-grey-darkest">Online Users</h3>
-        </div>
-      </div>
-      <!-- TEXT -->
-      <div class="flex flex-row p-2 mb-4 text-sm">
-        <div
-          class="m-1 tooltip"
-          v-for="(player, players) in connectedPlayers"
-          :key="players"
-        >
-          <img
-            :src="player.profile_image"
-            class="w-10 h-10 rounded cursor-pointer"
-            v-on:click="getPlayercamPos(player)"
-          />
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import ChatWindow from "@/components/ChatWindow";
+import OnlineUsers from "./Right.OnlineUsers";
 
 import Vue from "vue";
 Vue.use(require("vue-moment"));
@@ -43,6 +18,7 @@ export default {
   name: "right-sidebar",
   components: {
     ChatWindow,
+    OnlineUsers,
   },
   computed: {
     camPosi() {
@@ -68,12 +44,6 @@ export default {
         this.gotlastcamPos = moment();
         this.$store.dispatch("viewport/push_position");
       }
-    },
-  },
-  methods: {
-    getPlayercamPos(player) {
-      console.log("moveToPlayer", player.position);
-      this.$store.dispatch("viewport/getcamPos", player);
     },
   },
   destroyed() {

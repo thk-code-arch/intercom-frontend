@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col flex-1 overflow-hidden bg-white">
+  <div class="bottom-0 flex flex-col flex-1 overflow-hidden bg-white">
     <!-- Top bar -->
     <div class="flex items-center justify-between flex-none px-6 py-2 border-b">
       <div class="flex flex-col">
@@ -12,23 +12,23 @@
       >
         + Screenshot
       </button>
+      <ScreenshotModal
+        @toggleScreenshotModal="toggleScreenshotModal()"
+        @getScreenshots="getScreenshots()"
+        v-if="ScreenshotModalIsOpen"
+      />
     </div>
     <!-- TEXT -->
-    <div class="max-h-full flex items-start mb-4 text-sm">
-      <div class="flex-1 px-6 overflow-y-scroll">
-        <ScreenshotModal
-          @toggleScreenshotModal="toggleScreenshotModal()"
-          @getScreenshots="getScreenshots()"
-          v-if="ScreenshotModalIsOpen"
-        />
+    <div class="flex items-start h-full mb-4 overflow-y-scroll text-sm">
+      <div class="flex-1 px-6">
+        <div
+          class=""
+          v-for="(screenshot, screnshot_idx) in screenshots"
+          :key="screnshot_idx"
+        >
+          <Screenshot-Card v-bind:screenshot="screenshot" />
+        </div>
       </div>
-    </div>
-    <div
-      class=""
-      v-for="(screenshot, screnshot_idx) in screenshots"
-      :key="screnshot_idx"
-    >
-      <Screenshot-Card v-bind:screenshot="screenshot" />
     </div>
   </div>
 </template>

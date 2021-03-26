@@ -1,7 +1,7 @@
 <template>
-  <div class="flex h-screen2" :style="styleHeight">
+  <div class="flex flex-row justify-start h-screen2" :style="styleHeight">
     <!-- Channel bar -->
-    <div class="flex flex-none w-1/5 px-6 py-2 border-b">
+    <div class="flex w-1/5 px-6 py-2 border-b">
       <div class="flex flex-col w-full">
         <h1 class="mb-1 font-extrabold text-grey-darkest">Chatrooms</h1>
         <div class="" v-for="(room, room_index) in chatrooms" :key="room_index">

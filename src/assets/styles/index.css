@@ -3,29 +3,26 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'din-2014';
-  src: url('../fonts/DIN2014-Regular.ttf');
+  font-family: "din-2014";
+  src: url("../fonts/DIN2014-Regular.ttf");
 }
-.tooltip .tooltip-text {
-  visibility: hidden;
-  text-align: center;
-  padding: 2px 6px;
-  position: absolute;
-  z-index: 100;
-}
-.tooltip:hover .tooltip-text {
-  visibility: visible;
-}
-.allpointer{
+.allpointer {
   pointer-events: all;
 }
-.nopointer{
+.nopointer {
   pointer-events: none;
 }
-.splitter{
+.splitter {
   pointer-events: all;
 }
-.embed-responsive-item{
+.embed-responsive-item {
   height: 100%;
-  width: 100%
+  width: 100%;
+}
+.the-tooltip {
+  @apply invisible absolute;
+}
+
+.has-tooltip:hover .the-tooltip {
+  @apply z-50 visible;
 }
