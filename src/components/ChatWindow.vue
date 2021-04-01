@@ -1,6 +1,6 @@
 <template>
   <!-- Chat content -->
-  <div class="flex flex-col overflow-hidden bg-white">
+  <div class="flex w-full flex-col overflow-hidden bg-white">
     <!-- Top bar -->
     <router-link to="/chat">
       <div class="flex items-center flex-none px-6 py-2 border-b">
