@@ -3,7 +3,11 @@
     class="fixed top-0 left-0 z-20 flex bg-black items-center justify-center w-full h-full modal"
   >
     <div class="w-full p-12 flex flex-col">
-      <img class="w-full" :src="$app_url + image.filepath" />
+      <img
+        class="w-full"
+        :src="$app_url + image.filepath"
+        :alt="image.description"
+      />
       <span class="text-gray-200">
         {{ image.description }} uploaded by {{ image.user.username }} created:
         {{ image.createdAt }}
