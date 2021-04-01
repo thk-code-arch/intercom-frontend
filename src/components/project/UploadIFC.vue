@@ -13,7 +13,7 @@
     </button>
 
     <div v-if="message">
-      <a :href="$app_url + message">Logfile</a>
+      <a :href="$app_url + '/' + message">Logfile</a>
     </div>
   </div>
 </template>

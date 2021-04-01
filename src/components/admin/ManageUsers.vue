@@ -5,7 +5,7 @@
       v-if="showModal"
       class="fixed inset-0 z-50 flex items-center justify-center max-w-4xl overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
     >
-      <div class="relative w-3/4 max-w-full px-12 mx-auto">
+      <div class="relative w-3/4 max-w-full">
         <!--content-->
         <div
           class="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none"
@@ -31,31 +31,12 @@
             @submit="submitNewUsers"
             v-model="selectedUsers"
             :schema="addUsersForm"
+            class="p-6 flex flex-row justify-between"
           />
           <div class="relative flex-auto p-2">
             <p class="my-4 text-lg leading-relaxed text-gray-600"></p>
           </div>
           <!--footer-->
-          <div
-            class="flex items-center justify-end p-6 border-t border-gray-300 border-solid rounded-b"
-          >
-            <button
-              class="px-4 py-2 mb-1 mr-1 text-sm font-bold uppercase outline-none text-codearch-400 background-transparent focus:outline-none"
-              type="button"
-              style="transition: all 0.15s ease"
-              v-on:click="toggleModal()"
-            >
-              Close
-            </button>
-            <button
-              class="px-4 py-2 mb-1 mr-1 text-sm font-bold uppercase bg-transparent border border-solid rounded outline-none text-codearch-400 border-codearch-400 hover:bg-codearch-400 hover:text-white active:bg-red-600 focus:outline-none"
-              type="button"
-              style="transition: all 0.15s ease"
-              v-on:click="toggleModal()"
-            >
-              Save
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -112,6 +93,7 @@ export default {
   },
   methods: {
     toggleModal() {
+      this.$emit("getProjects");
       this.showModal = !this.showModal;
     },
     reqBody() {
