@@ -12,14 +12,14 @@
       Upload
     </button>
 
-    <div v-if="message">
-      <a :href="$app_url + '/' + message">Logfile</a>
+    <div class="h-64 overflow-y-scroll" v-if="message">
+      {{ message }}
     </div>
   </div>
 </template>
 
 <script>
-import UploadService from "@/services/file.service";
+import projectHeader from "../../services/project-header";
 export default {
   name: "UploadIFC",
   data() {
@@ -36,14 +36,21 @@ export default {
       this.selectedFiles = this.$refs.file.files;
     },
     upload() {
-      this.progress = 0;
-      this.currentFile = this.selectedFiles.item(0);
-      UploadService.uploadifc(this.currentFile, (event) => {
-        this.progress = Math.round((100 * event.loaded) / event.total);
-      }).then((response) => {
-        this.message = response.data.logfile;
-      });
+      // TODO Upload IFC: Uploading File process bar.
+      const fd = new FormData();
+      fd.append("file", this.selectedFiles.item(0));
+      fd.append("projectId", projectHeader());
+      this.message = "Uploading & processing. Please Wait.";
       this.selectedFiles = undefined;
+      this.$http.post(`project/uploadifc/${projectHeader()}`, fd).then(
+        (response) => {
+          console.log(response);
+          this.message = response.data.log;
+        },
+        (error) => {
+          this.message = error;
+        }
+      );
     },
   },
   mounted() {},
