@@ -187,6 +187,7 @@
                       ><ManageUsers
                         v-bind:project="project"
                         v-bind:allUsers="Users"
+                        @getProjects="getProjects()"
                     /></span>
                   </span>
                 </td>
@@ -303,6 +304,19 @@ export default {
     },
   },
   methods: {
+    getProjects() {
+      this.$http.get("admin/get_projects").then(
+        (response) => {
+          this.Projects = response.data;
+        },
+        (error) => {
+          this.content =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
     rmRole(therole, theuserid) {
       if (therole === "admin" && theuserid != this.currentUser.id) {
         this.$http.post(`admin/rm_role/admin/${theuserid}`, {}).then(
@@ -339,20 +353,10 @@ export default {
       this.$router.push("/login");
     }
 
+    this.getProjects();
     this.$http.get("admin/get_users").then(
       (response) => {
         this.Users = response.data;
-      },
-      (error) => {
-        this.content =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-      }
-    );
-    this.$http.get("admin/get_projects").then(
-      (response) => {
-        this.Projects = response.data;
       },
       (error) => {
         this.content =

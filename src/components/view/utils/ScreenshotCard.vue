@@ -4,7 +4,11 @@
     class="flex flex-row rounded-sm border-gray-200 border m-2 justify-between cursor-pointer"
   >
     <div class="px-6 py-4">
-      <img class="w-16 h-16" :src="$app_url + screenshot.thumbnail" />
+      <img
+        class="w-16 h-16"
+        alt="Screenshot Preview"
+        :src="$app_url + screenshot.thumbnail"
+      />
     </div>
     <div class="px-6 py-4 flex flex-col justify-center">
       <div class="mb-2 text-xl font-bold">{{ screenshot.title }}</div>
