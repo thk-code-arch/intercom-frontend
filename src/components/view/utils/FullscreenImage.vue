@@ -5,7 +5,7 @@
     <div class="w-full p-12 flex flex-col">
       <img
         class="w-full"
-        :src="$app_url + image.filepath"
+        :src="$files_url + image.filepath"
         :alt="image.description"
       />
       <span class="text-gray-200">

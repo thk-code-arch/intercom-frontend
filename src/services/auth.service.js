@@ -1,6 +1,7 @@
 import axios from 'axios';
+import Vue from 'vue'
 
-const API_URL = process.env.VUE_APP_API_URL+'/api/auth/';
+const API_URL = Vue.prototype.$app_url+'api/auth/';
 
 class AuthService {
   login(user) {

@@ -20,7 +20,7 @@
           v-for="(listFile, listFile_idx) in pfiles"
           :key="listFile_idx"
         >
-          <a :href="$app_url + listFile.filepath" target="_blank">
+          <a :href="$files_url + listFile.filepath" target="_blank">
             {{ listFile.description }}
           </a>
         </div>

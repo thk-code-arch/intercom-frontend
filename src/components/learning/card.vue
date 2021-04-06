@@ -3,7 +3,7 @@
     v-on:click="showFull()"
     class="max-w-sm overflow-hidden bg-white rounded cursor-pointer"
   >
-    <img class="" :src="$app_url + theLearning.thumbnail" />
+    <img class="" :src="$files_url + theLearning.thumbnail" />
     <div class="px-6 py-4">
       <div class="mb-2 text-xl font-bold">{{ theLearning.title }}</div>
       <p class="text-base text-gray-700">
