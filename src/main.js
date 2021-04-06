@@ -11,6 +11,7 @@ import axios from "axios";
 Vue.prototype.$app_url = process.env.VUE_APP_API_URL;
 //Location for static files, remove trailing slash, because API answers with root /files
 Vue.prototype.$files_url = process.env.VUE_APP_API_URL.replace(/\/$/, '');
+console.log(process.env.VUE_APP_API_URL)
 
 const API_URL = process.env.VUE_APP_API_URL+'api/';
 
