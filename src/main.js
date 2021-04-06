@@ -7,14 +7,14 @@ import "./assets/styles/index.css";
 import VueFormulate from "@braid/vue-formulate";
 
 import axios from "axios";
+import {API, FILES} from "./services/api";
 //general API URL
-Vue.prototype.$app_url = process.env.VUE_APP_API_URL;
+Vue.prototype.$app_url = API;
 //Location for static files, remove trailing slash, because API answers with root /files
-Vue.prototype.$files_url = process.env.VUE_APP_API_URL.replace(/\/$/, '');
+Vue.prototype.$files_url = FILES;
 
 
 const API_URL = process.env.VUE_APP_API_URL+'api/';
-console.log(API_URL)
 Vue.prototype.$http = axios.create({
   baseURL: API_URL,
   headers: {
