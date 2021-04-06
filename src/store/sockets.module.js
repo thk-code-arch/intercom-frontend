@@ -7,6 +7,7 @@ import store from "../store";
 import io from "socket.io-client";
 import authHeader from "@/services/auth-header";
 import VueSocketIO from "vue-socket.io";
+import {SOCKETS} from "../services/api"
 
 export const iosockets = {
   namespaced: true,
@@ -19,7 +20,7 @@ export const iosockets = {
   actions: {
     init_chatroom({ commit, state }) {
       if (state.chatroomInit === false) {
-        const chatsocket = io(Vue.prototype.$app_url + "chatroom", {
+        const chatsocket = io(SOCKETS + "chatroom", {
           query: `token=${authHeader().replace("Bearer ", "")}`,
         });
         Vue.use(
@@ -40,7 +41,7 @@ export const iosockets = {
     init_viewport({ commit, state }) {
       console.log("init viwport socket");
       if (state.viewportInit === false) {
-        const playersocket = io(Vue.prototype.$app_url + "viewport", {
+        const playersocket = io(SOCKETS + "viewport", {
           query: `token=${authHeader().replace("Bearer ", "")}`,
         });
         Vue.use(
