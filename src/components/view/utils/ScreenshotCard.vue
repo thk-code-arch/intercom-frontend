@@ -7,7 +7,7 @@
       <img
         class="w-16 h-16"
         alt="Screenshot Preview"
-        :src="$app_url + screenshot.thumbnail"
+        :src="$files_url + screenshot.thumbnail"
       />
     </div>
     <div class="px-6 py-4 flex flex-col justify-center">

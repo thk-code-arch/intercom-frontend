@@ -13,7 +13,7 @@
     </FormulateForm>
     <div v-if="scrapedObject" class="flex flex-row">
       <div class="w-1/2">
-        <img class="p-4" :src="$app_url + scrapedObject.thumbnail" />
+        <img class="p-4" :src="$files_url + scrapedObject.thumbnail" />
       </div>
       <div class="w-1/2">
         <FormulateForm @submit="handlePostVideo">

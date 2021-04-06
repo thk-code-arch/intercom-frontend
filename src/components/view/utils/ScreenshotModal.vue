@@ -186,7 +186,7 @@ export default {
     },
     broadcastImageInChat(thumbnail, description) {
       const message = `![SavedView](${
-        this.$app_url + thumbnail
+        this.$files_url + thumbnail
       } "${description}")`;
       this.$store.dispatch("chatroom/CHAT_sendmessage", message);
     },

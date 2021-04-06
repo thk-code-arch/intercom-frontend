@@ -163,7 +163,6 @@
 </template>
 
 <script>
-import MaintenanceService from "@/services/maintenance.service.js";
 export default {
   name: "BugReport",
   data() {
@@ -218,11 +217,12 @@ ${yourContext}`;
       this.$emit("exitBugReport");
     },
     sendBugReport(report, title, label) {
-      MaintenanceService.sendReport({
-        title: title,
-        label: label,
-        context: report,
-      })
+      this.$http
+        .post("/user/create_issue", {
+          title: title,
+          label: label,
+          context: report,
+        })
         .then((response) => {
           this.response = response.data;
           this.selType = "sent";
