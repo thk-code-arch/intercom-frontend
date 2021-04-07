@@ -2,16 +2,6 @@ import Vue from "vue";
 import Router from "vue-router";
 import Projects from "../views/Projects.vue";
 import Login from "../views/Login.vue";
-import TheView from "../views/TheView.vue";
-import Chat from "../views/Chat.vue";
-import Admin from "../views/Admin.vue";
-import Profile from "../views/Profile.vue";
-import ProjectSettings from "../views/ProjectSettings.vue";
-
-import Learning from "../views/Learning.vue";
-import ListLearning from "../components/learning/list-learnings.vue";
-import ShowLearning from "../components/learning/show-learning.vue";
-import AddLearning from "../components/learning/add-learning.vue";
 
 Vue.use(Router);
 
@@ -29,52 +19,59 @@ export const router = new Router({
     {
       path: "/view",
       name: "TheView",
-      component: TheView,
+      // lazy-loaded
+      component: () => import("../views/TheView.vue"),
     },
     {
       path: "/chat",
       name: "Chat",
-      component: Chat,
+      // lazy-loaded
+      component: () => import("../views/Chat.vue"),
     },
     {
       path: "/learning",
       name: "Learning",
       redirect: "/learning/list",
-      component: Learning,
+      // lazy-loaded
+      component: () => import("../views/Learning.vue"),
       children: [
         {
           path: "list",
-          component: ListLearning,
+          component: () => import("../components/learning/list-learnings.vue"),
         },
         {
           path: "show/:id",
-          component: ShowLearning,
+          component: () => import("../components/learning/show-learning.vue"),
         },
         {
           path: "add",
-          component: AddLearning,
+          component: () => import("../components/learning/add-learning.vue"),
         },
       ],
     },
     {
       path: "/profile",
       name: "profile",
-      component: Profile,
+      // lazy-loaded
+      component: () => import("../views/Profile.vue"),
     },
     {
       path: "/admin",
       name: "admin",
-      component: Admin,
+      // lazy-loaded
+      component: () => import("../views/Admin.vue"),
     },
     {
       path: "/new-project",
       name: "new-project",
-      component: ProjectSettings,
+      // lazy-loaded
+      component: () => import("../views/ProjectSettings.vue"),
     },
     {
       path: "/project-settings",
       name: "project-settings",
-      component: ProjectSettings,
+      // lazy-loaded
+      component: () => import("../views/ProjectSettings.vue"),
     },
     {
       path: "/projects",

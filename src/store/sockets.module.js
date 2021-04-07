@@ -20,7 +20,7 @@ export const iosockets = {
   actions: {
     init_chatroom({ commit, state }) {
       if (state.chatroomInit === false) {
-        const chatsocket = io(SOCKETS + "chatroom", {
+        const chatsocket = io(SOCKETS + "/chatroom", {
           query: `token=${authHeader().replace("Bearer ", "")}`,
         });
         Vue.use(
@@ -41,7 +41,7 @@ export const iosockets = {
     init_viewport({ commit, state }) {
       console.log("init viwport socket");
       if (state.viewportInit === false) {
-        const playersocket = io(SOCKETS + "viewport", {
+        const playersocket = io(SOCKETS + "/viewport", {
           query: `token=${authHeader().replace("Bearer ", "")}`,
         });
         Vue.use(

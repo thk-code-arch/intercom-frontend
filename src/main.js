@@ -13,10 +13,8 @@ Vue.prototype.$app_url = API;
 //Location for static files, remove trailing slash, because API answers with root /files
 Vue.prototype.$files_url = FILES;
 
-
-const API_URL = process.env.VUE_APP_API_URL+'api/';
 Vue.prototype.$http = axios.create({
-  baseURL: API_URL,
+  baseURL: API+/api/,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",

@@ -36,23 +36,23 @@ export default {
   components: {
     LearningCard,
   },
-  computed: {},
+  methods: {
+    getLearnings() {
+      this.$http.get("learning/public", {}).then(
+        (response) => {
+          this.learnings = response.data;
+        },
+        (error) => {
+          this.content =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
+  },
   mounted() {
-    //get actaual chatroomid
-    this.$http.get("learning/public").then(
-      (response) => {
-        // connect to room
-        this.learnings = response.data;
-        console.log("learning response", this.learnings);
-      },
-      (error) => {
-        console.log(error);
-        this.content =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-      }
-    );
+    this.getLearnings();
   },
   data() {
     return {
