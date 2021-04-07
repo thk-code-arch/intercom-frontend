@@ -228,7 +228,6 @@ ${yourContext}`;
           this.selType = "sent";
         })
         .catch(() => {
-          console.log("error");
         });
     },
   },

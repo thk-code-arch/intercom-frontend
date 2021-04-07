@@ -55,7 +55,6 @@ export default {
           this.scrapedObject = response.data;
         })
         .catch(() => {
-          console.log("error");
         });
     },
     handlePostVideo() {
@@ -72,7 +71,6 @@ export default {
           this.$router.push("/learning/show/" + response.data.id);
         })
         .catch(() => {
-          console.log("error");
         });
     },
   },

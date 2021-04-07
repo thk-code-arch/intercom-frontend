@@ -167,8 +167,6 @@ export default {
       return this.$store.state.viewport.imgDataurl;
     },
     size() {
-      console.log(this.$store.state.viewport.imgDataurl);
-
       const size = new Object();
       size.height = "600";
       size.width = "1200";
@@ -219,7 +217,6 @@ export default {
           fd.append("projectId", projectHeader());
           this.$http.post("storage/upload_project_screenshot", fd).then(
             (response) => {
-              console.log(response);
               this.broadcastImageInChat(
                 response.data.thumbnail,
                 response.data.description
@@ -227,7 +224,7 @@ export default {
               this.toggleModal();
             },
             (error) => {
-              console.log(error);
+              this.content = error;
             }
           );
         });

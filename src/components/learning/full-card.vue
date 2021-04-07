@@ -119,10 +119,8 @@ export default {
       (response) => {
         // connect to room
         this.theLearning = response.data;
-        console.log("learning response", this.theLearning);
       },
       (error) => {
-        console.log(error);
         this.content =
           (error.response && error.response.data) ||
           error.message ||

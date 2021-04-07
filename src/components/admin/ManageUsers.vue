@@ -105,14 +105,13 @@ export default {
         req.newUsers = this.selectedUsers.textUsers.split(",");
       }
       req.projectId = this.project.id;
-      console.log(req);
       return req;
     },
     submitNewUsers() {
       this.$http.post("/admin/add_users_to_project", this.reqBody()).then(
         (response) => {
-          console.log(response.data);
           this.toggleModal();
+          this.content = response.data;
         },
         (error) => {
           this.content =

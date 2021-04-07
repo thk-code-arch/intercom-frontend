@@ -49,7 +49,6 @@ export default {
           this.pfiles = response.data;
         },
         (error) => {
-          console.log(error);
           this.content =
             (error.response && error.response.data) ||
             error.message ||
@@ -67,11 +66,11 @@ export default {
       fd.append("projectId", projectHeader());
       this.$http.post("storage/upload_project_file", fd).then(
         (response) => {
-          console.log(response);
           this.getFiles();
+          this.content = response.data;
         },
         (error) => {
-          console.log(error);
+          this.content = error;
         }
       );
     },

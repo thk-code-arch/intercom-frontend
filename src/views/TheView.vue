@@ -83,12 +83,10 @@ export default {
     this.$http.get("chat/get_projectroom/" + projectHeader()).then(
       (response) => {
         // connect to room
-        console.log("step1");
         this.$store.dispatch("chatroom/select_chatroom", response.data.id);
         this.$store.dispatch("viewport/select_viewport", response.data.id);
       },
       (error) => {
-        console.log(error);
         this.content =
           (error.response && error.response.data) ||
           error.message ||

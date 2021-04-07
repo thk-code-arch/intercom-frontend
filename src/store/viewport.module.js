@@ -33,9 +33,7 @@ export const viewport = {
       commit("Select_Viewport", chatID);
     },
     join_viewport({ commit, state }, oldroom) {
-      console.log("join viwport socket");
       if (state.currentviewport !== 0) {
-        console.log("join viwport notnull");
         this._vm.$socket.viewport.emit("join_viewport", {
           oldRoom: oldroom,
           newRoom: state.currentviewport,

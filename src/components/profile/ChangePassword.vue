@@ -43,7 +43,6 @@ export default {
 
   methods: {
     changePasswordNow() {
-      console.log(this.password.password);
     },
   },
   mounted() {},
