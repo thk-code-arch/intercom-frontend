@@ -45,7 +45,6 @@ export default {
   },
   methods: {
     getPlayercamPos(player) {
-      console.log("moveToPlayer", player.position);
       this.$store.dispatch("viewport/getcamPos", player);
     },
   },

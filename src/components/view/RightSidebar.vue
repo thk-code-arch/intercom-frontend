@@ -52,7 +52,6 @@ export default {
   created() {
     //init message delay
     this.gotlastcamPos = moment();
-    console.log(this.gotlastcamPos);
   },
   mounted() {
     //init viewport socket

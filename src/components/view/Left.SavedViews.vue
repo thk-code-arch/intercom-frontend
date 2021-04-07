@@ -68,7 +68,6 @@ export default {
           this.screenshots = response.data;
         },
         (error) => {
-          console.log(error);
           this.content =
             (error.response && error.response.data) ||
             error.message ||

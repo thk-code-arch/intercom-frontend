@@ -44,7 +44,6 @@ export default {
       this.selectedFiles = undefined;
       this.$http.post(`project/uploadifc/${projectHeader()}`, fd).then(
         (response) => {
-          console.log(response);
           this.message = response.data.log;
         },
         (error) => {

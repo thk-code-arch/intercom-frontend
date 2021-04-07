@@ -218,7 +218,6 @@ export default {
   },
   computed: {
     currentProject() {
-      console.log(this.$store.state.curproject.theproject);
       return this.$store.state.curproject.theproject;
     },
     isProjectOwner() {

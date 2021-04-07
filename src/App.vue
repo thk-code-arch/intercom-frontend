@@ -31,15 +31,10 @@ export default {
   },
   watch: {
     chatroomid: function (newVal, oldVal) {
-      // watch it
-      console.log("chatroomid  changed: ", newVal, " | was: ", oldVal);
       // TODO dispatch load chatlog on change
       this.$store.dispatch("chatroom/load_chatlog", oldVal);
     },
     viewportid: function (newVal, oldVal) {
-      // watch it
-      console.log("viewportid  changed: ", newVal, " | was: ", oldVal);
-      // TODO dispatch load chatlog on change
       this.$store.dispatch("viewport/join_viewport", oldVal);
     },
   },

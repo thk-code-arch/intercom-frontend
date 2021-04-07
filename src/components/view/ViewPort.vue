@@ -278,7 +278,6 @@ export default {
       this.getCameraPosition();
     },
     takeScreenshotNow() {
-      console.log("takeScreenshot");
       this.takeScreenshot();
     },
   },

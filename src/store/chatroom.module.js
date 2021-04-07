@@ -13,7 +13,6 @@ export const chatroom = {
       if (state.currentchatroom !== 0){
         this._vm.$http.get('chat/log/'+state.currentchatroom).then((message) => {
 		commit("loaded_chatlog", message.data);
-          console.log(message.data.chatlog)
         commit("loaded_theroom", {name: message.data.name,description: message.data.description});
         this._vm.$socket.chatroom.emit('join_chatroom',{oldRoom: oldroom, newRoom: state.currentchatroom});
         });

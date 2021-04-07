@@ -26,7 +26,6 @@ Vue.prototype.$http.interceptors.response.use(
     return response;
   },
   function(error) {
-    console.log(error.response.data);
     if (error.response.status === 401) {
       store.dispatch("auth/logout");
       router.push("/login");
@@ -43,7 +42,6 @@ Vue.prototype.$http.interceptors.request.use(
       config.headers["Authorization"] = "Bearer " + user.accessToken;
     }
     config.headers["Content-Type"] = "application/json";
-    console.log("$http axios request",config);
     return config;
   },
   (error) => {

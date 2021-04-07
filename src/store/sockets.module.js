@@ -39,7 +39,6 @@ export const iosockets = {
       }
     },
     init_viewport({ commit, state }) {
-      console.log("init viwport socket");
       if (state.viewportInit === false) {
         const playersocket = io(SOCKETS + "/viewport", {
           query: `token=${authHeader().replace("Bearer ", "")}`,

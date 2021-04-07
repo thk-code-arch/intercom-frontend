@@ -1,6 +1,5 @@
 import ProjectService from '../services/project.service';
 const theproject = JSON.parse(localStorage.getItem('project'));
-console.log("loaded project mmodule",theproject);
 
 
 const initialState = theproject

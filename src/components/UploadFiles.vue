@@ -56,7 +56,6 @@ export default {
       })
         .then(response => {
           this.message = response.data.message;
-          console.log(this.message);
         })
         .catch(() => {
           this.progress = 0;
