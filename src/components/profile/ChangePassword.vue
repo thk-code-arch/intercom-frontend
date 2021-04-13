@@ -3,11 +3,11 @@
     <div class="p-8">
       <!-- TEXT -->
       <FormulateForm
+        name="ChangePassword"
         @submit="changePasswordNow"
         v-model="password"
         :schema="changePassword"
       />
-      {{ content }}
     </div>
   </div>
 </template>
@@ -43,18 +43,26 @@ export default {
 
   methods: {
     changePasswordNow() {
-      console.log("helllo", this.password);
       this.$http
         .post("user/update_password", { newPassword: this.password.Passwords })
         .then(
-          (response) => {
-            this.content = response.data;
+          () => {
+            this.$notify({
+              title: "Success",
+              text: "Password changed",
+              group: "info",
+            });
+            this.$formulate.reset("ChangePassword");
           },
           (error) => {
-            this.content =
-              (error.response && error.response.data) ||
-              error.message ||
-              error.toString();
+            this.$notify({
+              title: "Ooops...",
+              text:
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString(),
+              group: "error",
+            });
           }
         );
     },

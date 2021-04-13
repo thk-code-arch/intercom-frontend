@@ -2,6 +2,18 @@
   <div id="app">
     <header-menu v-if="showDiv" />
     <router-view :key="$route.path" />
+    <notifications
+      position="bottom left"
+      width=""
+      classes="m-6 p-3 text-black bg-red-500 rounded-lg border-solid border-l-8 border-red-700"
+      group="error"
+    />
+    <notifications
+      position="bottom left"
+      width=""
+      classes="m-6 p-3 text-gray-100 bg-codearch-500 rounded-lg border-solid border-l-8 border-codearch-700"
+      group="info"
+    />
   </div>
 </template>
 <script>
@@ -64,5 +76,12 @@ export default {
 }
 .btn-blue:hover {
   @apply bg-codearch-500;
+}
+.notification-title {
+  @apply text-xl;
+}
+
+.notification-content {
+  @apply text-sm;
 }
 </style>

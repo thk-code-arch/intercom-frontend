@@ -111,13 +111,21 @@ export default {
       this.$http.post("/admin/add_users_to_project", this.reqBody()).then(
         (response) => {
           this.toggleModal();
-          this.content = response.data;
+          this.$notify({
+            title: "Success",
+            text: response.data,
+            group: "info",
+          });
         },
         (error) => {
-          this.content =
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString();
+          this.$notify({
+            title: "Ooops...",
+            text:
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString(),
+            group: "error",
+          });
         }
       );
     },

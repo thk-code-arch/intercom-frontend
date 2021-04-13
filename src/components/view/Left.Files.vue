@@ -65,12 +65,23 @@ export default {
       fd.append("file", this.selectedFiles.item(0));
       fd.append("projectId", projectHeader());
       this.$http.post("storage/upload_project_file", fd).then(
-        (response) => {
+        () => {
           this.getFiles();
-          this.content = response.data;
+          this.$notify({
+            title: "Success",
+            text: "File uploaded",
+            group: "info",
+          });
         },
         (error) => {
-          this.content = error;
+          this.$notify({
+            title: "Ooops...",
+            text:
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString(),
+            group: "error",
+          });
         }
       );
     },

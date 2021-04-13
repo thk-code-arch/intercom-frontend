@@ -8,6 +8,9 @@ import VueFormulate from "@braid/vue-formulate";
 
 import axios from "axios";
 import {API, FILES} from "./services/api";
+
+import Notifications from 'vue-notification'
+Vue.use(Notifications)
 //general API URL
 Vue.prototype.$app_url = API;
 //Location for static files, remove trailing slash, because API answers with root /files

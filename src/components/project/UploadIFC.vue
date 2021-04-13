@@ -45,9 +45,22 @@ export default {
       this.$http.post(`project/uploadifc/${projectHeader()}`, fd).then(
         (response) => {
           this.message = response.data.log;
+          this.$notify({
+            title: "Convert finished",
+            text: "See logfile.",
+            group: "info",
+            duration: 7000,
+          });
         },
         (error) => {
-          this.message = error;
+          this.$notify({
+            title: "Ooops...",
+            text:
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString(),
+            group: "error",
+          });
         }
       );
     },

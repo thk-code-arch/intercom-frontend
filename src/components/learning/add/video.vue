@@ -49,13 +49,21 @@ export default {
   computed: {},
   methods: {
     handleFetch() {
-      this.$http
-        .post("learning/fetch", { scrapeUrl: this.scrapeurl })
-        .then((response) => {
+      this.$http.post("learning/fetch", { scrapeUrl: this.scrapeurl }).then(
+        (response) => {
           this.scrapedObject = response.data;
-        })
-        .catch(() => {
-        });
+        },
+        (error) => {
+          this.$notify({
+            title: "Ooops...",
+            text:
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString(),
+            group: "error",
+          });
+        }
+      );
     },
     handlePostVideo() {
       this.$http
@@ -67,11 +75,21 @@ export default {
           description: this.scrapedObject.description,
           type: "PUBLIC",
         })
-        .then((response) => {
-          this.$router.push("/learning/show/" + response.data.id);
-        })
-        .catch(() => {
-        });
+        .then(
+          (response) => {
+            this.$router.push("/learning/show/" + response.data.id);
+          },
+          (error) => {
+            this.$notify({
+              title: "Ooops...",
+              text:
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString(),
+              group: "error",
+            });
+          }
+        );
     },
   },
   data() {

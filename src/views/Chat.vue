@@ -64,10 +64,14 @@ export default {
         }
       },
       (error) => {
-        this.content =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
+        this.$notify({
+          title: "Ooops...",
+          text:
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString(),
+          group: "error",
+        });
       }
     );
   },
