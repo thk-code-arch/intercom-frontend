@@ -89,11 +89,14 @@ export default {
           this.$router.push("/new-project");
         },
         (error) => {
-          this.loading = false;
-          this.message =
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString();
+          this.$notify({
+            title: "Ooops...",
+            text:
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString(),
+            group: "error",
+          });
         }
       );
     },
@@ -105,11 +108,14 @@ export default {
             this.$router.push("/view");
           },
           (error) => {
-            this.loading = false;
-            this.message =
-              (error.response && error.response.data) ||
-              error.message ||
-              error.toString();
+            this.$notify({
+              title: "Ooops...",
+              text:
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString(),
+              group: "error",
+            });
           }
         );
       }
@@ -142,10 +148,14 @@ export default {
         }
       },
       (error) => {
-        this.content =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
+        this.$notify({
+          title: "Ooops...",
+          text:
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString(),
+          group: "error",
+        });
       }
     );
   },

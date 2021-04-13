@@ -1,9 +1,9 @@
-
 <template>
   <div>
     <div class="p-8">
       <!-- TEXT -->
       <FormulateForm
+        name="ChangePassword"
         @submit="changePasswordNow"
         v-model="password"
         :schema="changePassword"
@@ -18,6 +18,7 @@ export default {
   data: function () {
     return {
       password: {},
+      content: {},
       changePassword: [
         {
           label: "New password",
@@ -27,9 +28,8 @@ export default {
         },
         {
           label: "Confirm password",
-          type: "password",
           name: "Passwords",
-          validation: "required|confirm",
+          type: "password",
         },
         {
           type: "submit",
@@ -43,6 +43,28 @@ export default {
 
   methods: {
     changePasswordNow() {
+      this.$http
+        .post("user/update_password", { newPassword: this.password.Passwords })
+        .then(
+          () => {
+            this.$notify({
+              title: "Success",
+              text: "Password changed",
+              group: "info",
+            });
+            this.$formulate.reset("ChangePassword");
+          },
+          (error) => {
+            this.$notify({
+              title: "Ooops...",
+              text:
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString(),
+              group: "error",
+            });
+          }
+        );
     },
   },
   mounted() {},

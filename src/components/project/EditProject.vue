@@ -107,14 +107,23 @@ export default {
           this.$store
             .dispatch("curproject/selectProject", response.data)
             .then(() => {
+              this.$notify({
+                title: "Success",
+                text: "Project added",
+                group: "info",
+              });
               this.$router.push("/project-settings");
             });
         },
         (error) => {
-          this.content =
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString();
+          this.$notify({
+            title: "Ooops...",
+            text:
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString(),
+            group: "error",
+          });
         }
       );
     },
@@ -128,12 +137,21 @@ export default {
         .then(
           (response) => {
             this.$store.dispatch("curproject/selectProject", response.data);
+            this.$notify({
+              title: "Success",
+              text: "Project details changed",
+              group: "info",
+            });
           },
           (error) => {
-            this.content =
-              (error.response && error.response.data) ||
-              error.message ||
-              error.toString();
+            this.$notify({
+              title: "Ooops...",
+              text:
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString(),
+              group: "error",
+            });
           }
         );
     },

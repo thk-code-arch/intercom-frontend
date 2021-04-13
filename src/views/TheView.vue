@@ -87,10 +87,14 @@ export default {
         this.$store.dispatch("viewport/select_viewport", response.data.id);
       },
       (error) => {
-        this.content =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
+        this.$notify({
+          title: "Ooops...",
+          text:
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString(),
+          group: "error",
+        });
       }
     );
   },
