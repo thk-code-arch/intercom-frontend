@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <div class="p-8">
@@ -8,6 +7,7 @@
         v-model="password"
         :schema="changePassword"
       />
+      {{ content }}
     </div>
   </div>
 </template>
@@ -18,6 +18,7 @@ export default {
   data: function () {
     return {
       password: {},
+      content: {},
       changePassword: [
         {
           label: "New password",
@@ -27,9 +28,8 @@ export default {
         },
         {
           label: "Confirm password",
-          type: "password",
           name: "Passwords",
-          validation: "required|confirm",
+          type: "password",
         },
         {
           type: "submit",
@@ -43,6 +43,20 @@ export default {
 
   methods: {
     changePasswordNow() {
+      console.log("helllo", this.password);
+      this.$http
+        .post("user/update_password", { newPassword: this.password.Passwords })
+        .then(
+          (response) => {
+            this.content = response.data;
+          },
+          (error) => {
+            this.content =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
+          }
+        );
     },
   },
   mounted() {},
