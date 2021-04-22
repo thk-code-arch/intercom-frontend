@@ -1,14 +1,7 @@
 <template>
   <div class="flex flex-col px-8 pt-6 pb-8 mb-4 bg-white rounded">
     <p class="text-codearch-500">{{ useraction }}</p>
-    <FormulateForm v-if="!login" @submit="handleRegister">
-      <FormulateInput
-        type="text"
-        name="username"
-        v-model="user.username"
-        label="Username"
-        validation="required"
-      />
+    <FormulateForm v-if="!login" @submit="resetPassword">
       <FormulateInput
         type="text"
         name="email"
@@ -16,14 +9,7 @@
         label="Email"
         validation="required"
       />
-      <FormulateInput
-        type="text"
-        name="invitecode"
-        v-model="user.invitecode"
-        label="Invite Code"
-        validation="required"
-      />
-      <FormulateInput label="Register" type="submit" />
+      <FormulateInput label="Reset Password" type="submit" />
     </FormulateForm>
     <FormulateForm v-if="login" @submit="loginme">
       <FormulateInput
@@ -48,9 +34,10 @@
 
 <script>
 import User from "@/models/user";
+import AuthService from "@/services/auth.service";
 
 export default {
-  name: "Register",
+  name: "PasswordReset",
   data() {
     return {
       user: new User("", "", ""),
@@ -61,15 +48,13 @@ export default {
     };
   },
   methods: {
-    handleRegister() {
+    resetPassword() {
       this.message = "";
       this.submitted = true;
-      this.$store.dispatch("auth/register", this.user).then(
-        (data) => {
-          this.message = data.message;
-          this.successful = true;
+      AuthService.resetPassword(this.user).then(
+        (response) => {
+          this.useraction = response.data;
           this.login = true;
-          this.useraction = "Registered. Check your mails!";
         },
         (error) => {
           this.message =

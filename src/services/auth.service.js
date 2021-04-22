@@ -30,6 +30,11 @@ class AuthService {
       invitecode: user.invitecode
     });
   }
+  resetPassword(user) {
+    return axios.post(API_URL + 'reset-password', {
+      email: user.email,
+    });
+  }
 }
 
 export default new AuthService();

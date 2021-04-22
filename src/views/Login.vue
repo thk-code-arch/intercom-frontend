@@ -29,18 +29,20 @@
 <script>
 import SignIn from "@/components/login/signin";
 import Register from "@/components/login/register";
+import ResetPassword from "@/components/login/ResetPassword";
 export default {
   name: "Login",
   components: {
     SignIn,
     Register,
+    ResetPassword,
   },
   data() {
     return {
       currentTab: "SignIn",
       tabs: [
         { name: "Register", component: "Register" },
-        { name: "Forgot Password!", component: "ForgotPassword" },
+        { name: "Forgot Password!", component: "ResetPassword" },
         { name: "Sign In", component: "SignIn" },
       ],
       images: {
