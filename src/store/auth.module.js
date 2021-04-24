@@ -25,6 +25,9 @@ export const auth = {
       AuthService.logout();
       commit('logout');
     },
+    updateProfile({ commit },updateUser) {
+      commit('updatedProfile',updateUser);
+    },
     register({ commit }, user) {
       return AuthService.register(user).then(
         response => {
@@ -42,6 +45,10 @@ export const auth = {
     loginSuccess(state, user) {
       state.status.loggedIn = true;
       state.user = user;
+    },
+    updatedProfile(state, user) {
+      state.user.username = user.username;
+      state.user.email = user.email;
     },
     loginFailure(state) {
       state.status.loggedIn = false;

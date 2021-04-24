@@ -349,10 +349,6 @@ export default {
     },
   },
   mounted() {
-    if (!this.currentUser) {
-      this.$router.push("/login");
-    }
-
     this.getProjects();
     this.$http.get("admin/get_users").then(
       (response) => {

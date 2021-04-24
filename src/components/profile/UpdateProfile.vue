@@ -4,17 +4,17 @@
       <!-- Top bar -->
       <div class="flex items-center flex-none py-2 mb-4 border-b">
         <div class="flex flex-col">
-          <h2 class="mb-2 text-2xl">Change Password</h2>
+          <h2 class="mb-2 text-2xl">Profile</h2>
         </div>
       </div>
       <!-- TEXT -->
       <div class="">
         <!-- TEXT -->
         <FormulateForm
-          name="ChangePassword"
-          @submit="changePasswordNow"
-          v-model="password"
-          :schema="changePassword"
+          name="UpdateProfile"
+          @submit="updateProfileNow"
+          v-model="profile"
+          :schema="updateProfile"
         />
       </div>
     </div>
@@ -23,26 +23,25 @@
 
 <script>
 export default {
-  name: "change-password",
+  name: "update-profile",
   data: function () {
     return {
-      password: {},
+      profile: {},
       content: {},
-      changePassword: [
+      updateProfile: [
         {
-          label: "New password",
-          name: "password",
-          type: "password",
+          label: "Username",
+          name: "username",
           validation: "required",
         },
         {
-          label: "Confirm password",
-          name: "Passwords",
-          type: "password",
+          label: "Email",
+          name: "email",
+          validation: "required|email",
         },
         {
           type: "submit",
-          label: "Update Password",
+          label: "Save",
         },
       ],
     };
@@ -51,17 +50,21 @@ export default {
   components: {},
 
   methods: {
-    changePasswordNow() {
+    updateProfileNow() {
       this.$http
-        .post("user/update_password", { newPassword: this.password.Passwords })
+        .post("user/update_profile", {
+          username: this.profile.username,
+          email: this.profile.email,
+        })
         .then(
-          () => {
+          (response) => {
+            this.profile = response.data;
+            this.$store.dispatch("auth/updateProfile", response.data);
             this.$notify({
               title: "Success",
-              text: "Password changed",
+              text: "Profile updated",
               group: "info",
             });
-            this.$formulate.reset("ChangePassword");
           },
           (error) => {
             this.$notify({
@@ -76,6 +79,8 @@ export default {
         );
     },
   },
-  mounted() {},
+  mounted() {
+    this.profile = this.$store.state.auth.user;
+  },
 };
 </script>
