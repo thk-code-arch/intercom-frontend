@@ -1,16 +1,21 @@
 <template>
   <div class="flex flex-row justify-start h-screen2" :style="styleHeight">
     <!-- Channel bar -->
-    <div class="flex w-1/5 px-6 py-2 border-b">
+    <div class="flex w-1/5 px-2 py-2 border-b">
       <div class="flex flex-col w-full">
         <h1 class="mb-1 font-extrabold text-grey-darkest">Chatrooms</h1>
         <div class="" v-for="(room, room_index) in chatrooms" :key="room_index">
           <div
             v-on:click="switchRoom(room.id)"
-            class="w-full p-2 m-2 bg-white rounded-sm cursor-pointer"
+            class="flex flex-row w-full p-2 mb-2 bg-white rounded cursor-pointer"
+            v-bind:class="{
+              'border-codearch-500 border-2': room.name === theroom.name,
+            }"
           >
-            <h2 class="font-extrabold">#{{ room.name }}</h2>
-            <span class="italic">{{ room.description }}</span>
+            <span class="w-1/2 text-lg font-extrabold">#{{ room.name }}</span>
+            <span class="w-1/2 text-xs italic text-gray-600">{{
+              room.description
+            }}</span>
           </div>
         </div>
       </div>
@@ -29,6 +34,7 @@ export default {
   data() {
     return {
       chatrooms: [],
+      selectedRoom: "border-2 border-red-500",
     };
   },
   computed: {

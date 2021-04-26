@@ -10,10 +10,6 @@
 import ChatWindow from "@/components/ChatWindow";
 import OnlineUsers from "./Right.OnlineUsers";
 
-import Vue from "vue";
-Vue.use(require("vue-moment"));
-import moment from "moment";
-
 export default {
   name: "right-sidebar",
   components: {
@@ -38,10 +34,10 @@ export default {
   watch: {
     camPosi() {
       //dont send too much coordinates in a second
-      this.timenow = moment();
+      this.timenow = this.$moment();
       this.mseconds = this.timenow.diff(this.gotlastcamPos);
       if (this.mseconds > 500) {
-        this.gotlastcamPos = moment();
+        this.gotlastcamPos = this.$moment();
         this.$store.dispatch("viewport/push_position");
       }
     },
@@ -51,7 +47,7 @@ export default {
   },
   created() {
     //init message delay
-    this.gotlastcamPos = moment();
+    this.gotlastcamPos = this.$moment();
   },
   mounted() {
     //init viewport socket

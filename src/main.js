@@ -12,6 +12,18 @@ import {API, FILES} from "./services/api";
 import Notifications from 'vue-notification'
 Vue.use(Notifications)
 //general API URL
+//Vue moment
+import VueMoment from 'vue-moment'
+import moment from "moment";
+Vue.use(VueMoment, {
+    moment,
+})
+Vue.filter("formatDate", function (value) {
+  if (value) {
+    return moment(String(value)).format("DD.MM.YYYY HH:mm");
+  }
+});
+
 Vue.prototype.$app_url = API;
 //Location for static files, remove trailing slash, because API answers with root /files
 Vue.prototype.$files_url = FILES;
