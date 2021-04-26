@@ -277,14 +277,7 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
-import moment from "moment";
 import ManageUsers from "@/components/admin/ManageUsers";
-Vue.filter("formatDate", function (value) {
-  if (value) {
-    return moment(String(value)).format("DD/MM/YYYY HH:mm");
-  }
-});
 
 export default {
   name: "Admin",

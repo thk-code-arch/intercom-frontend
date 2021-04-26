@@ -1,6 +1,6 @@
 <template>
   <!-- Chat content -->
-  <div class="flex w-full flex-col overflow-hidden bg-white">
+  <div class="flex flex-col w-full overflow-hidden bg-white">
     <!-- Top bar -->
     <router-link to="/chat">
       <div class="flex items-center flex-none px-6 py-2 border-b">
@@ -31,7 +31,9 @@
           <div class="flex-1 overflow-hidden">
             <div>
               <span class="font-bold">{{ hist_msg.user.username }}</span>
-              <span class="text-xs text-grey"> {{ hist_msg.time }}</span>
+              <span class="text-xs text-gray-700">
+                {{ hist_msg.time | formatDate }}</span
+              >
             </div>
             <p class="leading-normal text-black">
               <vue-markdown :source="hist_msg.message" />
