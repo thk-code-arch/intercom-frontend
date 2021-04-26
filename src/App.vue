@@ -52,7 +52,7 @@ export default {
   },
   created() {
     //set <header title>
-    document.title = "InterCom";
+    document.title = `Intercom`;
     // relogin after JWT expire
   },
 };
