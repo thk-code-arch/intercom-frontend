@@ -52,7 +52,7 @@ export default {
         {
           label: "Project name",
           name: "name",
-          validation: "required",
+          validation: "required|max:17,length",
         },
         {
           label: "Project description",
@@ -76,7 +76,7 @@ export default {
         {
           label: "Project name",
           name: "name",
-          validation: "required",
+          validation: "required|max:17,length",
         },
         {
           label: "Project description",

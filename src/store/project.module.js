@@ -14,6 +14,8 @@ export const curproject = {
       return ProjectService.selectProject(theproject).then(
         theproject => {
           commit('selectSuccess', theproject);
+
+          document.title = `${theproject.name} | InterCOM`;
           return Promise.resolve(theproject);
         },
         error => {
@@ -38,6 +40,7 @@ export const curproject = {
     },
     unselect({ commit }) {
       localStorage.removeItem('project');
+      document.title = `InterCOM`;
       commit('unselect');
     }
   },
