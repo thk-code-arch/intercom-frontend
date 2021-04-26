@@ -71,10 +71,17 @@
             class="flex items-center justify-between p-6 border-t border-gray-300 border-solid rounded-b"
           >
             <div class="flex flex-row">
-              <div class="w-8 h-8 m-2" v-on:click="setTool('selectMode')">
+              <div
+                class="w-8 h-8 m-2 cursor-pointer"
+                v-on:click="setTool('selectMode')"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="text-red-800 bg-red-200 rounded"
+                  v-bind:class="{
+                    'border-red-500 border':
+                      currentActiveMethod === 'selectMode',
+                  }"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -87,10 +94,16 @@
                   />
                 </svg>
               </div>
-              <div class="w-8 h-8 m-2" v-on:click="setTool('text', text)">
+              <div
+                class="w-8 h-8 m-2 cursor-pointer"
+                v-on:click="setTool('text', text)"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="text-red-800 bg-red-200 rounded"
+                  v-bind:class="{
+                    'border-red-500 border': currentActiveMethod === 'text',
+                  }"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -103,13 +116,20 @@
                   />
                 </svg>
               </div>
-              <div class="w-8 h-8 m-2" v-on:click="setTool('freeDrawing', pen)">
+              <div
+                class="w-8 h-8 m-2 cursor-pointer"
+                v-on:click="setTool('freeDrawing', pen)"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                   class="text-red-800 bg-red-200 rounded"
+                  v-bind:class="{
+                    'border-red-500 border':
+                      currentActiveMethod === 'freeDrawing',
+                  }"
                 >
                   <path
                     stroke-linecap="round"
@@ -149,6 +169,7 @@ export default {
   data() {
     return {
       showModal: false,
+      currentActiveMethod: "selectMode",
       description: "",
       text: {
         fontFamily: "Verdana",
@@ -156,7 +177,7 @@ export default {
       },
       pen: {
         stroke: "red",
-        strokeWidth: "3",
+        strokeWidth: 2,
       },
     };
   },

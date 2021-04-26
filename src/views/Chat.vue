@@ -7,13 +7,13 @@
         <div class="" v-for="(room, room_index) in chatrooms" :key="room_index">
           <div
             v-on:click="switchRoom(room.id)"
-            class="flex flex-row w-full p-2 mb-2 bg-white rounded cursor-pointer"
+            class="flex flex-col w-full p-2 mb-2 bg-white rounded cursor-pointer"
             v-bind:class="{
               'border-codearch-500 border-2': room.name === theroom.name,
             }"
           >
-            <span class="w-1/2 text-lg font-extrabold">#{{ room.name }}</span>
-            <span class="w-1/2 text-xs italic text-gray-600">{{
+            <span class="text-lg font-extrabold">#{{ room.name }}</span>
+            <span class="text-xs italic text-left text-gray-600">{{
               room.description
             }}</span>
           </div>
