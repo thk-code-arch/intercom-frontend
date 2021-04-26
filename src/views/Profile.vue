@@ -1,7 +1,7 @@
 <template>
   <div class="container p-6 sm:px-8 flex flex-row">
-    <update-profile />
     <change-profile-image />
+    <update-profile />
     <change-password />
   </div>
 </template>
