@@ -38,7 +38,37 @@ export default {
   },
   components: {},
 
-  methods: {},
+  methods: {
+    selectFile() {
+      this.selectedFiles = this.$refs.file.files;
+      this.upload();
+    },
+    upload() {
+      const fd = new FormData();
+      fd.append("file", this.selectedFiles.item(0));
+      fd.append("baseUrl", this.$files_url);
+      this.$http.post("user/upload_profile_image", fd).then(
+        (response) => {
+          this.$store.dispatch("auth/updateProfile", response.data);
+          this.$notify({
+            title: "Success",
+            text: "Profile image changed",
+            group: "info",
+          });
+        },
+        (error) => {
+          this.$notify({
+            title: "Ooops...",
+            text:
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString(),
+            group: "error",
+          });
+        }
+      );
+    },
+  },
   mounted() {
     this.profile = this.$store.state.auth.user;
   },

@@ -49,6 +49,7 @@ export const auth = {
     updatedProfile(state, user) {
       state.user.username = user.username;
       state.user.email = user.email;
+      state.user.profile_image = user.profile_image;
     },
     loginFailure(state) {
       state.status.loggedIn = false;
