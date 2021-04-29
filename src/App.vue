@@ -46,9 +46,6 @@ export default {
       // TODO dispatch load chatlog on change
       this.$store.dispatch("chatroom/load_chatlog", oldVal);
     },
-    viewportid: function (newVal, oldVal) {
-      this.$store.dispatch("viewport/join_viewport", oldVal);
-    },
   },
   created() {
     //set <header title>

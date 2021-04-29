@@ -84,7 +84,6 @@ export default {
       (response) => {
         // connect to room
         this.$store.dispatch("chatroom/select_chatroom", response.data.id);
-        this.$store.dispatch("viewport/select_viewport", response.data.id);
       },
       (error) => {
         this.$notify({

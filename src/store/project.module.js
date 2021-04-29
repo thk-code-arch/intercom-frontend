@@ -10,11 +10,11 @@ export const curproject = {
   namespaced: true,
   state: initialState,
   actions: {
-    selectProject({ commit }, theproject) {
+    selectProject({ commit,dispatch }, theproject) {
       return ProjectService.selectProject(theproject).then(
         theproject => {
           commit('selectSuccess', theproject);
-
+          dispatch("viewport/join_viewport", theproject.id, { root: true });
           document.title = `${theproject.name} | InterCOM`;
           return Promise.resolve(theproject);
         },
@@ -38,8 +38,9 @@ export const curproject = {
 
       );
     },
-    unselect({ commit }) {
+    unselect({ commit}) {
       localStorage.removeItem('project');
+//      dispatch("viewport/leave_viewport", null, { root: true });
       document.title = `InterCOM`;
       commit('unselect');
     }

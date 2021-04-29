@@ -42,9 +42,6 @@ export default {
       }
     },
   },
-  destroyed() {
-    this.$store.dispatch("viewport/leave_viewport");
-  },
   created() {
     //init message delay
     this.gotlastcamPos = this.$moment();
@@ -52,8 +49,6 @@ export default {
   mounted() {
     //init viewport socket
     this.$store.dispatch("iosockets/init_viewport");
-    // join viewport room
-    this.$store.dispatch("viewport/join_viewport");
   },
 };
 </script>
