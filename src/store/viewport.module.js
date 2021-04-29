@@ -39,7 +39,10 @@ export const viewport = {
         commit("Select_Viewport", projectId);
       }
     },
-    push_position({ state }) {
+    push_position({ state,dispatch,rootState }) {
+      if (state.currentViewport === 0) {
+          dispatch("viewport/join_viewport", rootState.curproject.theproject.id, { root: true });
+      }
       if (state.currentViewport !== 0) {
         this._vm.$socket.viewport.emit("moveTo", {
           position: state.camPosi,
