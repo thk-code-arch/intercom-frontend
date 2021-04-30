@@ -7,7 +7,7 @@
         <div class="text-sm truncate text-grey-dark">Files</div>
       </div>
       <label
-        class="flex flex-col inline-block bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
+        class="flex flex-col inline-block px-3 py-1 mb-2 mr-2 font-semibold text-white bg-gray-800 rounded-full"
       >
         <input type="file" ref="file" @change="selectFile" hidden />
         + Upload
@@ -20,12 +20,9 @@
           v-for="(listFile, listFile_idx) in pfiles"
           :key="listFile_idx"
         >
-          <div
-        class="flex flex-row rounded-sm border-gray-200 border m-2 p-2 justify-start cursor-pointer">
           <a :href="$files_url + listFile.filepath" target="_blank">
             {{ listFile.description }}
           </a>
-          </div>
         </div>
       </div>
       <!-- TEXT -->
