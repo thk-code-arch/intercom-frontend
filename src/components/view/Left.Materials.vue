@@ -3,7 +3,7 @@
         <!-- Top bar -->
         <div class="flex items-center flex-none px-6 py-2 border-b">
             <div class="flex flex-col">
-                <h3 class="mb-1 font-extrabold text-grey-darkest">Materials</h3>
+                <h3 class="mb-1 font-extrabold text-grey-darkest">Building Elements</h3>
                 <div class="text-sm truncate text-grey-dark">
                   Materials found: {{materials.length}}
                 </div>
