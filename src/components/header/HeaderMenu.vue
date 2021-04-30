@@ -242,9 +242,6 @@ export default {
       return false;
     },
   },
-  created() {
-    this.$store.dispatch("iosockets/init_viewport");
-  },
   methods: {
     logOut() {
       this.$store.dispatch("curproject/unselect");

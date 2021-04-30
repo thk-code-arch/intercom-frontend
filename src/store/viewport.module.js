@@ -29,8 +29,11 @@ export const viewport = {
     imgStore({ commit }, dataUrl) {
       commit("storeImage", dataUrl);
     },
-    join_viewport({ commit, state }, projectId) {
+    join_viewport({ commit, state,dispatch, rootState }, projectId) {
       if (projectId !== 0) {
+      if (!rootState.iosockets.viewport){
+          dispatch("iosockets/init_viewport", null, { root: true });
+      }
         this._vm.$socket.viewport.emit("join_viewport", {
           oldRoom: state.currentViewport,
           newRoom: projectId,
