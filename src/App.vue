@@ -45,6 +45,7 @@ export default {
     chatroomid: function (newVal, oldVal) {
       // TODO dispatch load chatlog on change
       this.$store.dispatch("chatroom/load_chatlog", oldVal);
+      console.log(newVal);
     },
   },
   created() {
