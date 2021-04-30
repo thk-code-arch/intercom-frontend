@@ -20,12 +20,9 @@
           v-for="(listFile, listFile_idx) in pfiles"
           :key="listFile_idx"
         >
-          <div
-        class="flex flex-row rounded-sm border-gray-200 border m-2 p-2 justify-start cursor-pointer">
           <a :href="$files_url + listFile.filepath" target="_blank">
             {{ listFile.description }}
           </a>
-          </div>
         </div>
       </div>
       <!-- TEXT -->
