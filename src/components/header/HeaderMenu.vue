@@ -161,12 +161,14 @@
         <router-link
           to="/"
           class="w-full py-1 border-b-2 border-transparent outline-none lg:p-2 hover:border-codearch-400"
+          exact-active-class="border-codearch-400"
         >
           Home
         </router-link>
         <router-link
           to="/projects"
           class="w-full py-1 border-b-2 border-transparent outline-none lg:p-2 hover:border-codearch-400"
+          active-class="border-codearch-400"
         >
           Project</router-link
         >
@@ -174,18 +176,21 @@
           to="/view"
           class="w-full py-1 border-b-2 border-transparent outline-none lg:p-2 hover:border-codearch-400"
           v-if="isProjectSelected"
+          active-class="border-codearch-400"
         >
           View</router-link
         >
         <router-link
           to="/chat"
           class="w-full py-1 border-b-2 border-transparent outline-none lg:p-2 hover:border-codearch-400"
+          active-class="border-codearch-400"
         >
           Chat</router-link
         >
         <router-link
           to="/learning"
           class="w-full py-1 border-b-2 border-transparent outline-none lg:p-2 hover:border-codearch-400"
+          active-class="border-codearch-400"
         >
           Learning</router-link
         >

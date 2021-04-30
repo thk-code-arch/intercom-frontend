@@ -1,11 +1,7 @@
 <template>
   <div class="w-full px-4 px-6 mx-auto sm:px-8">
-    <div class="py-8">
-   
-      <!-- TEXT -->
-      <HelloUser />
-            <HomeMenu />
-    </div>
+    <HelloUser />
+    <HomeMenu />
   </div>
 </template>
 <script>
@@ -16,8 +12,8 @@ export default {
   name: "home",
   components: {
     HelloUser,
-    HomeMenu
-    },
+    HomeMenu,
+  },
   methods: {},
 };
 </script>
