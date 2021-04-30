@@ -1,7 +1,7 @@
 export const viewport = {
   namespaced: true,
   state: {
-    currentviewport: 0,
+    currentViewport: 0,
     players: [],
     camPosi: {},
     othercamPos: {},
@@ -29,31 +29,32 @@ export const viewport = {
     imgStore({ commit }, dataUrl) {
       commit("storeImage", dataUrl);
     },
-    select_viewport({ commit }, chatID) {
-      commit("Select_Viewport", chatID);
-    },
-    join_viewport({ commit, state }, oldroom) {
-      if (state.currentviewport !== 0) {
+    join_viewport({ commit, state }, projectId) {
+      if (projectId !== 0) {
         this._vm.$socket.viewport.emit("join_viewport", {
-          oldRoom: oldroom,
-          newRoom: state.currentviewport,
+          oldRoom: state.currentViewport,
+          newRoom: projectId,
         });
         commit("get_players", []);
+        commit("Select_Viewport", projectId);
       }
     },
-    push_position({ state }) {
-      if (state.currentviewport !== 0) {
+    push_position({ state,dispatch,rootState }) {
+      if (state.currentViewport === 0) {
+          dispatch("viewport/join_viewport", rootState.curproject.theproject.id, { root: true });
+      }
+      if (state.currentViewport !== 0) {
         this._vm.$socket.viewport.emit("moveTo", {
           position: state.camPosi,
-          chatroomId: state.currentviewport,
+          chatroomId: state.currentViewport,
         });
       }
       // push ownCam Position
     },
     leave_viewport({ commit, state }) {
-      if (state.currentviewport !== 0) {
+      if (state.currentViewport !== 0) {
         this._vm.$socket.viewport.emit("disconnect", {
-          chatroomId: state.currentviewport,
+          chatroomId: state.currentViewport,
         });
         commit("Select_Viewport", 0);
       }
@@ -61,17 +62,19 @@ export const viewport = {
       // Remove disconnect players from array
       // disconnect when destroy View
     },
-    PLAYER_getplayers({ commit, rootState }, data) {
+    PLAYER_getplayers({ commit,state, rootState }, data) {
       // get all connected players in array
-      let players = Object.keys(data)
-        .map((key) => data[key])
+      if(data.projectId === state.currentViewport){
+      let players = Object.keys(data.pos)
+        .map((key) => data.pos[key])
         .filter((key) => key.userId !== rootState.auth.user.id);
       commit("get_players", players);
+      }
     },
     clear({ commit, state }) {
-      if (state.currentviewport !== 0) {
+      if (state.currentViewport !== 0) {
         this._vm.$socket.viewport.emit("disconnect", {
-          chatroomId: state.currentviewport,
+          chatroomId: state.currentViewport,
         });
       }
       commit("clear");
@@ -93,8 +96,8 @@ export const viewport = {
     storeImage(state, dataUrl) {
       state.imgDataurl = dataUrl;
     },
-    Select_Viewport(state, chatID) {
-      state.currentviewport = chatID;
+    Select_Viewport(state, projectId) {
+      state.currentViewport = projectId;
     },
     get_players(state, data) {
       state.players = data;
@@ -103,7 +106,7 @@ export const viewport = {
       state.players = [];
       state.camPosi = {};
       state.othercamPos = {};
-      state.currentviewport = 0;
+      state.currentViewport = 0;
     },
   },
 };
