@@ -15,6 +15,9 @@
   code {
     @apply text-sm;
   }
+  ul {
+    @apply list-disc;
+  }
 }
 @tailwind components;
 @tailwind utilities;
