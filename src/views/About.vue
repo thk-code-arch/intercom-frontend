@@ -2,7 +2,6 @@
   <div class="w-full px-4 px-6 sm:px-8">
     <div class="flex p-4 flex-row w-3/4 mx-auto">
       <INTERCOM class="p-12 border-gray-400 border-r-2" />
-
       <CODEARCH class="p-12" />
     </div>
     <div class="w-3/4 mx-auto">

@@ -6,7 +6,7 @@
         class="flex items-center justify-between w-full px-4 px-6 py-1 bg-white border-b-2 border-blue-900 navbar"
       >
         <div class="self-center">
-          <img class="w-24" :src="images.logo" />
+          <INTERCOM class="w-24" />
         </div>
         <div class="flex">
           <div v-if="isProjectSelected" class="relative">
@@ -205,6 +205,8 @@
 <script>
 import BugReport from "./maintenance/BugReport";
 import FixedHeader from "vue-fixed-header";
+import INTERCOM from "../../assets/LOGO_INTERCOM";
+
 export default {
   name: "header-menu",
   data() {
@@ -212,14 +214,12 @@ export default {
       isOpen: false,
       PisOpen: false,
       BugReportisOpen: false,
-      images: {
-        logo: require("@/assets/logo.png"),
-      },
     };
   },
   components: {
     FixedHeader,
     BugReport,
+    INTERCOM,
   },
   computed: {
     currentProject() {
