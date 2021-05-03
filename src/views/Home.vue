@@ -1,11 +1,13 @@
 <template>
   <div class="w-full px-4 px-6 sm:px-8">
+    <router-link
+      to="/about"
+      class="absolute bottom-0 right-0 p-2 text-xl text-gray-700"
+      >ABOUT</router-link
+    >
     <div class="w-3/4 mx-auto">
       <HelloUser />
       <HomeMenu />
-    </div>
-    <div class="flex flex-row justify-end w-full my-2">
-      <router-link to="/about" class="text-xl text-gray-900">ABOUT</router-link>
     </div>
   </div>
 </template>
