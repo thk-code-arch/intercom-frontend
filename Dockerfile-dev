@@ -1,7 +1,9 @@
 FROM node:14.5.0-slim
 # Create app directory
 WORKDIR /usr/src/app
+RUN apt update && apt install -y git
 RUN npm install -g serve
 COPY . .
+RUN git show --quiet HEAD
 EXPOSE 8080
 CMD npm install && npm run serve

@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-4 flex-row flex justify-around items-center my-6">
+  <div class="pt-4 my-6">
     <vue-markdown :source="changelog" />
   </div>
 </template>

@@ -1,11 +1,9 @@
 <template>
   <div class="flex flex-wrap md:flex-row-reverse">
     <div
-      class="flex w-full h-screen p-4 p-64 text-center text-gray-200 bg-white md:w-3/4"
+      class="flex w-full h-screen p-4 text-center text-gray-200 bg-white md:w-3/4"
     >
-      <div class="m-auto">
-        <img :src="images.logo" />
-      </div>
+      <INTERCOM class="p-6" />
     </div>
     <div
       class="flex w-full h-screen p-4 text-center text-gray-700 bg-gray-200 md:w-1/4"
@@ -30,12 +28,14 @@
 import SignIn from "@/components/login/signin";
 import Register from "@/components/login/register";
 import ResetPassword from "@/components/login/ResetPassword";
+import INTERCOM from "../assets/LOGO_INTERCOM";
 export default {
   name: "Login",
   components: {
     SignIn,
     Register,
     ResetPassword,
+    INTERCOM,
   },
   data() {
     return {
@@ -45,9 +45,6 @@ export default {
         { name: "Forgot Password!", component: "ResetPassword" },
         { name: "Sign In", component: "SignIn" },
       ],
-      images: {
-        logo: require("../assets/logo.png"),
-      },
     };
   },
   computed: {
