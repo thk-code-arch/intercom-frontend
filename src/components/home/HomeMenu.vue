@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-2 gap-2 w-1/2">
+  <div class="grid grid-cols-2 gap-2">
     <div
       class="flex flex-col justify-center h-32 m-2 text-center bg-white rounded cursor-pointer"
     >

@@ -1,4 +1,21 @@
 @tailwind base;
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+  h3 {
+    @apply text-lg;
+  }
+  pre {
+    @apply  p-4 bg-gray-400 rounded-md;
+  }
+  code {
+    @apply text-sm;
+  }
+}
 @tailwind components;
 @tailwind utilities;
 
@@ -20,7 +37,7 @@
   width: 100%;
 }
 .the-tooltip {
-  @apply invisible absolute;
+  @apply absolute invisible;
 }
 
 .has-tooltip:hover .the-tooltip {

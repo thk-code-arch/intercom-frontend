@@ -18,6 +18,12 @@ export const router = new Router({
       component: Login,
     },
     {
+      path: "/about",
+      name: "About",
+      // lazy-loaded
+      component: () => import("../views/About.vue"),
+    },
+    {
       path: "/view",
       name: "TheView",
       // lazy-loaded

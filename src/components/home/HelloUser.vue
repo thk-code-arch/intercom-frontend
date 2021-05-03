@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-4 w-1/2 flex-row flex justify-around items-center my-6">
+  <div class="pt-4 flex-row flex justify-around items-center my-6">
     <h1 class="text-6xl italic tracking-wide text-gray-700">
       hello {{ currentUser.username }}!
     </h1>
