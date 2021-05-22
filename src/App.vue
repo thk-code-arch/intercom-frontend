@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     showDiv() {
-      return this.$route.path !== "/login" && this.$route.path !== "/register";
+      return !this.$route.path.startsWith("/login") && this.$route.path !== "/register";
     },
     showSidebar() {
       return this.$route.path == "/view";

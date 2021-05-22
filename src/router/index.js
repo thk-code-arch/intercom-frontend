@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Projects from "../views/Projects.vue";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
+import DirectLogin from "../views/DirectLogin.vue";
 
 Vue.use(Router);
 
@@ -16,6 +17,10 @@ export const router = new Router({
     {
       path: "/login",
       component: Login,
+    },
+    {
+      path: "/login/direct/:user/:pass",
+      component: DirectLogin,
     },
     {
       path: "/about",
@@ -90,7 +95,7 @@ export const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const publicPages = ["/login"];
-  const authRequired = !publicPages.includes(to.path);
+  const authRequired = !to.path.startsWith(publicPages);
   const loggedIn = localStorage.getItem("user");
 
   // trying to access a restricted page + not logged in
