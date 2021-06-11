@@ -7,7 +7,7 @@
       </div>
     </div>
     <!-- TEXT -->
-    <div class="flex flex-row p-2 mb-4 text-sm">
+    <div class="flex flex-wrap p-2 mb-4 text-sm">
       <div
         class="m-1"
         v-for="(player, players) in connectedPlayers"
