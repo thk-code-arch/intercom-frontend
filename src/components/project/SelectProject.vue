@@ -1,3 +1,5 @@
+<!-- // Copyright (c) 2021 Steffen Stein <mail@steffenstein.com> For LICENSE see docs/LICENSE -->
+
 <template>
   <div>
     <div class="flex flex-wrap justify-center w-full">

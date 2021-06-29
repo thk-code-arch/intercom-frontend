@@ -1,3 +1,5 @@
+<!-- // Copyright (c) 2021 Steffen Stein <mail@steffenstein.com> For LICENSE see docs/LICENSE -->
+
 <template>
   <div class="pt-4 my-6">
     <vue-markdown :source="changelog" />

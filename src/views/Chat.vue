@@ -1,3 +1,5 @@
+<!-- // Copyright (c) 2021 Steffen Stein <mail@steffenstein.com> For LICENSE see docs/LICENSE -->
+
 <template>
   <div class="flex flex-row justify-start h-screen2" :style="styleHeight">
     <!-- Channel bar -->

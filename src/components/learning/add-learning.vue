@@ -1,3 +1,5 @@
+<!-- // Copyright (c) 2021 Steffen Stein <mail@steffenstein.com> For LICENSE see docs/LICENSE -->
+
 <template>
   <div class="px-4">
     <div class="container p-8 mx-auto my-8 bg-white rounded-lg">

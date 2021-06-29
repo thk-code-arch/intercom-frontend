@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Steffen Stein <mail@steffenstein.com> For LICENSE see docs/LICENSE
+
 //This module inits/manages socket connection, when user is logged in
 // TODO reconnect when user is logged if connection gets lost
 

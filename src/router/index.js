@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Steffen Stein <mail@steffenstein.com> For LICENSE see docs/LICENSE
+
 import Vue from "vue";
 import Router from "vue-router";
 import Projects from "../views/Projects.vue";

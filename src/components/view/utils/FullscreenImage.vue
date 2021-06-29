@@ -1,3 +1,5 @@
+<!-- // Copyright (c) 2021 Steffen Stein <mail@steffenstein.com> For LICENSE see docs/LICENSE -->
+
 <template>
   <div
     class="fixed top-0 left-0 z-20 flex bg-black items-center justify-center w-full h-full modal"

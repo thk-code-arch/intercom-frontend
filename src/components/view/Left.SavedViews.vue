@@ -1,3 +1,5 @@
+<!-- // Copyright (c) 2021 Steffen Stein <mail@steffenstein.com> For LICENSE see docs/LICENSE -->
+
 <template>
   <div class="bottom-0 flex flex-col flex-1 overflow-hidden bg-white">
     <!-- Top bar -->

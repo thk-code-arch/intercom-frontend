@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Steffen Stein <mail@steffenstein.com> For LICENSE see docs/LICENSE
+
 export default function projectHeader() {
   let project = JSON.parse(localStorage.getItem('project'));
 

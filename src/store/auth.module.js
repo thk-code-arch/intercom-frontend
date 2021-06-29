@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Steffen Stein <mail@steffenstein.com> For LICENSE see docs/LICENSE
+
 import AuthService from '../services/auth.service';
 
 const user = JSON.parse(localStorage.getItem('user'));

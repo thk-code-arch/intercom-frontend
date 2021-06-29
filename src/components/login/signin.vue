@@ -1,3 +1,5 @@
+<!-- // Copyright (c) 2021 Steffen Stein <mail@steffenstein.com> For LICENSE see docs/LICENSE -->
+
 <template>
   <div class="flex flex-col px-8 pt-6 pb-8 mb-4 bg-white rounded">
     <FormulateForm @submit="login">
