@@ -16,7 +16,7 @@
     "postcss-svgo": "^5.1.0",
     "socket.io-client": "2.4.0",
     "tailwindcss": "^1.9.6",
-    "three": "^0.126.1",
+    "three": "^0.140.2",
     "three-spritetext": "^1.6.1",
     "v-video-embed": "^1.0.8",
     "vue": "^2.6.12",
