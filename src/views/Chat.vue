@@ -4,7 +4,7 @@
   <div class="flex flex-row justify-start h-screen2" :style="styleHeight">
     <!-- Channel bar -->
     <div class="flex w-1/5 px-2 py-2 border-b">
-      <div class="flex flex-col w-full">
+      <div class="flex flex-col w-full overflow-y-scroll">
         <h1 class="mb-1 font-extrabold text-grey-darkest">Chatrooms</h1>
         <div class="" v-for="(room, room_index) in chatrooms" :key="room_index">
           <div
@@ -27,16 +27,16 @@
 </template>
 
 <script>
-import ChatWindow from "../components/ChatWindow";
+import ChatWindow from '../components/ChatWindow';
 export default {
-  name: "Chat",
+  name: 'Chat',
   components: {
     ChatWindow,
   },
   data() {
     return {
       chatrooms: [],
-      selectedRoom: "border-2 border-red-500",
+      selectedRoom: 'border-2 border-red-500',
     };
   },
   computed: {
@@ -44,41 +44,41 @@ export default {
       return this.$store.state.chatroom.theroom;
     },
     viewHeight() {
-      const headerHeight = document.getElementById("top").clientHeight;
+      const headerHeight = document.getElementById('top').clientHeight;
       return `${headerHeight}px`;
     },
     styleHeight() {
       return {
-        "--header-height": this.viewHeight,
+        '--header-height': this.viewHeight,
       };
     },
   },
   methods: {
     switchRoom(id) {
-      this.$store.dispatch("chatroom/select_chatroom", id);
+      this.$store.dispatch('chatroom/select_chatroom', id);
     },
   },
   created() {
     //get actaual chatroomid
-    this.$http.get("chat/get_chatrooms").then(
+    this.$http.get('chat/get_chatrooms').then(
       (response) => {
         // connect to room
         this.chatrooms = response.data;
         if (this.theroom == 0) {
           this.$store.dispatch(
-            "chatroom/select_chatroom",
+            'chatroom/select_chatroom',
             this.chatrooms[0].id
           );
         }
       },
       (error) => {
         this.$notify({
-          title: "Ooops...",
+          title: 'Ooops...',
           text:
             (error.response && error.response.data) ||
             error.message ||
             error.toString(),
-          group: "error",
+          group: 'error',
         });
       }
     );
