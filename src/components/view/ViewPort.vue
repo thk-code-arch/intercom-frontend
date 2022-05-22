@@ -6,15 +6,14 @@
   ></div>
 </template>
 <script>
-import * as THREE from "three";
-import SpriteText from "three-spritetext";
-//import { makeTextSprite } from "./utils/models";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import authHeader from "@/services/auth-header";
-import projectHeader from "@/services/project-header";
+import * as THREE from 'three';
+import SpriteText from 'three-spritetext';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import authHeader from '@/services/auth-header';
+import projectHeader from '@/services/project-header';
 export default {
-  name: "view-port",
+  name: 'view-port',
   data() {
     return {
       container: null,
@@ -22,7 +21,7 @@ export default {
       camera: null,
       controls: null,
       renderer: null,
-      camPos: "",
+      camPos: '',
       avatar: null,
     };
   },
@@ -74,7 +73,7 @@ export default {
 
       // create scene
       this.scene = new THREE.Scene();
-      this.scene.background = new THREE.Color("#eeeeee");
+      this.scene.background = new THREE.Color('#eeeeee');
 
       // add lights
       const ambientLight = new THREE.HemisphereLight(
@@ -147,9 +146,23 @@ export default {
             var myText = new SpriteText(name);
             myText.textHeight = 2;
             myText.strokeWidth = 1;
-            myText.strokeColor = "black";
+            myText.strokeColor = 'black';
             myText.position.y = gltf.scene.position.y - 3;
             gltf.scene.add(myText);
+            this.scene.add(gltf.scene);
+          }
+        );
+      }
+    },
+    loadSubproject(subprojectId, name) {
+      if (!this.scene.getObjectByName(name)) {
+        const gltfLoader = new GLTFLoader();
+        gltfLoader.setRequestHeader({ Authorization: authHeader() });
+        gltfLoader.load(
+          `${this.$app_url}/api/project/get_projectfile/${subprojectId}`,
+          (gltf) => {
+            gltf.scene.scale.set(0.4, 0.4, 0.4);
+            gltf.scene.name = name;
             this.scene.add(gltf.scene);
           }
         );
@@ -182,7 +195,7 @@ export default {
               if (o.material) materials.push(o.material);
             }
           });
-          this.$store.dispatch("viewport/setmaterialList", materials);
+          this.$store.dispatch('viewport/setmaterialList', materials);
           const box = new THREE.Box3().setFromObject(gltf.scene);
           const size = box.getSize(new THREE.Vector3()).length();
           const center = box.getCenter(new THREE.Vector3());
@@ -228,7 +241,7 @@ export default {
     },
     roundNumbers(obj) {
       Object.entries(obj).forEach(([key, value]) => {
-        if (typeof value === "number") {
+        if (typeof value === 'number') {
           // obj[key] = value.toFixed(2) // 1.9999 -> "2.00"
           obj[key] = +value.toFixed(2); // 1.9999 -> 2
         }
@@ -244,13 +257,13 @@ export default {
         dir: this.roundNumbers(this.camera.getWorldDirection(this.vector)),
       };
       //send camera position to Server
-      this.$store.dispatch("viewport/setowncamPos", this.camPos);
+      this.$store.dispatch('viewport/setowncamPos', this.camPos);
       this.render();
     },
     takeScreenshot() {
       this.render();
       this.$store.dispatch(
-        "viewport/imgStore",
+        'viewport/imgStore',
         this.renderer.domElement.toDataURL()
       );
     },
@@ -283,16 +296,16 @@ export default {
   },
   mounted() {
     this.init();
-    this.controls.addEventListener("change", this.updateCamera);
+    this.controls.addEventListener('change', this.updateCamera);
     // call this only in static scenes (i.e., if there is no animation loop)
   },
   created() {
-    window.addEventListener("resize", this.resizeWindow);
+    window.addEventListener('resize', this.resizeWindow);
   },
   destroyed() {
     this.scene.dispose();
-    window.removeEventListener("resize", this.resizeWindow);
-    this.controls.removeEventListener("change", this.updateCamera);
+    window.removeEventListener('resize', this.resizeWindow);
+    this.controls.removeEventListener('change', this.updateCamera);
   },
 };
 </script>
