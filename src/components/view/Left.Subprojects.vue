@@ -13,12 +13,14 @@
     <div class="flex items-start mb-4 text-sm">
       <div class="flex-1 px-6">
         <div class="flex flex-col">
-          <label class="inline-flex items-center mt-3">
+          <label class="inline-flex items-center mt-3"
+          v-for="(subProject, subProject_idx) in subprojects"
+          :key="subProject_idx"
+          >
             <input
               type="checkbox"
               class="form-checkbox h-5 w-5 text-gray-600"
-              checked
-            /><span class="ml-2 text-gray-700">label</span>
+            /><span class="ml-2 text-gray-700">{{subProject.name}}</span>
           </label>
         </div>
       </div>
@@ -29,6 +31,18 @@
 <script>
 export default {
   name: 'left-subprojects',
+  computed: {
+    isSubproject() {
+      return !!this.$store.state.curproject.theproject.subprojects;
+    },
+    subprojects(){
+      if(this.$store.state.curproject.theproject.subprojects !== null){
+      return this.$store.state.curproject.theproject.subprojects;
+      }
+      return null
+    }
+
+  },
   data() {
     return {};
   },
