@@ -21,6 +21,8 @@
             <input
               type="checkbox"
               class="form-checkbox h-5 w-5 text-gray-600"
+              :value="subProject"
+              v-model="testSubproject"
             /><span class="ml-2 text-gray-700">{{ subProject.name }}</span>
           </label>
         </div>
@@ -32,6 +34,11 @@
 <script>
 export default {
   name: 'left-subprojects',
+  data() {
+    return {
+      testSubproject: [],
+    };
+  },
   computed: {
     isSubproject() {
       return !!this.$store.state.curproject.theproject.subprojects;
@@ -43,17 +50,18 @@ export default {
       return null;
     },
     selectedSubproject: {
-      get() {},
-      set() {},
+      get() {
+        return null;
+      },
+      set() {
+        return null;
+      },
     },
   },
   methods: {
     selectSubproject(subproject) {
       this.$store.dispatch('viewport/selectSubproject', subproject);
     },
-  },
-  data() {
-    return {};
   },
 };
 </script>
