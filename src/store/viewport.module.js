@@ -33,6 +33,9 @@ export const viewport = {
       commit('storeImage', dataUrl);
     },
     join_viewport({ commit, state, dispatch, rootState }, projectId) {
+      if (state.currentViewport !== projectId){
+        commit('clear')
+      }
       if (projectId !== 0) {
         if (!rootState.iosockets.viewport) {
           dispatch('iosockets/init_viewport', null, { root: true });
@@ -87,8 +90,6 @@ export const viewport = {
       }
       commit('clear');
     },
-    //load subprojects in parentProject
-    selectSubprojects() {},
   },
   mutations: {
     materialList(state, materials) {
@@ -118,7 +119,9 @@ export const viewport = {
       state.othercamPos = {};
       state.currentViewport = 0;
       state.selectedSubprojects = [];
+      console.log('clear');
     },
+    //load subprojects in parentProject
     selectedSubprojects(state, selSubprojects) {
       state.selectedSubprojects = selSubprojects;
     },

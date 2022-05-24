@@ -4,7 +4,8 @@
     <div class="flex flex-row mb-4 space-x-1">
       <div
         v-on:click="currentTab = 'Subprojects'"
-        class="flex justify-center p-2 bg-white cursor-pointer w-1/5"
+        v-if="hasSubproject"
+        class="flex justify-center p-2 bg-white cursor-pointer w-full"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +23,7 @@
       </div>
       <div
         v-on:click="currentTab = 'Issues'"
-        class="flex justify-center p-2 bg-white cursor-pointer w-1/5"
+        class="flex justify-center p-2 bg-white cursor-pointer w-full"
       >
         <svg viewBox="0 0 20 20" fill="currentColor">
           <path
@@ -34,7 +35,7 @@
       </div>
       <div
         v-on:click="currentTab = 'Materials'"
-        class="flex justify-center p-2 bg-white cursor-pointer w-1/5"
+        class="flex justify-center p-2 bg-white cursor-pointer w-full"
       >
         <svg viewBox="0 0 20 20" fill="currentColor">
           <path
@@ -46,7 +47,7 @@
       </div>
       <div
         v-on:click="currentTab = 'SavedViews'"
-        class="flex justify-center p-2 bg-white cursor-pointer w-1/5"
+        class="flex justify-center p-2 bg-white cursor-pointer w-full"
       >
         <svg viewBox="0 0 20 20" fill="currentColor">
           <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
@@ -59,7 +60,7 @@
       </div>
       <div
         v-on:click="currentTab = 'Files'"
-        class="flex justify-center p-2 bg-white cursor-pointer w-1/5"
+        class="flex justify-center p-2 bg-white cursor-pointer w-full"
       >
         <svg
           data-darkreader-inline-fill=""
@@ -110,6 +111,9 @@ export default {
   computed: {
     currentTabComponent: function () {
       return this.currentTab;
+    },
+    hasSubproject() {
+      return !!this.$store.state.curproject.theproject.subprojects;
     },
   },
 };
