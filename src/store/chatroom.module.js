@@ -56,6 +56,15 @@ export const chatroom = {
       state.theroom =[];
       state.currentchatroom =0;
     }
+  },
+  getters:{
+    asc_messages:(state) => {
+      return state.messages.sort(function(a, b) {
+        var c = new Date(a.time);
+        var d = new Date(b.time);
+        return c-d;
+    });
+    }
   }
 };
 
