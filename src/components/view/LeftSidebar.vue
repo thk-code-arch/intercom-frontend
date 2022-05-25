@@ -1,16 +1,31 @@
 <template>
   <div class="flex w-full flex-col h-full p-4">
     <!-- Menu buttons -->
-    <div class="flex flex-row mb-4">
+    <div class="flex flex-row mb-4 space-x-1">
       <div
-        v-on:click="currentTab = 'Issues'"
-        class="flex justify-center w-full p-4 mr-2 bg-white cursor-pointer"
+        v-on:click="currentTab = 'Subprojects'"
+        v-if="hasSubproject"
+        class="flex justify-center p-2 bg-white cursor-pointer w-full"
       >
         <svg
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          class="w-6 h-6 lightning-bolt"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
         >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+          />
+        </svg>
+      </div>
+      <div
+        v-on:click="currentTab = 'Issues'"
+        class="flex justify-center p-2 bg-white cursor-pointer w-full"
+      >
+        <svg viewBox="0 0 20 20" fill="currentColor">
           <path
             fill-rule="evenodd"
             d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
@@ -20,9 +35,9 @@
       </div>
       <div
         v-on:click="currentTab = 'Materials'"
-        class="flex justify-center w-full p-4 mr-1 bg-white cursor-pointer"
+        class="flex justify-center p-2 bg-white cursor-pointer w-full"
       >
-        <svg viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6 map">
+        <svg viewBox="0 0 20 20" fill="currentColor">
           <path
             fill-rule="evenodd"
             d="M12 1.586l-4 4v12.828l4-4V1.586zM3.707 3.293A1 1 0 002 4v10a1 1 0 00.293.707L6 18.414V5.586L3.707 3.293zM17.707 5.293L14 1.586v12.828l2.293 2.293A1 1 0 0018 16V6a1 1 0 00-.293-.707z"
@@ -32,9 +47,9 @@
       </div>
       <div
         v-on:click="currentTab = 'SavedViews'"
-        class="flex justify-center w-full p-4 ml-1 bg-white cursor-pointer"
+        class="flex justify-center p-2 bg-white cursor-pointer w-full"
       >
-        <svg viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6 eye">
+        <svg viewBox="0 0 20 20" fill="currentColor">
           <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
           <path
             fill-rule="evenodd"
@@ -45,10 +60,9 @@
       </div>
       <div
         v-on:click="currentTab = 'Files'"
-        class="flex justify-center w-full p-4 ml-2 bg-white cursor-pointer"
+        class="flex justify-center p-2 bg-white cursor-pointer w-full"
       >
         <svg
-          class="w-6 h-6"
           data-darkreader-inline-fill=""
           data-darkreader-inline-stroke=""
           fill="none"
@@ -74,27 +88,32 @@
 </template>
 
 <script>
-import Issues from "./Left.Issues";
-import Materials from "./Left.Materials";
-import SavedViews from "./Left.SavedViews";
-import Files from "./Left.Files.vue";
+import Issues from './Left.Issues';
+import Materials from './Left.Materials';
+import SavedViews from './Left.SavedViews';
+import Files from './Left.Files.vue';
+import Subprojects from './Left.Subprojects.vue';
 
 export default {
-  name: "left-sidebar",
+  name: 'left-sidebar',
   components: {
     Issues,
     Materials,
     SavedViews,
     Files,
+    Subprojects,
   },
   data() {
     return {
-      currentTab: "Issues",
+      currentTab: 'Issues',
     };
   },
   computed: {
     currentTabComponent: function () {
       return this.currentTab;
+    },
+    hasSubproject() {
+      return !!this.$store.state.curproject.theproject.subprojects;
     },
   },
 };

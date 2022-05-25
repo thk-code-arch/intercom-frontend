@@ -8,7 +8,6 @@
 <script>
 import * as THREE from "three";
 import SpriteText from "three-spritetext";
-//import { makeTextSprite } from "./utils/models";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import authHeader from "@/services/auth-header";
@@ -22,6 +21,8 @@ export default {
       camera: null,
       controls: null,
       renderer: null,
+      raycaster: null,
+      intersects: null,
       camPos: "",
       avatar: null,
     };
@@ -35,6 +36,9 @@ export default {
     },
     connectedPlayers() {
       return this.$store.state.viewport.players;
+    },
+    selectedSubprojects() {
+      return this.$store.state.viewport.selectedSubprojects;
     },
   },
   methods: {
@@ -60,6 +64,17 @@ export default {
         this.moveAvatar(player.username, player.position);
       });
     },
+    insertSubproject(addSubproject) {
+      // sample Box from docs
+      Array.prototype.forEach.call(addSubproject, (sb) => {
+        this.loadSubproject(sb);
+      });
+    },
+    removeSubproject(rmSubproject) {
+      Array.prototype.forEach.call(rmSubproject, (sb) => {
+        this.unloadSubproject(sb);
+      });
+    },
     init() {
       // set container
       this.container = this.$refs.sceneContainer;
@@ -82,6 +97,9 @@ export default {
         0x222222, // dim ground color
         1 // intensity
       );
+      // interacting with objects
+      this.raycaster = new THREE.Raycaster();
+
       this.scene.add(ambientLight);
 
       this.dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
@@ -155,6 +173,29 @@ export default {
         );
       }
     },
+    loadSubproject(subprojectId) {
+      if (!this.scene.getObjectByName(`subprojectId:${subprojectId}`)) {
+        const gltfLoader = new GLTFLoader();
+        gltfLoader.setRequestHeader({ Authorization: authHeader() });
+        gltfLoader.load(
+          `${this.$app_url}/api/project/get_projectfile/${subprojectId}`,
+          (gltf) => {
+            gltf.scene.name = `subprojectId:${subprojectId}`;
+            this.scene.add(gltf.scene);
+            console.log(
+              this.scene.getObjectByName({ subprojectId: subprojectId })
+            );
+          }
+        );
+      }
+    },
+    unloadSubproject(subprojectId) {
+      const group = this.scene.getObjectByName(`subprojectId:${subprojectId}`);
+      if (group) {
+        this.scene.remove(group);
+      }
+    },
+
     moveAvatar(avatarName, player) {
       const selAvatar = this.scene.getObjectByName(avatarName);
       if (selAvatar) {
@@ -271,6 +312,24 @@ export default {
       if (oldval.length !== newval.length) {
         this.insertAvatar();
       }
+      this.updateCamera();
+    },
+    selectedSubprojects(newval, oldval) {
+      if (oldval.length !== newval.length) {
+        const loadedSubprojects = this.scene.children
+          .filter((x) => x.name.startsWith("subprojectId:"))
+          .map((x) => x.name.replace("subprojectId:", ""));
+        const addSubprojects = newval.filter(
+          (x) => !loadedSubprojects.includes(x)
+        );
+        const rmSubprojects = loadedSubprojects.filter(
+          (x) => !newval.includes(x)
+        );
+
+        this.insertSubproject(addSubprojects);
+        this.removeSubproject(rmSubprojects);
+      }
+
       this.updateCamera();
     },
     othercamPos() {

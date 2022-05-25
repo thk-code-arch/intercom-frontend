@@ -86,7 +86,7 @@ export default {
   components: { VueMarkdown },
   computed: {
     messages() {
-      return this.$store.state.chatroom.messages;
+      return this.$store.getters['chatroom/asc_messages'];
     },
     theroom() {
       return this.$store.state.chatroom.theroom;
