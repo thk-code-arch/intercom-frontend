@@ -6,14 +6,14 @@
   ></div>
 </template>
 <script>
-import * as THREE from 'three';
-import SpriteText from 'three-spritetext';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import authHeader from '@/services/auth-header';
-import projectHeader from '@/services/project-header';
+import * as THREE from "three";
+import SpriteText from "three-spritetext";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import authHeader from "@/services/auth-header";
+import projectHeader from "@/services/project-header";
 export default {
-  name: 'view-port',
+  name: "view-port",
   data() {
     return {
       container: null,
@@ -21,7 +21,9 @@ export default {
       camera: null,
       controls: null,
       renderer: null,
-      camPos: '',
+      raycaster: null,
+      intersects: null,
+      camPos: "",
       avatar: null,
     };
   },
@@ -34,6 +36,9 @@ export default {
     },
     connectedPlayers() {
       return this.$store.state.viewport.players;
+    },
+    selectedSubprojects() {
+      return this.$store.state.viewport.selectedSubprojects;
     },
   },
   methods: {
@@ -59,6 +64,17 @@ export default {
         this.moveAvatar(player.username, player.position);
       });
     },
+    insertSubproject(addSubproject) {
+      // sample Box from docs
+      Array.prototype.forEach.call(addSubproject, (sb) => {
+        this.loadSubproject(sb);
+      });
+    },
+    removeSubproject(rmSubproject) {
+      Array.prototype.forEach.call(rmSubproject, (sb) => {
+        this.unloadSubproject(sb);
+      });
+    },
     init() {
       // set container
       this.container = this.$refs.sceneContainer;
@@ -73,7 +89,7 @@ export default {
 
       // create scene
       this.scene = new THREE.Scene();
-      this.scene.background = new THREE.Color('#eeeeee');
+      this.scene.background = new THREE.Color("#eeeeee");
 
       // add lights
       const ambientLight = new THREE.HemisphereLight(
@@ -81,6 +97,9 @@ export default {
         0x222222, // dim ground color
         1 // intensity
       );
+      // interacting with objects
+      this.raycaster = new THREE.Raycaster();
+
       this.scene.add(ambientLight);
 
       this.dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
@@ -146,7 +165,7 @@ export default {
             var myText = new SpriteText(name);
             myText.textHeight = 2;
             myText.strokeWidth = 1;
-            myText.strokeColor = 'black';
+            myText.strokeColor = "black";
             myText.position.y = gltf.scene.position.y - 3;
             gltf.scene.add(myText);
             this.scene.add(gltf.scene);
@@ -154,20 +173,29 @@ export default {
         );
       }
     },
-    loadSubproject(subprojectId, name) {
-      if (!this.scene.getObjectByName(name)) {
+    loadSubproject(subprojectId) {
+      if (!this.scene.getObjectByName(`subprojectId:${subprojectId}`)) {
         const gltfLoader = new GLTFLoader();
         gltfLoader.setRequestHeader({ Authorization: authHeader() });
         gltfLoader.load(
           `${this.$app_url}/api/project/get_projectfile/${subprojectId}`,
           (gltf) => {
-            gltf.scene.scale.set(0.4, 0.4, 0.4);
-            gltf.scene.name = name;
+            gltf.scene.name = `subprojectId:${subprojectId}`;
             this.scene.add(gltf.scene);
+            console.log(
+              this.scene.getObjectByName({ subprojectId: subprojectId })
+            );
           }
         );
       }
     },
+    unloadSubproject(subprojectId) {
+      const group = this.scene.getObjectByName(`subprojectId:${subprojectId}`);
+      if (group) {
+        this.scene.remove(group);
+      }
+    },
+
     moveAvatar(avatarName, player) {
       const selAvatar = this.scene.getObjectByName(avatarName);
       if (selAvatar) {
@@ -195,7 +223,7 @@ export default {
               if (o.material) materials.push(o.material);
             }
           });
-          this.$store.dispatch('viewport/setmaterialList', materials);
+          this.$store.dispatch("viewport/setmaterialList", materials);
           const box = new THREE.Box3().setFromObject(gltf.scene);
           const size = box.getSize(new THREE.Vector3()).length();
           const center = box.getCenter(new THREE.Vector3());
@@ -241,7 +269,7 @@ export default {
     },
     roundNumbers(obj) {
       Object.entries(obj).forEach(([key, value]) => {
-        if (typeof value === 'number') {
+        if (typeof value === "number") {
           // obj[key] = value.toFixed(2) // 1.9999 -> "2.00"
           obj[key] = +value.toFixed(2); // 1.9999 -> 2
         }
@@ -257,13 +285,13 @@ export default {
         dir: this.roundNumbers(this.camera.getWorldDirection(this.vector)),
       };
       //send camera position to Server
-      this.$store.dispatch('viewport/setowncamPos', this.camPos);
+      this.$store.dispatch("viewport/setowncamPos", this.camPos);
       this.render();
     },
     takeScreenshot() {
       this.render();
       this.$store.dispatch(
-        'viewport/imgStore',
+        "viewport/imgStore",
         this.renderer.domElement.toDataURL()
       );
     },
@@ -286,6 +314,24 @@ export default {
       }
       this.updateCamera();
     },
+    selectedSubprojects(newval, oldval) {
+      if (oldval.length !== newval.length) {
+        const loadedSubprojects = this.scene.children
+          .filter((x) => x.name.startsWith("subprojectId:"))
+          .map((x) => x.name.replace("subprojectId:", ""));
+        const addSubprojects = newval.filter(
+          (x) => !loadedSubprojects.includes(x)
+        );
+        const rmSubprojects = loadedSubprojects.filter(
+          (x) => !newval.includes(x)
+        );
+
+        this.insertSubproject(addSubprojects);
+        this.removeSubproject(rmSubprojects);
+      }
+
+      this.updateCamera();
+    },
     othercamPos() {
       // watch it
       this.getCameraPosition();
@@ -296,16 +342,16 @@ export default {
   },
   mounted() {
     this.init();
-    this.controls.addEventListener('change', this.updateCamera);
+    this.controls.addEventListener("change", this.updateCamera);
     // call this only in static scenes (i.e., if there is no animation loop)
   },
   created() {
-    window.addEventListener('resize', this.resizeWindow);
+    window.addEventListener("resize", this.resizeWindow);
   },
   destroyed() {
     this.scene.dispose();
-    window.removeEventListener('resize', this.resizeWindow);
-    this.controls.removeEventListener('change', this.updateCamera);
+    window.removeEventListener("resize", this.resizeWindow);
+    this.controls.removeEventListener("change", this.updateCamera);
   },
 };
 </script>
