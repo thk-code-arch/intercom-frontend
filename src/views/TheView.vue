@@ -36,7 +36,8 @@
         <right-sidebar />
       </div>
     </div>
-    <ViewPort />
+    <ViewPort v-if="selectedViewport === 'classic'" />
+    <IFCPort v-if="selectedViewport === 'ifc'"/>
   </div>
 </template>
 
@@ -44,10 +45,13 @@
 import LeftSidebar from "@/components/view/LeftSidebar";
 import RightSidebar from "@/components/view/RightSidebar";
 import ViewPort from "@/components/view/ViewPort.vue";
+import IFCPort from "@/components/view/IFCPort.vue";
 import projectHeader from "@/services/project-header";
+
 export default {
   name: "TheView",
   components: {
+    IFCPort,
     ViewPort,
     LeftSidebar,
     RightSidebar,
@@ -67,6 +71,9 @@ export default {
       return {
         "--header-height": this.viewHeight,
       };
+    },
+    selectedViewport(){
+      return this.$store.state.viewport.selectedViewport;
     },
   },
   methods: {

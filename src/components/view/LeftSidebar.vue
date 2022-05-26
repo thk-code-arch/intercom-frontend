@@ -84,6 +84,21 @@
       </div>
     </div>
     <component v-bind:is="currentTabComponent"></component>
+  
+    <div class="flex flex-row my-4 space-x-1">
+      <div
+        class="flex justify-center p-2 bg-white cursor-pointer w-full"
+        v-on:click="selectViewport('ifc')"
+      >
+      IFC
+      </div>
+      <div
+        class="flex justify-center p-2 bg-white cursor-pointer w-full"
+        v-on:click="selectViewport('classic')"
+      >
+      CLASSIC
+      </div>
+    </div>
   </div>
 </template>
 
@@ -115,6 +130,11 @@ export default {
     hasSubproject() {
       return !!this.$store.state.curproject.theproject.subprojects;
     },
+  },
+  methods: {
+    selectViewport(view){
+      this.$store.dispatch("viewport/setViewport", view);
+    }
   },
 };
 </script>
