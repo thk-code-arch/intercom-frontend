@@ -11,9 +11,9 @@ import SpriteText from "three-spritetext";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { IFCLoader } from 'three/examples/jsm/loaders/IFCLoader.js';
-
 import authHeader from "@/services/auth-header";
 //import projectHeader from "@/services/project-header";
+
 export default {
   name: "view-port",
   data() {
@@ -210,61 +210,31 @@ export default {
       }
     },
     loadModel() {
-const materials = [];
-
 
 
 				//Setup IFC Loader
 				const ifcLoader = new IFCLoader();
-				ifcLoader.ifcManager.setWasmPath( 'jsm/loaders/ifc/' );
-				ifcLoader.load( 'http://localhost:3000/files/input/254989.ifc', ( ifc )=> {
 
-          ifc.scene.traverse((o) => {
-            if (o.isMesh) {
-              o.castShadow = true;
-              o.receiveShadow = true;
-              o.matrixAutoUpdate = false; // this object is static
-              //adding materials to a list
-              if (o.material) materials.push(o.material);
-            }
-          })
+        
+        
+        
+        
+        
+      ifcLoader.setRequestHeader({ Authorization: authHeader() });
+				ifcLoader.load( 
+       'testfile.ifc', 
+        ( ifc )=> {
 
-          this.$store.dispatch("viewport/setmaterialList", materials);
-          const box = new THREE.Box3().setFromObject(ifc.scene);
-          const size = box.getSize(new THREE.Vector3()).length();
-          const center = box.getCenter(new THREE.Vector3());
-
-          ifc.scene.position.x += ifc.scene.position.x - center.x;
-          ifc.scene.position.y += ifc.scene.position.y - center.y;
-          ifc.scene.position.z += ifc.scene.position.z - center.z;
-
-          this.camera.near = size / 100;
-          this.camera.far = size * 100;
-
-          this.camera.updateProjectionMatrix();
-
-          this.camera.position.copy(center);
-          this.camera.position.x += size / 1.0;
-          this.camera.position.y += size / 2.0;
-          this.camera.position.z += size / -1.0;
-          this.camera.lookAt(center);
-
-          this.dirLight.shadow.camera = new THREE.OrthographicCamera(
-            -size,
-            size,
-            size,
-            -size,
-            0.5,
-            1000
-          );
-
-          this.controls.maxDistance = size * 10;
-          this.controls.update();
 
           this.scene.add(ifc.scene);
           this.render();
 
-				})},
+				})
+        
+        
+        
+        
+        },
 
 
 
