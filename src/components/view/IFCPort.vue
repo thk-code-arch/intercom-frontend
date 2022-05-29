@@ -6,16 +6,16 @@
   ></div>
 </template>
 <script>
-import * as THREE from "three";
-import SpriteText from "three-spritetext";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import * as THREE from 'three';
+import SpriteText from 'three-spritetext';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { IFCLoader } from 'three/examples/jsm/loaders/IFCLoader.js';
-import authHeader from "@/services/auth-header";
+import authHeader from '@/services/auth-header';
 //import projectHeader from "@/services/project-header";
 
 export default {
-  name: "view-port",
+  name: 'ifc-port',
   data() {
     return {
       container: null,
@@ -25,7 +25,7 @@ export default {
       renderer: null,
       raycaster: null,
       intersects: null,
-      camPos: "",
+      camPos: '',
       avatar: null,
     };
   },
@@ -44,6 +44,79 @@ export default {
     },
   },
   methods: {
+    init() {
+      // set container
+      this.container = this.$refs.sceneContainer;
+
+      // add camera
+      const fov = 45; // Field of view
+      const aspect = this.container.clientWidth / this.container.clientHeight;
+      const near = 0.1; // the near clipping plane
+      const far = 1000; // the far clipping plane
+      const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+      this.camera = camera;
+
+      //Scene
+      this.scene = new THREE.Scene();
+      this.scene.background = new THREE.Color('#eeeeee');
+
+      // add lights
+      const ambientLight = new THREE.HemisphereLight(
+        0xffffff, // bright sky color
+        0x222222, // dim ground color
+        1 // intensity
+      );
+      this.scene.add(ambientLight);
+
+      this.dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
+      this.dirLight.position.set(500, 500, 500);
+      this.dirLight.castShadow = true;
+      this.dirLight.shadow.mapSize.width = 2048; // default
+      this.dirLight.shadow.mapSize.height = 2048; // default
+      this.dirLight.shadow.camera = new THREE.OrthographicCamera(
+        -100,
+        100,
+        100,
+        -100,
+        0.5,
+        1000
+      );
+      this.dirLight.shadow.camera.near = near; // default
+      this.dirLight.shadow.camera.far = far * 10; // default
+      this.scene.add(this.dirLight);
+
+      //Controls
+      this.controls = new OrbitControls(this.camera, this.container);
+      this.controls.keys = {
+        LEFT: 65, //left arrow
+        UP: 87, // up arrow
+        RIGHT: 68, // right arrow
+        BOTTOM: 83, // down arrow
+      };
+      // create renderer
+      this.renderer = new THREE.WebGLRenderer({ antialias: true });
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+      this.renderer.outputEncoding = true;
+      this.renderer.gammaFactor = 2.2;
+      this.renderer.shadowMap.enabled = true;
+      // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+      this.container.appendChild(this.renderer.domElement);
+
+      // set aspect ratio to match the new browser window aspect ratio
+      this.camera.aspect =
+        this.container.clientWidth / this.container.clientHeight;
+      this.camera.updateProjectionMatrix();
+      this.renderer.setSize(
+        this.container.clientWidth,
+        this.container.clientHeight
+      );
+
+      // create Vector to calculate Camera Direction
+      this.vector = new THREE.Vector3();
+      this.loadModel();
+      this.render();
+    },
+
     resizeWindow() {
       this.container = this.$refs.sceneContainer;
       this.renderer.setSize(
@@ -77,7 +150,7 @@ export default {
         this.unloadSubproject(sb);
       });
     },
-    init() {
+    delinit() {
       // set container
       this.container = this.$refs.sceneContainer;
 
@@ -91,7 +164,7 @@ export default {
 
       // create scene
       this.scene = new THREE.Scene();
-      this.scene.background = new THREE.Color("#eeeeee");
+      this.scene.background = new THREE.Color('#6900eb');
 
       // add lights
       const ambientLight = new THREE.HemisphereLight(
@@ -99,8 +172,6 @@ export default {
         0x222222, // dim ground color
         1 // intensity
       );
-      // interacting with objects
-      this.raycaster = new THREE.Raycaster();
 
       this.scene.add(ambientLight);
 
@@ -151,7 +222,7 @@ export default {
 
       // create Vector to calculate Camera Direction
       this.vector = new THREE.Vector3();
-      this.loadModel();
+      // this.loadModel();
       this.render();
     },
     loadAvatar(avatarId, name) {
@@ -167,7 +238,7 @@ export default {
             var myText = new SpriteText(name);
             myText.textHeight = 2;
             myText.strokeWidth = 1;
-            myText.strokeColor = "black";
+            myText.strokeColor = 'black';
             myText.position.y = gltf.scene.position.y - 3;
             gltf.scene.add(myText);
             this.scene.add(gltf.scene);
@@ -210,38 +281,15 @@ export default {
       }
     },
     loadModel() {
+      //Setup IFC Loader
+      const ifcLoader = new IFCLoader();
 
-
-				//Setup IFC Loader
-				const ifcLoader = new IFCLoader();
-
-        
-        
-        
-        
-        
       ifcLoader.setRequestHeader({ Authorization: authHeader() });
-				ifcLoader.load( 
-       'testfile.ifc', 
-        ( ifc )=> {
-
-
-          this.scene.add(ifc.scene);
-          this.render();
-
-				})
-        
-        
-        
-        
-        },
-
-
-
-
-
-
-
+      ifcLoader.load('testfile.ifc', (ifc) => {
+        this.scene.add(ifc.mesh);
+        this.render();
+      });
+    },
 
     getCameraPosition() {
       this.camera.position.x = this.othercamPos.position.x;
@@ -252,7 +300,7 @@ export default {
     },
     roundNumbers(obj) {
       Object.entries(obj).forEach(([key, value]) => {
-        if (typeof value === "number") {
+        if (typeof value === 'number') {
           // obj[key] = value.toFixed(2) // 1.9999 -> "2.00"
           obj[key] = +value.toFixed(2); // 1.9999 -> 2
         }
@@ -268,13 +316,13 @@ export default {
         dir: this.roundNumbers(this.camera.getWorldDirection(this.vector)),
       };
       //send camera position to Server
-      this.$store.dispatch("viewport/setowncamPos", this.camPos);
+      this.$store.dispatch('viewport/setowncamPos', this.camPos);
       this.render();
     },
     takeScreenshot() {
       this.render();
       this.$store.dispatch(
-        "viewport/imgStore",
+        'viewport/imgStore',
         this.renderer.domElement.toDataURL()
       );
     },
@@ -300,8 +348,8 @@ export default {
     selectedSubprojects(newval, oldval) {
       if (oldval.length !== newval.length) {
         const loadedSubprojects = this.scene.children
-          .filter((x) => x.name.startsWith("subprojectId:"))
-          .map((x) => x.name.replace("subprojectId:", ""));
+          .filter((x) => x.name.startsWith('subprojectId:'))
+          .map((x) => x.name.replace('subprojectId:', ''));
         const addSubprojects = newval.filter(
           (x) => !loadedSubprojects.includes(x)
         );
@@ -325,16 +373,16 @@ export default {
   },
   mounted() {
     this.init();
-    this.controls.addEventListener("change", this.updateCamera);
+    this.controls.addEventListener('change', this.updateCamera);
     // call this only in static scenes (i.e., if there is no animation loop)
   },
   created() {
-    window.addEventListener("resize", this.resizeWindow);
+    window.addEventListener('resize', this.resizeWindow);
   },
   destroyed() {
     this.scene.dispose();
-    window.removeEventListener("resize", this.resizeWindow);
-    this.controls.removeEventListener("change", this.updateCamera);
+    window.removeEventListener('resize', this.resizeWindow);
+    this.controls.removeEventListener('change', this.updateCamera);
   },
 };
 </script>
