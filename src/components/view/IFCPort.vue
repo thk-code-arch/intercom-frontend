@@ -61,30 +61,14 @@ export default {
       this.scene.background = new THREE.Color('#eeeeee');
 
       // add lights
-      const ambientLight = new THREE.HemisphereLight(
-        0xffffff, // bright sky color
-        0x222222, // dim ground color
-        1 // intensity
-      );
+      const directionalLight1 = new THREE.DirectionalLight(0xffeeff, 0.8);
+      directionalLight1.position.set(1, 1, 1);
+      this.scene.add(directionalLight1);
+      const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight2.position.set(-1, 0.5, -1);
+      this.scene.add(directionalLight2);
+      const ambientLight = new THREE.AmbientLight(0xffffee, 0.25);
       this.scene.add(ambientLight);
-
-      this.dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
-      this.dirLight.position.set(500, 500, 500);
-      this.dirLight.castShadow = true;
-      this.dirLight.shadow.mapSize.width = 2048; // default
-      this.dirLight.shadow.mapSize.height = 2048; // default
-      this.dirLight.shadow.camera = new THREE.OrthographicCamera(
-        -100,
-        100,
-        100,
-        -100,
-        0.5,
-        1000
-      );
-      this.dirLight.shadow.camera.near = near; // default
-      this.dirLight.shadow.camera.far = far * 10; // default
-      this.scene.add(this.dirLight);
-
       this.loadModel();
 
       //Controls
@@ -180,6 +164,17 @@ export default {
           `${this.$app_url}/api/project/get_projectfileifc/${subprojectId}`,
           (ifc) => {
             ifc.name = `subprojectId:${subprojectId}`;
+
+            console.log(this.scene.children.slice(-1)[0]);
+            const box = new THREE.Box3().setFromObject(ifc.mesh);
+            const center = box.getCenter(new THREE.Vector3());
+
+            ifc.position.x += ifc.position.x - center.x;
+            ifc.position.y += ifc.position.y - center.y;
+            ifc.position.z += ifc.position.z - center.z;
+            ifc.position.setFromMatrixPosition(
+              this.scene.children.slice(-1)[0].matrixWorld
+            );
             this.scene.add(ifc.mesh);
           }
         );
@@ -228,15 +223,6 @@ export default {
           this.camera.position.y += size / 2.0;
           this.camera.position.z += size / -1.0;
           this.camera.lookAt(center);
-
-          this.dirLight.shadow.camera = new THREE.OrthographicCamera(
-            -size,
-            size,
-            size,
-            -size,
-            0.5,
-            1000
-          );
 
           this.controls.maxDistance = size * 10;
           this.controls.update();
