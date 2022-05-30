@@ -174,16 +174,13 @@ export default {
     },
     loadSubproject(subprojectId) {
       if (!this.scene.getObjectByName(`subprojectId:${subprojectId}`)) {
-        const gltfLoader = new GLTFLoader();
-        gltfLoader.setRequestHeader({ Authorization: authHeader() });
-        gltfLoader.load(
-          `${this.$app_url}/api/project/get_projectfile/${subprojectId}`,
-          (gltf) => {
-            gltf.scene.name = `subprojectId:${subprojectId}`;
-            this.scene.add(gltf.scene);
-            console.log(
-              this.scene.getObjectByName({ subprojectId: subprojectId })
-            );
+        const ifcLoader = new IFCLoader();
+        ifcLoader.setRequestHeader({ Authorization: authHeader() });
+        ifcLoader.load(
+          `${this.$app_url}/api/project/get_projectfileifc/${subprojectId}`,
+          (ifc) => {
+            ifc.name = `subprojectId:${subprojectId}`;
+            this.scene.add(ifc.mesh);
           }
         );
       }
