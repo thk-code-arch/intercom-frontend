@@ -36,44 +36,51 @@
         <right-sidebar />
       </div>
     </div>
-    <ViewPort />
+    <ViewPort v-if="selectedViewport === 'classic'" />
+    <IFCPort v-if="selectedViewport === 'ifc'" />
   </div>
 </template>
 
 <script>
-import LeftSidebar from "@/components/view/LeftSidebar";
-import RightSidebar from "@/components/view/RightSidebar";
-import ViewPort from "@/components/view/ViewPort.vue";
-import projectHeader from "@/services/project-header";
+import LeftSidebar from '@/components/view/LeftSidebar';
+import RightSidebar from '@/components/view/RightSidebar';
+import ViewPort from '@/components/view/ViewPort';
+import IFCPort from '@/components/view/IFCPort';
+import projectHeader from '@/services/project-header';
+
 export default {
-  name: "TheView",
+  name: 'TheView',
   components: {
+    IFCPort,
     ViewPort,
     LeftSidebar,
     RightSidebar,
   },
   data() {
     return {
-      rightSidebar: "w-1/5",
-      leftSidebar: "w-1/5",
+      rightSidebar: 'w-1/5',
+      leftSidebar: 'w-1/5',
     };
   },
   computed: {
     viewHeight() {
-      const headerHeight = document.getElementById("top").clientHeight;
+      const headerHeight = document.getElementById('top').clientHeight;
       return `${headerHeight}px`;
     },
     styleHeight() {
       return {
-        "--header-height": this.viewHeight,
+        '--header-height': this.viewHeight,
       };
+    },
+    selectedViewport() {
+      return this.$store.state.viewport.selectedViewport;
     },
   },
   methods: {
     openSidebar(left, right) {
       if (this.leftSidebar !== this.rightSidebar) {
-        this.leftSidebar = "w-1/5";
-        this.rightSidebar = "w-1/5";
+        this.leftSidebar = 'w-1/5';
+        this.rightSidebar = 'w-1/5';
       } else {
         this.leftSidebar = left;
         this.rightSidebar = right;
@@ -82,24 +89,22 @@ export default {
   },
   created() {
     //get actaual chatroomid
-    this.$http.get("chat/get_projectroom/" + projectHeader()).then(
+    this.$http.get('chat/get_projectroom/' + projectHeader()).then(
       (response) => {
         // connect to room
-        this.$store.dispatch("chatroom/select_chatroom", response.data.id);
+        this.$store.dispatch('chatroom/select_chatroom', response.data.id);
       },
       (error) => {
         this.$notify({
-          title: "Ooops...",
+          title: 'Ooops...',
           text:
             (error.response && error.response.data) ||
             error.message ||
             error.toString(),
-          group: "error",
+          group: 'error',
         });
       }
     );
   },
 };
 </script>
-
-
