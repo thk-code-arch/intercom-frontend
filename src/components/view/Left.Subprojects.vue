@@ -10,7 +10,7 @@
       </div>
     </div>
     <!-- TEXT -->
-    <div class="flex items-start mb-4 text-sm">
+    <div class="flex items-start mb-4 text-sm overflow-y-scroll">
       <div class="flex-1 px-6">
         <div class="flex flex-col">
           <label
@@ -23,7 +23,7 @@
               class="form-checkbox h-5 w-5 text-gray-600"
               :value="subProject.id"
               v-model="selectedSubproject"
-            /><span class="ml-2 text-gray-700">{{ subProject.name }}</span>
+            /><span class="ml-2 text-gray-700">{{ subProject.id }}</span>
           </label>
         </div>
       </div>

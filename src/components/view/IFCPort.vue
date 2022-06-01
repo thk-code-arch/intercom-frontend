@@ -42,6 +42,11 @@ export default {
     selectedSubprojects() {
       return this.$store.state.viewport.selectedSubprojects;
     },
+    loadedSubprojects() {
+      return this.scene.children
+        .filter((x) => x.name.startsWith('subprojectId:'))
+        .map((x) => parseInt(x.name.replace('subprojectId:', '')));
+    },
   },
   methods: {
     init() {
@@ -160,24 +165,33 @@ export default {
       if (!this.scene.getObjectByName(`subprojectId:${subprojectId}`)) {
         const ifcLoader = new IFCLoader();
         ifcLoader.setRequestHeader({ Authorization: authHeader() });
-        ifcLoader.load(
-          `${this.$app_url}/api/project/get_projectfileifc/${subprojectId}`,
-          (ifc) => {
-            ifc.name = `subprojectId:${subprojectId}`;
+        try {
+          ifcLoader.load(
+            `${this.$app_url}/api/project/get_projectfileifc/${subprojectId}`,
+            (ifc, progress, error) => {
+              console.log(error);
+              console.log(ifc);
+              ifc.name = `subprojectId:${subprojectId}`;
 
-            console.log(this.scene.children.slice(-1)[0]);
-            const box = new THREE.Box3().setFromObject(ifc.mesh);
-            const center = box.getCenter(new THREE.Vector3());
+              const lastLoaded = this.scene.children.find((x) =>
+                x.name.match(/projectId/)
+              );
+              console.log(lastLoaded);
+              const box = new THREE.Box3().setFromObject(ifc.mesh);
+              const center = box.getCenter(new THREE.Vector3());
 
-            ifc.position.x += ifc.position.x - center.x;
-            ifc.position.y += ifc.position.y - center.y;
-            ifc.position.z += ifc.position.z - center.z;
-            ifc.position.setFromMatrixPosition(
-              this.scene.children.slice(-1)[0].matrixWorld
-            );
-            this.scene.add(ifc.mesh);
-          }
-        );
+              ifc.position.x += ifc.position.x - center.x;
+              ifc.position.y += ifc.position.y - center.y;
+              ifc.position.z += ifc.position.z - center.z;
+              ifc.position.setFromMatrixPosition(lastLoaded.matrixWorld);
+              this.scene.add(ifc.mesh);
+              this.updateCamera();
+            }
+          );
+        } catch (err) {
+          console.error('Error loading IFC.');
+          console.error(err);
+        }
       }
     },
     unloadSubproject(subprojectId) {
@@ -203,34 +217,41 @@ export default {
       const ifcLoader = new IFCLoader();
 
       ifcLoader.setRequestHeader({ Authorization: authHeader() });
-      ifcLoader.load(
-        `${this.$app_url}/api/project/get_projectfileifc/${projectHeader()}`,
-        (ifc) => {
-          const box = new THREE.Box3().setFromObject(ifc.mesh);
-          const size = box.getSize(new THREE.Vector3()).length();
-          const center = box.getCenter(new THREE.Vector3());
+      try {
+        ifcLoader.load(
+          `${this.$app_url}/api/project/get_projectfileifc/${projectHeader()}`,
+          (ifc) => {
+            const box = new THREE.Box3().setFromObject(ifc.mesh);
+            const size = box.getSize(new THREE.Vector3()).length();
+            const center = box.getCenter(new THREE.Vector3());
 
-          ifc.position.x += ifc.position.x - center.x;
-          ifc.position.y += ifc.position.y - center.y;
-          ifc.position.z += ifc.position.z - center.z;
-          this.camera.near = size / 100;
-          this.camera.far = size * 100;
+            ifc.name = 'projectId';
 
-          this.camera.updateProjectionMatrix();
+            ifc.position.x += ifc.position.x - center.x;
+            ifc.position.y += ifc.position.y - center.y;
+            ifc.position.z += ifc.position.z - center.z;
+            this.camera.near = size / 100;
+            this.camera.far = size * 100;
 
-          this.camera.position.copy(center);
-          this.camera.position.x += size / 1.0;
-          this.camera.position.y += size / 2.0;
-          this.camera.position.z += size / -1.0;
-          this.camera.lookAt(center);
+            this.camera.updateProjectionMatrix();
 
-          this.controls.maxDistance = size * 10;
-          this.controls.update();
+            this.camera.position.copy(center);
+            this.camera.position.x += size / 1.0;
+            this.camera.position.y += size / 2.0;
+            this.camera.position.z += size / -1.0;
+            this.camera.lookAt(center);
 
-          this.scene.add(ifc.mesh);
-          this.render();
-        }
-      );
+            this.controls.maxDistance = size * 10;
+            this.controls.update();
+
+            this.scene.add(ifc.mesh);
+            this.render();
+          }
+        );
+      } catch (err) {
+        console.error('Error loading IFC.');
+        console.error(err);
+      }
     },
 
     getCameraPosition() {
@@ -289,18 +310,12 @@ export default {
     },
     selectedSubprojects(newval, oldval) {
       if (oldval.length !== newval.length) {
-        const loadedSubprojects = this.scene.children
-          .filter((x) => x.name.startsWith('subprojectId:'))
-          .map((x) => x.name.replace('subprojectId:', ''));
-        const addSubprojects = newval.filter(
-          (x) => !loadedSubprojects.includes(x)
+        this.insertSubproject(this.selectedSubprojects);
+        const rmProjects = this.loadedSubprojects.filter(
+          (x) => !this.selectedSubprojects.includes(x)
         );
-        const rmSubprojects = loadedSubprojects.filter(
-          (x) => !newval.includes(x)
-        );
-
-        this.insertSubproject(addSubprojects);
-        this.removeSubproject(rmSubprojects);
+        console.log(rmProjects);
+        this.removeSubproject(rmProjects);
       }
 
       this.updateCamera();
