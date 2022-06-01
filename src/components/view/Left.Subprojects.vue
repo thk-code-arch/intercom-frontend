@@ -23,7 +23,7 @@
               class="form-checkbox h-5 w-5 text-gray-600"
               :value="subProject.id"
               v-model="selectedSubproject"
-            /><span class="ml-2 text-gray-700">{{ subProject.id }}</span>
+            /><span class="ml-2 text-gray-700">{{ subProject.name }}</span>
           </label>
         </div>
       </div>
