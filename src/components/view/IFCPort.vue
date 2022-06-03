@@ -27,6 +27,7 @@ export default {
       intersects: null,
       camPos: '',
       avatar: null,
+      highlightMaterial: null,
     };
   },
   computed: {
@@ -101,6 +102,14 @@ export default {
         this.container.clientWidth,
         this.container.clientHeight
       );
+      // selectingModelsColor
+      this.highlightMaterial = new THREE.MeshPhongMaterial({
+        color: 0xff00ff,
+        depthTest: false,
+        transparent: true,
+        opacity: 0.3,
+      });
+      this.container.onpointerdown = this.selectObject;
 
       // create Vector to calculate Camera Direction
       this.vector = new THREE.Vector3();
@@ -299,6 +308,41 @@ export default {
         this.camera.position.z += 1;
       }
       this.updateCamera();
+    },
+    selectObject(event) {
+      const ifcLoader = new IFCLoader();
+      if (event.button != 0) return;
+
+      const mouse = new THREE.Vector2();
+      mouse.x = (event.clientX / this.container.clientWidth) * 2 - 1;
+      mouse.y = -(event.clientY / this.container.clientHeight) * 2 + 1;
+
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, this.camera);
+
+      const intersected = raycaster.intersectObjects(
+        this.scene.children,
+        false
+      );
+      if (intersected.length) {
+        const found = intersected[0];
+        const faceIndex = found.faceIndex;
+        const geometry = found.object.geometry;
+        const id = ifcLoader.ifcManager.getExpressId(geometry, faceIndex);
+
+        const modelID = found.object.modelID;
+        console.log('found', found.object.name);
+        ifcLoader.ifcManager.createSubset({
+          modelID,
+          ids: [id],
+          scene: this.scene,
+          removePrevious: true,
+          material: this.highlightMaterial,
+        });
+        const props = ifcLoader.ifcManager.getItemProperties(modelID, id, true);
+        console.log(props);
+        this.updateCamera();
+      }
     },
   },
   watch: {
