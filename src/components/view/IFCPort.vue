@@ -209,8 +209,8 @@ export default {
             }
           );
         } catch (err) {
-          console.error('Error loading IFC.');
-          console.error(err);
+          console.log('Error loading IFC.');
+          console.log(err);
         }
       }
     },
@@ -335,7 +335,7 @@ export default {
       var pIntersect = new THREE.Vector3();
       if (intersects.length) {
         this.found = intersects[0];
-        console.log('pointedObject', this.found.name);
+        console.log('pointedObject', this.found.point);
         this.controls.enabled = false;
         pIntersect.copy(this.found.point);
         this.plane.setFromNormalAndCoplanarPoint(this.pNormal, pIntersect);
@@ -347,11 +347,13 @@ export default {
       }
     },
     pointerUp() {
-      this.isDragging = false;
-      this.dragObject = null;
-      this.controls.enabled = true;
-      this.found.object.material = this.found.object.userData.color;
-      this.updateCamera();
+      if (this.isDragging) {
+        this.isDragging = false;
+        this.dragObject = null;
+        this.controls.enabled = true;
+        this.found.object.material = this.found.object.userData.color;
+        this.updateCamera();
+      }
     },
   },
   watch: {
