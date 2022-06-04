@@ -23,11 +23,16 @@ export default {
       camera: null,
       controls: null,
       renderer: null,
-      raycaster: null,
-      intersects: null,
       camPos: '',
       avatar: null,
       highlightMaterial: null,
+      isDragging: false,
+      dragObject: null,
+      plane: null,
+      pNormal: null,
+      raycaster: null,
+      shift: null,
+      found: null,
     };
   },
   computed: {
@@ -104,12 +109,17 @@ export default {
       );
       // selectingModelsColor
       this.highlightMaterial = new THREE.MeshPhongMaterial({
-        color: 0xff00ff,
+        color: 0x00b1ff,
         depthTest: false,
         transparent: true,
         opacity: 0.3,
       });
-      this.container.onpointerdown = this.selectObject;
+
+      //moving objects intersecting
+      this.plane = new THREE.Plane();
+      this.pNormal = new THREE.Vector3(0, 1, 0); // plane's normal
+      this.raycaster = new THREE.Raycaster();
+      this.shift = new THREE.Vector3(); // distance between position of an object and points of intersection with the object
 
       // create Vector to calculate Camera Direction
       this.vector = new THREE.Vector3();
@@ -301,48 +311,47 @@ export default {
     render() {
       this.renderer.render(this.scene, this.camera);
     },
-    handleMouseWheel(event) {
-      if (event.deltaY < 0) {
-        this.camera.position.z -= 1;
-      } else if (event.deltaY > 0) {
-        this.camera.position.z += 1;
-      }
-      this.updateCamera();
-    },
-    selectObject(event) {
-      const ifcLoader = new IFCLoader();
-      if (event.button != 0) return;
-
+    pointerMove(event) {
       const mouse = new THREE.Vector2();
-      mouse.x = (event.clientX / this.container.clientWidth) * 2 - 1;
-      mouse.y = -(event.clientY / this.container.clientHeight) * 2 + 1;
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      this.raycaster.setFromCamera(mouse, this.camera);
+      const planeIntersect = new THREE.Vector3(); // point of intersection with the plane
 
-      const raycaster = new THREE.Raycaster();
-      raycaster.setFromCamera(mouse, this.camera);
-
-      const intersected = raycaster.intersectObjects(
+      if (this.isDragging) {
+        console.log('drgging');
+        this.raycaster.ray.intersectPlane(this.plane, planeIntersect);
+        this.dragObject.position.addVectors(planeIntersect, this.shift);
+        this.updateCamera();
+      }
+    },
+    pointerDown() {
+      const intersects = this.raycaster.intersectObjects(
         this.scene.children,
         false
       );
-      if (intersected.length) {
-        const found = intersected[0];
-        const faceIndex = found.faceIndex;
-        const geometry = found.object.geometry;
-        const id = ifcLoader.ifcManager.getExpressId(geometry, faceIndex);
-
-        const modelID = found.object.modelID;
-        console.log('found', found.object.name);
-        ifcLoader.ifcManager.createSubset({
-          modelID,
-          ids: [id],
-          scene: this.scene,
-          removePrevious: true,
-          material: this.highlightMaterial,
-        });
-        const props = ifcLoader.ifcManager.getItemProperties(modelID, id, true);
-        console.log(props);
-        this.updateCamera();
+      console.log('pointerDown', intersects);
+      var pIntersect = new THREE.Vector3();
+      if (intersects.length) {
+        this.found = intersects[0];
+        console.log('pointedObject', this.found.name);
+        //   const found = intersected[0];
+        this.controls.enabled = false;
+        pIntersect.copy(this.found.point);
+        this.plane.setFromNormalAndCoplanarPoint(this.pNormal, pIntersect);
+        this.shift.subVectors(this.found.object.position, this.found.point);
+        this.isDragging = true;
+        this.dragObject = this.found.object;
+        this.found.object.userData.color = this.found.object.material;
+        this.found.object.material = this.highlightMaterial;
       }
+    },
+    pointerUp() {
+      this.isDragging = false;
+      this.dragObject = null;
+      this.controls.enabled = true;
+      this.found.object.material = this.found.object.userData.color;
+      this.updateCamera();
     },
   },
   watch: {
@@ -375,6 +384,9 @@ export default {
   mounted() {
     this.init();
     this.controls.addEventListener('change', this.updateCamera);
+    this.container.addEventListener('pointerdown', this.pointerDown);
+    this.container.addEventListener('pointermove', this.pointerMove);
+    this.container.addEventListener('pointerup', this.pointerUp);
     // call this only in static scenes (i.e., if there is no animation loop)
   },
   created() {
