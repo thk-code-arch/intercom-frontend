@@ -23,6 +23,7 @@ export default {
       camera: null,
       controls: null,
       renderer: null,
+      vector: null,
       camPos: '',
       avatar: null,
       highlightMaterial: null,
@@ -117,9 +118,9 @@ export default {
 
       //moving objects intersecting
       this.plane = new THREE.Plane();
-      this.pNormal = new THREE.Vector3(0, 1, 0); // plane's normal
+      this.pNormal = new THREE.Vector3(0, 1, 0);
       this.raycaster = new THREE.Raycaster();
-      this.shift = new THREE.Vector3(); // distance between position of an object and points of intersection with the object
+      this.shift = new THREE.Vector3();
 
       // create Vector to calculate Camera Direction
       this.vector = new THREE.Vector3();
@@ -316,7 +317,7 @@ export default {
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
       this.raycaster.setFromCamera(mouse, this.camera);
-      const planeIntersect = new THREE.Vector3(); // point of intersection with the plane
+      const planeIntersect = new THREE.Vector3();
 
       if (this.isDragging) {
         console.log('drgging');
@@ -335,7 +336,6 @@ export default {
       if (intersects.length) {
         this.found = intersects[0];
         console.log('pointedObject', this.found.name);
-        //   const found = intersected[0];
         this.controls.enabled = false;
         pIntersect.copy(this.found.point);
         this.plane.setFromNormalAndCoplanarPoint(this.pNormal, pIntersect);
@@ -396,6 +396,9 @@ export default {
     this.scene.dispose();
     window.removeEventListener('resize', this.resizeWindow);
     this.controls.removeEventListener('change', this.updateCamera);
+    this.container.removeEventListener('pointerdown', this.pointerDown);
+    this.container.removeEventListener('pointermove', this.pointerMove);
+    this.container.removeEventListener('pointerup', this.pointerUp);
   },
 };
 </script>
