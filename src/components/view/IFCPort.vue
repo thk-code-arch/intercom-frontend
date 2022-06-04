@@ -23,10 +23,17 @@ export default {
       camera: null,
       controls: null,
       renderer: null,
-      raycaster: null,
-      intersects: null,
+      vector: null,
       camPos: '',
       avatar: null,
+      highlightMaterial: null,
+      isDragging: false,
+      dragObject: null,
+      plane: null,
+      pNormal: null,
+      raycaster: null,
+      shift: null,
+      found: null,
     };
   },
   computed: {
@@ -101,6 +108,19 @@ export default {
         this.container.clientWidth,
         this.container.clientHeight
       );
+      // selectingModelsColor
+      this.highlightMaterial = new THREE.MeshPhongMaterial({
+        color: 0x00b1ff,
+        depthTest: false,
+        transparent: true,
+        opacity: 0.3,
+      });
+
+      //moving objects intersecting
+      this.plane = new THREE.Plane();
+      this.pNormal = new THREE.Vector3(0, 1, 0);
+      this.raycaster = new THREE.Raycaster();
+      this.shift = new THREE.Vector3();
 
       // create Vector to calculate Camera Direction
       this.vector = new THREE.Vector3();
@@ -189,8 +209,8 @@ export default {
             }
           );
         } catch (err) {
-          console.error('Error loading IFC.');
-          console.error(err);
+          console.log('Error loading IFC.');
+          console.log(err);
         }
       }
     },
@@ -292,13 +312,48 @@ export default {
     render() {
       this.renderer.render(this.scene, this.camera);
     },
-    handleMouseWheel(event) {
-      if (event.deltaY < 0) {
-        this.camera.position.z -= 1;
-      } else if (event.deltaY > 0) {
-        this.camera.position.z += 1;
+    pointerMove(event) {
+      const mouse = new THREE.Vector2();
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      this.raycaster.setFromCamera(mouse, this.camera);
+      const planeIntersect = new THREE.Vector3();
+
+      if (this.isDragging) {
+        console.log('drgging');
+        this.raycaster.ray.intersectPlane(this.plane, planeIntersect);
+        this.dragObject.position.addVectors(planeIntersect, this.shift);
+        this.updateCamera();
       }
-      this.updateCamera();
+    },
+    pointerDown() {
+      const intersects = this.raycaster.intersectObjects(
+        this.scene.children,
+        false
+      );
+      console.log('pointerDown', intersects);
+      var pIntersect = new THREE.Vector3();
+      if (intersects.length) {
+        this.found = intersects[0];
+        console.log('pointedObject', this.found.point);
+        this.controls.enabled = false;
+        pIntersect.copy(this.found.point);
+        this.plane.setFromNormalAndCoplanarPoint(this.pNormal, pIntersect);
+        this.shift.subVectors(this.found.object.position, this.found.point);
+        this.isDragging = true;
+        this.dragObject = this.found.object;
+        this.found.object.userData.color = this.found.object.material;
+        this.found.object.material = this.highlightMaterial;
+      }
+    },
+    pointerUp() {
+      if (this.isDragging) {
+        this.isDragging = false;
+        this.dragObject = null;
+        this.controls.enabled = true;
+        this.found.object.material = this.found.object.userData.color;
+        this.updateCamera();
+      }
     },
   },
   watch: {
@@ -331,6 +386,9 @@ export default {
   mounted() {
     this.init();
     this.controls.addEventListener('change', this.updateCamera);
+    this.container.addEventListener('pointerdown', this.pointerDown);
+    this.container.addEventListener('pointermove', this.pointerMove);
+    this.container.addEventListener('pointerup', this.pointerUp);
     // call this only in static scenes (i.e., if there is no animation loop)
   },
   created() {
@@ -340,6 +398,9 @@ export default {
     this.scene.dispose();
     window.removeEventListener('resize', this.resizeWindow);
     this.controls.removeEventListener('change', this.updateCamera);
+    this.container.removeEventListener('pointerdown', this.pointerDown);
+    this.container.removeEventListener('pointermove', this.pointerMove);
+    this.container.removeEventListener('pointerup', this.pointerUp);
   },
 };
 </script>

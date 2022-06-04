@@ -6,14 +6,14 @@
   ></div>
 </template>
 <script>
-import * as THREE from "three";
-import SpriteText from "three-spritetext";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import authHeader from "@/services/auth-header";
-import projectHeader from "@/services/project-header";
+import * as THREE from 'three';
+import SpriteText from 'three-spritetext';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import authHeader from '@/services/auth-header';
+import projectHeader from '@/services/project-header';
 export default {
-  name: "view-port",
+  name: 'view-port',
   data() {
     return {
       container: null,
@@ -21,10 +21,17 @@ export default {
       camera: null,
       controls: null,
       renderer: null,
-      raycaster: null,
-      intersects: null,
-      camPos: "",
+      vector: null,
+      camPos: '',
       avatar: null,
+      highlightMaterial: null,
+      isDragging: false,
+      dragObject: null,
+      plane: null,
+      pNormal: null,
+      raycaster: null,
+      shift: null,
+      found: null,
     };
   },
   computed: {
@@ -40,8 +47,103 @@ export default {
     selectedSubprojects() {
       return this.$store.state.viewport.selectedSubprojects;
     },
+    loadedSubprojects() {
+      return this.scene.children
+        .filter((x) => x.name.startsWith('subprojectId:'))
+        .map((x) => parseInt(x.name.replace('subprojectId:', '')));
+    },
   },
   methods: {
+    init() {
+      // set container
+      this.container = this.$refs.sceneContainer;
+
+      // add camera
+      const fov = 45; // Field of view
+      const aspect = this.container.clientWidth / this.container.clientHeight;
+      const near = 0.1; // the near clipping plane
+      const far = 1000; // the far clipping plane
+      const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+      this.camera = camera;
+
+      // create scene
+      this.scene = new THREE.Scene();
+      this.scene.background = new THREE.Color('#eeeeee');
+
+      // add lights
+      const ambientLight = new THREE.HemisphereLight(
+        0xffffff, // bright sky color
+        0x222222, // dim ground color
+        1 // intensity
+      );
+      // interacting with objects
+      this.raycaster = new THREE.Raycaster();
+
+      this.scene.add(ambientLight);
+
+      this.dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
+      this.dirLight.position.set(500, 500, 500);
+      this.dirLight.castShadow = true;
+      this.dirLight.shadow.mapSize.width = 2048; // default
+      this.dirLight.shadow.mapSize.height = 2048; // default
+      this.dirLight.shadow.camera = new THREE.OrthographicCamera(
+        -100,
+        100,
+        100,
+        -100,
+        0.5,
+        1000
+      );
+      this.dirLight.shadow.camera.near = near; // default
+      this.dirLight.shadow.camera.far = far * 10; // default
+      this.scene.add(this.dirLight);
+      this.loadModel();
+
+      // add controls
+      this.controls = new OrbitControls(this.camera, this.container);
+      //this.controls.target = new THREE.Vector3(0, 0, 0);
+      this.controls.keys = {
+        LEFT: 65, //left arrow
+        UP: 87, // up arrow
+        RIGHT: 68, // right arrow
+        BOTTOM: 83, // down arrow
+      };
+
+      // create renderer
+      this.renderer = new THREE.WebGLRenderer({ antialias: true });
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+      this.renderer.outputEncoding = true;
+      this.renderer.gammaFactor = 2.2;
+      this.renderer.shadowMap.enabled = true;
+      // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+      this.container.appendChild(this.renderer.domElement);
+
+      // set aspect ratio to match the new browser window aspect ratio
+      this.camera.aspect =
+        this.container.clientWidth / this.container.clientHeight;
+      this.camera.updateProjectionMatrix();
+      this.renderer.setSize(
+        this.container.clientWidth,
+        this.container.clientHeight
+      );
+      // selectingModelsColor
+      this.highlightMaterial = new THREE.MeshPhongMaterial({
+        color: 0x00b1ff,
+        depthTest: false,
+        transparent: true,
+        opacity: 0.3,
+      });
+
+      //moving objects intersecting
+      this.plane = new THREE.Plane();
+      this.pNormal = new THREE.Vector3(0, 1, 0);
+      this.raycaster = new THREE.Raycaster();
+      this.shift = new THREE.Vector3();
+
+      // create Vector to calculate Camera Direction
+      this.vector = new THREE.Vector3();
+      this.render();
+    },
     resizeWindow() {
       this.container = this.$refs.sceneContainer;
       this.renderer.setSize(
@@ -75,83 +177,6 @@ export default {
         this.unloadSubproject(sb);
       });
     },
-    init() {
-      // set container
-      this.container = this.$refs.sceneContainer;
-
-      // add camera
-      const fov = 45; // Field of view
-      const aspect = this.container.clientWidth / this.container.clientHeight;
-      const near = 0.1; // the near clipping plane
-      const far = 1000; // the far clipping plane
-      const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-      this.camera = camera;
-
-      // create scene
-      this.scene = new THREE.Scene();
-      this.scene.background = new THREE.Color("#eeeeee");
-
-      // add lights
-      const ambientLight = new THREE.HemisphereLight(
-        0xffffff, // bright sky color
-        0x222222, // dim ground color
-        1 // intensity
-      );
-      // interacting with objects
-      this.raycaster = new THREE.Raycaster();
-
-      this.scene.add(ambientLight);
-
-      this.dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
-      this.dirLight.position.set(500, 500, 500);
-      this.dirLight.castShadow = true;
-      this.dirLight.shadow.mapSize.width = 2048; // default
-      this.dirLight.shadow.mapSize.height = 2048; // default
-      this.dirLight.shadow.camera = new THREE.OrthographicCamera(
-        -100,
-        100,
-        100,
-        -100,
-        0.5,
-        1000
-      );
-      this.dirLight.shadow.camera.near = near; // default
-      this.dirLight.shadow.camera.far = far * 10; // default
-      this.scene.add(this.dirLight);
-
-      // add controls
-      this.controls = new OrbitControls(this.camera, this.container);
-      //this.controls.target = new THREE.Vector3(0, 0, 0);
-      this.controls.keys = {
-        LEFT: 65, //left arrow
-        UP: 87, // up arrow
-        RIGHT: 68, // right arrow
-        BOTTOM: 83, // down arrow
-      };
-
-      // create renderer
-      this.renderer = new THREE.WebGLRenderer({ antialias: true });
-      this.renderer.setPixelRatio(window.devicePixelRatio);
-      this.renderer.outputEncoding = true;
-      this.renderer.gammaFactor = 2.2;
-      this.renderer.shadowMap.enabled = true;
-      // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
-      this.container.appendChild(this.renderer.domElement);
-
-      // set aspect ratio to match the new browser window aspect ratio
-      this.camera.aspect =
-        this.container.clientWidth / this.container.clientHeight;
-      this.camera.updateProjectionMatrix();
-      this.renderer.setSize(
-        this.container.clientWidth,
-        this.container.clientHeight
-      );
-
-      // create Vector to calculate Camera Direction
-      this.vector = new THREE.Vector3();
-      this.loadModel();
-      this.render();
-    },
     loadAvatar(avatarId, name) {
       if (!this.scene.getObjectByName(name)) {
         const gltfLoader = new GLTFLoader();
@@ -165,7 +190,7 @@ export default {
             var myText = new SpriteText(name);
             myText.textHeight = 2;
             myText.strokeWidth = 1;
-            myText.strokeColor = "black";
+            myText.strokeColor = 'black';
             myText.position.y = gltf.scene.position.y - 3;
             gltf.scene.add(myText);
             this.scene.add(gltf.scene);
@@ -177,16 +202,38 @@ export default {
       if (!this.scene.getObjectByName(`subprojectId:${subprojectId}`)) {
         const gltfLoader = new GLTFLoader();
         gltfLoader.setRequestHeader({ Authorization: authHeader() });
-        gltfLoader.load(
-          `${this.$app_url}/api/project/get_projectfile/${subprojectId}`,
-          (gltf) => {
-            gltf.scene.name = `subprojectId:${subprojectId}`;
-            this.scene.add(gltf.scene);
-            console.log(
-              this.scene.getObjectByName({ subprojectId: subprojectId })
-            );
-          }
-        );
+        try {
+          gltfLoader.load(
+            `${this.$app_url}/api/project/get_projectfile/${subprojectId}`,
+            (gltf) => {
+              gltf.scene.traverse((o) => {
+                if (o.isMesh) {
+                  o.castShadow = true;
+                  o.receiveShadow = true;
+                  o.matrixAutoUpdate = false; // this object is static
+                  o.gltf = gltf;
+                  //adding materials to a list
+                }
+              });
+              gltf.scene.name = `subprojectId:${subprojectId}`;
+              const lastLoaded = this.scene.children.find((x) =>
+                x.name.match(/projectId/)
+              );
+              console.log(lastLoaded);
+              const box = new THREE.Box3().setFromObject(gltf.scene);
+              const center = box.getCenter(new THREE.Vector3());
+
+              gltf.scene.position.x += gltf.scene.position.x - center.x;
+              gltf.scene.position.y += gltf.scene.position.y - center.y;
+              gltf.scene.position.z += gltf.scene.position.z - center.z;
+              gltf.scene.position.setFromMatrixPosition(lastLoaded.matrixWorld);
+              this.scene.add(gltf.scene);
+            }
+          );
+        } catch (err) {
+          console.log('Error loading IFC.');
+          console.log(err);
+        }
       }
     },
     unloadSubproject(subprojectId) {
@@ -219,15 +266,17 @@ export default {
               o.castShadow = true;
               o.receiveShadow = true;
               o.matrixAutoUpdate = false; // this object is static
+              o.gltf = gltf;
               //adding materials to a list
               if (o.material) materials.push(o.material);
             }
           });
-          this.$store.dispatch("viewport/setmaterialList", materials);
+          this.$store.dispatch('viewport/setmaterialList', materials);
           const box = new THREE.Box3().setFromObject(gltf.scene);
           const size = box.getSize(new THREE.Vector3()).length();
           const center = box.getCenter(new THREE.Vector3());
 
+          gltf.scene.name = 'projectId';
           gltf.scene.position.x += gltf.scene.position.x - center.x;
           gltf.scene.position.y += gltf.scene.position.y - center.y;
           gltf.scene.position.z += gltf.scene.position.z - center.z;
@@ -269,7 +318,7 @@ export default {
     },
     roundNumbers(obj) {
       Object.entries(obj).forEach(([key, value]) => {
-        if (typeof value === "number") {
+        if (typeof value === 'number') {
           // obj[key] = value.toFixed(2) // 1.9999 -> "2.00"
           obj[key] = +value.toFixed(2); // 1.9999 -> 2
         }
@@ -285,26 +334,64 @@ export default {
         dir: this.roundNumbers(this.camera.getWorldDirection(this.vector)),
       };
       //send camera position to Server
-      this.$store.dispatch("viewport/setowncamPos", this.camPos);
+      this.$store.dispatch('viewport/setowncamPos', this.camPos);
       this.render();
     },
     takeScreenshot() {
       this.render();
       this.$store.dispatch(
-        "viewport/imgStore",
+        'viewport/imgStore',
         this.renderer.domElement.toDataURL()
       );
     },
     render() {
       this.renderer.render(this.scene, this.camera);
     },
-    handleMouseWheel(event) {
-      if (event.deltaY < 0) {
-        this.camera.position.z -= 1;
-      } else if (event.deltaY > 0) {
-        this.camera.position.z += 1;
+    pointerMove(event) {
+      const mouse = new THREE.Vector2();
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      this.raycaster.setFromCamera(mouse, this.camera);
+      const planeIntersect = new THREE.Vector3();
+
+      if (this.isDragging) {
+        console.log('drgging');
+        this.raycaster.ray.intersectPlane(this.plane, planeIntersect);
+        this.dragObject.position.addVectors(planeIntersect, this.shift);
+        this.updateCamera();
       }
-      this.updateCamera();
+    },
+    pointerDown() {
+      const intersects = this.raycaster.intersectObjects(this.scene.children);
+      console.log('pointerDown', intersects);
+      var pIntersect = new THREE.Vector3();
+      if (intersects.length) {
+        if (intersects[0].object.gltf) {
+          this.found = intersects[0];
+          console.log('pointedObject', this.found.name);
+          this.controls.enabled = false;
+          pIntersect.copy(this.found.point);
+          this.plane.setFromNormalAndCoplanarPoint(this.pNormal, pIntersect);
+          this.shift.subVectors(
+            this.found.object.gltf.scene.position,
+            this.found.point
+          );
+          this.isDragging = true;
+          this.dragObject = this.found.object.gltf.scene;
+          //  this.found.object.userData.color = this.found.object.material;
+          //  this.found.object.material = this.highlightMaterial;
+        }
+        //  this.found = intersects[0];
+      }
+    },
+    pointerUp() {
+      if (this.isDragging) {
+        this.isDragging = false;
+        this.dragObject = null;
+        this.controls.enabled = true;
+        // this.found.object.material = this.found.object.userData.color;
+        this.updateCamera();
+      }
     },
   },
   watch: {
@@ -316,18 +403,12 @@ export default {
     },
     selectedSubprojects(newval, oldval) {
       if (oldval.length !== newval.length) {
-        const loadedSubprojects = this.scene.children
-          .filter((x) => x.name.startsWith("subprojectId:"))
-          .map((x) => x.name.replace("subprojectId:", ""));
-        const addSubprojects = newval.filter(
-          (x) => !loadedSubprojects.includes(x)
+        this.insertSubproject(this.selectedSubprojects);
+        const rmProjects = this.loadedSubprojects.filter(
+          (x) => !this.selectedSubprojects.includes(x)
         );
-        const rmSubprojects = loadedSubprojects.filter(
-          (x) => !newval.includes(x)
-        );
-
-        this.insertSubproject(addSubprojects);
-        this.removeSubproject(rmSubprojects);
+        console.log(rmProjects);
+        this.removeSubproject(rmProjects);
       }
 
       this.updateCamera();
@@ -342,16 +423,22 @@ export default {
   },
   mounted() {
     this.init();
-    this.controls.addEventListener("change", this.updateCamera);
+    this.controls.addEventListener('change', this.updateCamera);
+    this.container.addEventListener('pointerdown', this.pointerDown);
+    this.container.addEventListener('pointermove', this.pointerMove);
+    this.container.addEventListener('pointerup', this.pointerUp);
     // call this only in static scenes (i.e., if there is no animation loop)
   },
   created() {
-    window.addEventListener("resize", this.resizeWindow);
+    window.addEventListener('resize', this.resizeWindow);
   },
   destroyed() {
     this.scene.dispose();
-    window.removeEventListener("resize", this.resizeWindow);
-    this.controls.removeEventListener("change", this.updateCamera);
+    window.removeEventListener('resize', this.resizeWindow);
+    this.controls.removeEventListener('change', this.updateCamera);
+    this.container.removeEventListener('pointerdown', this.pointerDown);
+    this.container.removeEventListener('pointermove', this.pointerMove);
+    this.container.removeEventListener('pointerup', this.pointerUp);
   },
 };
 </script>
