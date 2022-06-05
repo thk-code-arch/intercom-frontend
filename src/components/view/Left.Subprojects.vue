@@ -5,7 +5,14 @@
     <!-- Top bar -->
     <div class="flex items-center flex-none px-6 py-2 border-b">
       <div class="flex flex-col">
-        <h3 class="mb-1 font-extrabold text-grey-darkest">Subprojects</h3>
+        <div class="flex flex-row w-full">
+          <h3 class="mb-1 font-extrabold text-grey-darkest">Subprojects</h3>
+          <button
+            class="flex flex-col px-3 py-1 mb-2 mr-2 font-semibold text-white bg-gray-800 rounded-full"
+          >
+            + save
+          </button>
+        </div>
         <div class="text-sm truncate text-grey-dark">Load Subprojects</div>
       </div>
     </div>
@@ -23,7 +30,13 @@
               class="form-checkbox h-5 w-5 text-gray-600"
               :value="subProject.id"
               v-model="selectedSubproject"
-            /><span class="ml-2 text-gray-700">{{ subProject.name }}</span>
+            />
+            <div class="flex flex-col w-full">
+              <span class="ml-2 text-gray-700">{{ subProject.name }}</span>
+              <span class="ml-2 text-gray-700">{{
+                subProject.description
+              }}</span>
+            </div>
           </label>
         </div>
       </div>
