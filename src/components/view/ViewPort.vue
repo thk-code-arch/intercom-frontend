@@ -368,7 +368,7 @@ export default {
       if (intersects.length) {
         if (intersects[0].object.gltf) {
           this.found = intersects[0];
-          console.log('pointedObject', this.found.name);
+          console.log('pointedObject', this.found.object.gltf);
           this.controls.enabled = false;
           pIntersect.copy(this.found.point);
           this.plane.setFromNormalAndCoplanarPoint(this.pNormal, pIntersect);
@@ -378,8 +378,13 @@ export default {
           );
           this.isDragging = true;
           this.dragObject = this.found.object.gltf.scene;
-          //  this.found.object.userData.color = this.found.object.material;
-          //  this.found.object.material = this.highlightMaterial;
+          this.found.object.gltf.userData.color =
+            this.found.object.gltf.material;
+          const highlight = this.scene.getObjectByName(
+            this.found.object.gltf.scene.name
+          );
+          console.log(highlight);
+          highlight.material = this.highlightMaterial;
         }
         //  this.found = intersects[0];
       }
@@ -389,7 +394,6 @@ export default {
         this.isDragging = false;
         this.dragObject = null;
         this.controls.enabled = true;
-        // this.found.object.material = this.found.object.userData.color;
         this.updateCamera();
       }
     },
