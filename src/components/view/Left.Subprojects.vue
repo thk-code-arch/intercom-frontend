@@ -28,7 +28,7 @@
             <input
               type="checkbox"
               class="form-checkbox h-5 w-5 text-gray-600"
-              :value="subProject.id"
+              :value="subProject"
               v-model="selectedSubproject"
             />
             <div class="flex flex-col w-full">
@@ -62,7 +62,22 @@ export default {
         return this.$store.state.viewport.selectedSubprojects;
       },
       set(value) {
-        return this.$store.commit('viewport/selectedSubprojects', value);
+        console.log(value);
+        const preSelected = this.$store.state.viewport.selectedSubprojects;
+        const selectedProject = value.map((x) => {
+          const foundPostion = preSelected.find((p) => p.id === x.id);
+          return {
+            ...x,
+            position: foundPostion
+              ? foundPostion.position
+              : { x: '0', y: '0', z: '0' },
+          };
+        });
+
+        return this.$store.commit(
+          'viewport/selectedSubprojects',
+          selectedProject
+        );
       },
     },
   },

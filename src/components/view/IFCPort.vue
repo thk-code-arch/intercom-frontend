@@ -181,17 +181,18 @@ export default {
         );
       }
     },
-    loadSubproject(subprojectId) {
-      if (!this.scene.getObjectByName(`subprojectId:${subprojectId}`)) {
+    loadSubproject(subproject) {
+      console.log('haeaeea', subproject);
+      if (!this.scene.getObjectByName(`subprojectId:${subproject.id}`)) {
         const ifcLoader = new IFCLoader();
         ifcLoader.setRequestHeader({ Authorization: authHeader() });
         try {
           ifcLoader.load(
-            `${this.$app_url}/api/project/get_projectfileifc/${subprojectId}`,
+            `${this.$app_url}/api/project/get_projectfileifc/${subproject.id}`,
             (ifc, progress, error) => {
               console.log(error);
               console.log(ifc);
-              ifc.name = `subprojectId:${subprojectId}`;
+              ifc.name = `subprojectId:${subproject.projectId}`;
 
               const lastLoaded = this.scene.children.find((x) =>
                 x.name.match(/projectId/)
