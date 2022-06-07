@@ -11,6 +11,7 @@ export const viewport = {
     takeScreenshot: false,
     imgDataurl: '',
     selectedSubprojects: [],
+    subprojectsPositions: [],
     selectedViewport: 'ifc',
   },
   actions: {
@@ -74,6 +75,20 @@ export const viewport = {
       // Remove disconnect players from array
       // disconnect when destroy View
     },
+    set_subproject({ state, commit }, subprojects) {
+      const sPP = state.subprojectsPositions;
+
+      const arrWithPositions = subprojects.map((x) => {
+        const positionZero = { x: 0, y: 0, z: 0 };
+        const posi = sPP.find((p) => p.id === x)?.position;
+        return {
+          id: x,
+          position: posi || positionZero,
+        };
+      });
+      commit('selectedSubprojects', subprojects);
+      commit('setSubprojectsPositions', arrWithPositions);
+    },
     PLAYER_getplayers({ commit, state, rootState }, data) {
       // get all connected players in array
       if (data.projectId === state.currentViewport) {
@@ -93,6 +108,15 @@ export const viewport = {
     },
     setViewport({ commit }, view) {
       commit('selectedViewport', view);
+    },
+    setSuprojectPosition({ commit, state }, data) {
+      const newPosition = state.subprojectsPositions.map((x) => {
+        if (x.id === data.id) {
+          x.position = data.position;
+        }
+        return x;
+      });
+      commit('setSubprojectsPositions', newPosition);
     },
   },
   mutations: {
@@ -123,12 +147,13 @@ export const viewport = {
       state.othercamPos = {};
       state.currentViewport = 0;
       state.selectedSubprojects = [];
-      console.log('clear');
     },
     //load subprojects in parentProject
     selectedSubprojects(state, selSubprojects) {
-      console.log(selSubprojects);
       state.selectedSubprojects = selSubprojects;
+    },
+    setSubprojectsPositions(state, selectedSubprojects) {
+      state.subprojectsPositions = selectedSubprojects;
     },
     selectedViewport(state, view) {
       state.selectedViewport = view;
