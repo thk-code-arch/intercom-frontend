@@ -118,6 +118,12 @@ export const viewport = {
       });
       commit('setSubprojectsPositions', newPosition);
     },
+    pullSubprojectPositions({ commit }, pulledSpPositions) {
+      const select = pulledSpPositions.map((x) => x.id);
+
+      commit('setSubprojectsPositions', pulledSpPositions);
+      commit('selectedSubprojects', select);
+    },
   },
   mutations: {
     materialList(state, materials) {
@@ -147,6 +153,7 @@ export const viewport = {
       state.othercamPos = {};
       state.currentViewport = 0;
       state.selectedSubprojects = [];
+      state.subprojectsPositions = [];
     },
     //load subprojects in parentProject
     selectedSubprojects(state, selSubprojects) {

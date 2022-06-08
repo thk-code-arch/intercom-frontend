@@ -9,6 +9,7 @@
           <h3 class="mb-1 font-extrabold text-grey-darkest">Subprojects</h3>
           <button
             class="flex flex-col px-3 py-1 mb-2 mr-2 font-semibold text-white bg-gray-800 rounded-full"
+            @click="pushSpPositions"
           >
             + save
           </button>
@@ -64,6 +65,34 @@ export default {
       set(value) {
         return this.$store.dispatch('viewport/set_subproject', value);
       },
+    },
+  },
+  methods: {
+    pushSpPositions() {
+      this.$http
+        .post('/view/set_selectedsubprojects', {
+          selectedSubprojects: this.$store.state.viewport.subprojectsPositions,
+          projectId: this.$store.state.curproject.theproject.id,
+        })
+        .then(
+          (response) => {
+            this.$notify({
+              title: 'Success',
+              text: `View saved ${response.data?.selectedSubprojects.length} Model`,
+              group: 'info',
+            });
+          },
+          (error) => {
+            this.$notify({
+              title: 'Ooops...',
+              text:
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString(),
+              group: 'error',
+            });
+          }
+        );
     },
   },
 };
