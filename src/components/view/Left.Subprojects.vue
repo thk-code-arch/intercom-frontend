@@ -4,8 +4,8 @@
   <div class="flex flex-col flex-1 overflow-hidden bg-white">
     <!-- Top bar -->
     <div class="flex items-center flex-none px-6 py-2 border-b">
-      <div class="flex flex-col">
-        <div class="flex flex-row w-full">
+      <div class="flex flex-col w-full">
+        <div class="flex justify-between">
           <h3 class="mb-1 font-extrabold text-grey-darkest">Subprojects</h3>
           <button
             class="flex flex-col px-3 py-1 mb-2 mr-2 font-semibold text-white bg-gray-800 rounded-full"
