@@ -9,54 +9,55 @@ export const viewport = {
     othercamPos: {},
     materials: {},
     takeScreenshot: false,
-    imgDataurl: "",
+    imgDataurl: '',
     selectedSubprojects: [],
-    selectedViewport: "ifc",
+    subprojectsPositions: [],
+    selectedViewport: 'ifc',
   },
   actions: {
     // Read materials List from GLTF (not as usefull...)
     setmaterialList({ commit }, materials) {
-      commit("materialList", materials);
+      commit('materialList', materials);
     },
     // set own camera postion -> send to Server
     setowncamPos({ commit }, position) {
-      commit("owncamPos", position);
+      commit('owncamPos', position);
     },
     // Takeover camera position -> receive from Server
     getcamPos({ commit }, position) {
-      commit("othercamPos", position);
+      commit('othercamPos', position);
     },
     // Take screenshots
     takeScreenshot({ commit }) {
-      commit("takeScreenshotNow");
+      commit('takeScreenshotNow');
     },
     imgStore({ commit }, dataUrl) {
-      commit("storeImage", dataUrl);
+      commit('storeImage', dataUrl);
     },
     join_viewport({ commit, state, dispatch, rootState }, projectId) {
       if (state.currentViewport !== projectId) {
-        commit("clear");
+        commit('clear');
       }
       if (projectId !== 0) {
         if (!rootState.iosockets.viewport) {
-          dispatch("iosockets/init_viewport", null, { root: true });
+          dispatch('iosockets/init_viewport', null, { root: true });
         }
-        this._vm.$socket.viewport.emit("join_viewport", {
+        this._vm.$socket.viewport.emit('join_viewport', {
           oldRoom: state.currentViewport,
           newRoom: projectId,
         });
-        commit("get_players", []);
-        commit("Select_Viewport", projectId);
+        commit('get_players', []);
+        commit('Select_Viewport', projectId);
       }
     },
     push_position({ state, dispatch, rootState }) {
       if (state.currentViewport === 0) {
-        dispatch("viewport/join_viewport", rootState.curproject.theproject.id, {
+        dispatch('viewport/join_viewport', rootState.curproject.theproject.id, {
           root: true,
         });
       }
       if (state.currentViewport !== 0) {
-        this._vm.$socket.viewport.emit("moveTo", {
+        this._vm.$socket.viewport.emit('moveTo', {
           position: state.camPosi,
           chatroomId: state.currentViewport,
         });
@@ -65,14 +66,28 @@ export const viewport = {
     },
     leave_viewport({ commit, state }) {
       if (state.currentViewport !== 0) {
-        this._vm.$socket.viewport.emit("disconnect", {
+        this._vm.$socket.viewport.emit('disconnect', {
           chatroomId: state.currentViewport,
         });
-        commit("Select_Viewport", 0);
+        commit('Select_Viewport', 0);
       }
       // TODO add disconnect: emit disconnect on disconnect
       // Remove disconnect players from array
       // disconnect when destroy View
+    },
+    set_subproject({ state, commit }, subprojects) {
+      const sPP = state.subprojectsPositions;
+
+      const arrWithPositions = subprojects.map((x) => {
+        const positionZero = { x: 0, y: 0, z: 0 };
+        const posi = sPP.find((p) => p.id === x)?.position;
+        return {
+          id: x,
+          position: posi || positionZero,
+        };
+      });
+      commit('selectedSubprojects', subprojects);
+      commit('setSubprojectsPositions', arrWithPositions);
     },
     PLAYER_getplayers({ commit, state, rootState }, data) {
       // get all connected players in array
@@ -80,19 +95,34 @@ export const viewport = {
         let players = Object.keys(data.pos)
           .map((key) => data.pos[key])
           .filter((key) => key.userId !== rootState.auth.user.id);
-        commit("get_players", players);
+        commit('get_players', players);
       }
     },
     clear({ commit, state }) {
       if (state.currentViewport !== 0) {
-        this._vm.$socket.viewport.emit("disconnect", {
+        this._vm.$socket.viewport.emit('disconnect', {
           chatroomId: state.currentViewport,
         });
       }
-      commit("clear");
+      commit('clear');
     },
     setViewport({ commit }, view) {
-      commit("selectedViewport", view);
+      commit('selectedViewport', view);
+    },
+    setSuprojectPosition({ commit, state }, data) {
+      const newPosition = state.subprojectsPositions.map((x) => {
+        if (x.id === data.id) {
+          x.position = data.position;
+        }
+        return x;
+      });
+      commit('setSubprojectsPositions', newPosition);
+    },
+    pullSubprojectPositions({ commit }, pulledSpPositions) {
+      const select = pulledSpPositions.map((x) => x.id);
+
+      commit('setSubprojectsPositions', pulledSpPositions);
+      commit('selectedSubprojects', select);
     },
   },
   mutations: {
@@ -123,11 +153,14 @@ export const viewport = {
       state.othercamPos = {};
       state.currentViewport = 0;
       state.selectedSubprojects = [];
-      console.log("clear");
+      state.subprojectsPositions = [];
     },
     //load subprojects in parentProject
     selectedSubprojects(state, selSubprojects) {
       state.selectedSubprojects = selSubprojects;
+    },
+    setSubprojectsPositions(state, selectedSubprojects) {
+      state.subprojectsPositions = selectedSubprojects;
     },
     selectedViewport(state, view) {
       state.selectedViewport = view;

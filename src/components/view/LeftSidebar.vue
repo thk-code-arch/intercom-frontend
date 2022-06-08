@@ -144,9 +144,41 @@ export default {
       return this.$store.state.viewport.selectedViewport;
     },
   },
+  mounted() {
+    if (this.hasSubproject) {
+      this.pullSpPositions();
+    }
+  },
   methods: {
     selectViewport(view) {
       this.$store.dispatch('viewport/setViewport', view);
+    },
+    pullSpPositions() {
+      this.$http
+        .get(
+          `/view/get_selectedsubprojects/${this.$store.state.curproject.theproject.id}`
+        )
+        .then(
+          (response) => {
+            console.log('pullSpPositions', response.data.selectedSubprojects);
+            if (response.data.selectedSubprojects.length > 0) {
+              console.log(
+                'pulllength',
+                response.data.selectedSubprojects.length
+              );
+              return this.$store.dispatch(
+                'viewport/pullSubprojectPositions',
+                response.data.selectedSubprojects
+              );
+            }
+          },
+          (error) => {
+            this.content =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
+          }
+        );
     },
   },
 };

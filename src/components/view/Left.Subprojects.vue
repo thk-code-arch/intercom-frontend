@@ -4,8 +4,16 @@
   <div class="flex flex-col flex-1 overflow-hidden bg-white">
     <!-- Top bar -->
     <div class="flex items-center flex-none px-6 py-2 border-b">
-      <div class="flex flex-col">
-        <h3 class="mb-1 font-extrabold text-grey-darkest">Subprojects</h3>
+      <div class="flex flex-col w-full">
+        <div class="flex justify-between">
+          <h3 class="mb-1 font-extrabold text-grey-darkest">Subprojects</h3>
+          <button
+            class="flex flex-col px-3 py-1 mb-2 mr-2 font-semibold text-white bg-gray-800 rounded-full"
+            @click="pushSpPositions"
+          >
+            + save
+          </button>
+        </div>
         <div class="text-sm truncate text-grey-dark">Load Subprojects</div>
       </div>
     </div>
@@ -23,7 +31,13 @@
               class="form-checkbox h-5 w-5 text-gray-600"
               :value="subProject.id"
               v-model="selectedSubproject"
-            /><span class="ml-2 text-gray-700">{{ subProject.name }}</span>
+            />
+            <div class="flex flex-col w-full">
+              <span class="ml-2 text-gray-700">{{ subProject.name }}</span>
+              <span class="ml-2 text-gray-700">{{
+                subProject.description
+              }}</span>
+            </div>
           </label>
         </div>
       </div>
@@ -49,8 +63,36 @@ export default {
         return this.$store.state.viewport.selectedSubprojects;
       },
       set(value) {
-        return this.$store.commit('viewport/selectedSubprojects', value);
+        return this.$store.dispatch('viewport/set_subproject', value);
       },
+    },
+  },
+  methods: {
+    pushSpPositions() {
+      this.$http
+        .post('/view/set_selectedsubprojects', {
+          selectedSubprojects: this.$store.state.viewport.subprojectsPositions,
+          projectId: this.$store.state.curproject.theproject.id,
+        })
+        .then(
+          (response) => {
+            this.$notify({
+              title: 'Success',
+              text: `View saved ${response.data?.selectedSubprojects.length} Model`,
+              group: 'info',
+            });
+          },
+          (error) => {
+            this.$notify({
+              title: 'Ooops...',
+              text:
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString(),
+              group: 'error',
+            });
+          }
+        );
     },
   },
 };

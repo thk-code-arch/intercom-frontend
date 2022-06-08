@@ -47,7 +47,7 @@ export default {
       return this.$store.state.viewport.players;
     },
     selectedSubprojects() {
-      return this.$store.state.viewport.selectedSubprojects;
+      return this.$store.state.viewport.subprojectsPositions;
     },
     loadedSubprojects() {
       return this.scene.children
@@ -181,29 +181,39 @@ export default {
         );
       }
     },
-    loadSubproject(subprojectId) {
-      if (!this.scene.getObjectByName(`subprojectId:${subprojectId}`)) {
+    loadSubproject(subproject) {
+      console.log('haeaeea', subproject);
+      if (!this.scene.getObjectByName(`subprojectId:${subproject.id}`)) {
         const ifcLoader = new IFCLoader();
         ifcLoader.setRequestHeader({ Authorization: authHeader() });
         try {
           ifcLoader.load(
-            `${this.$app_url}/api/project/get_projectfileifc/${subprojectId}`,
+            `${this.$app_url}/api/project/get_projectfileifc/${subproject.id}`,
             (ifc, progress, error) => {
               console.log(error);
               console.log(ifc);
-              ifc.name = `subprojectId:${subprojectId}`;
+              ifc.name = `subprojectId:${subproject.id}`;
 
               const lastLoaded = this.scene.children.find((x) =>
                 x.name.match(/projectId/)
               );
-              console.log(lastLoaded);
-              const box = new THREE.Box3().setFromObject(ifc.mesh);
-              const center = box.getCenter(new THREE.Vector3());
 
-              ifc.position.x += ifc.position.x - center.x;
-              ifc.position.y += ifc.position.y - center.y;
-              ifc.position.z += ifc.position.z - center.z;
-              ifc.position.setFromMatrixPosition(lastLoaded.matrixWorld);
+              if (
+                subproject.position.x === 0 &&
+                subproject.position.y === 0 &&
+                subproject.position.z === 0
+              ) {
+                ifc.position.setFromMatrixPosition(lastLoaded.matrixWorld);
+                this.$store.dispatch('viewport/setSuprojectPosition', {
+                  id: subproject.id,
+                  position: subproject.position,
+                });
+              } else {
+                ifc.position.x = subproject.position.x;
+                ifc.position.y = subproject.position.y;
+                ifc.position.z = subproject.position.z;
+              }
+
               this.scene.add(ifc.mesh);
               this.updateCamera();
             }
@@ -214,8 +224,8 @@ export default {
         }
       }
     },
-    unloadSubproject(subprojectId) {
-      const group = this.scene.getObjectByName(`subprojectId:${subprojectId}`);
+    unloadSubproject(subproject) {
+      const group = this.scene.getObjectByName(`subprojectId:${subproject}`);
       if (group) {
         this.scene.remove(group);
       }
@@ -275,11 +285,13 @@ export default {
     },
 
     getCameraPosition() {
-      this.camera.position.x = this.othercamPos.position.x;
-      this.camera.position.y = this.othercamPos.position.y;
-      this.camera.position.z = this.othercamPos.position.z;
-      this.controls.update();
-      this.render();
+      if (this.othercamPos.position) {
+        this.camera.position.x = this.othercamPos.position.x;
+        this.camera.position.y = this.othercamPos.position.y;
+        this.camera.position.z = this.othercamPos.position.z;
+        this.controls.update();
+        this.render();
+      }
     },
     roundNumbers(obj) {
       Object.entries(obj).forEach(([key, value]) => {
@@ -318,9 +330,7 @@ export default {
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
       this.raycaster.setFromCamera(mouse, this.camera);
       const planeIntersect = new THREE.Vector3();
-
       if (this.isDragging) {
-        console.log('drgging');
         this.raycaster.ray.intersectPlane(this.plane, planeIntersect);
         this.dragObject.position.addVectors(planeIntersect, this.shift);
         this.updateCamera();
@@ -349,9 +359,16 @@ export default {
     pointerUp() {
       if (this.isDragging) {
         this.isDragging = false;
-        this.dragObject = null;
+        console.log('drgging', this.dragObject.position);
+        if (this.dragObject.name.match(/subprojectId/)) {
+          this.$store.dispatch('viewport/setSuprojectPosition', {
+            id: parseInt(this.dragObject.name.replace('subprojectId:', '')),
+            position: this.dragObject.position,
+          });
+        }
         this.controls.enabled = true;
         this.found.object.material = this.found.object.userData.color;
+        this.dragObject = null;
         this.updateCamera();
       }
     },
@@ -363,15 +380,16 @@ export default {
       }
       this.updateCamera();
     },
-    selectedSubprojects(newval, oldval) {
-      if (oldval.length !== newval.length) {
-        this.insertSubproject(this.selectedSubprojects);
-        const rmProjects = this.loadedSubprojects.filter(
-          (x) => !this.selectedSubprojects.includes(x)
-        );
-        console.log(rmProjects);
-        this.removeSubproject(rmProjects);
-      }
+    selectedSubprojects() {
+      this.insertSubproject(this.selectedSubprojects);
+      const allowedProjects = this.selectedSubprojects.map((x) => {
+        return x.id;
+      });
+      const rmProjects = this.loadedSubprojects.filter(
+        (x) => !allowedProjects.includes(x)
+      );
+      console.log('remove', rmProjects, 'allowed', allowedProjects);
+      this.removeSubproject(rmProjects);
 
       this.updateCamera();
     },
