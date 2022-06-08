@@ -285,11 +285,13 @@ export default {
     },
 
     getCameraPosition() {
-      this.camera.position.x = this.othercamPos.position.x;
-      this.camera.position.y = this.othercamPos.position.y;
-      this.camera.position.z = this.othercamPos.position.z;
-      this.controls.update();
-      this.render();
+      if (this.othercamPos.position) {
+        this.camera.position.x = this.othercamPos.position.x;
+        this.camera.position.y = this.othercamPos.position.y;
+        this.camera.position.z = this.othercamPos.position.z;
+        this.controls.update();
+        this.render();
+      }
     },
     roundNumbers(obj) {
       Object.entries(obj).forEach(([key, value]) => {
