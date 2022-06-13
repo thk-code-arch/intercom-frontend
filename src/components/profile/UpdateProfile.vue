@@ -25,57 +25,54 @@
 
 <script>
 export default {
-  name: "update-profile",
+  name: 'update-profile',
   data: function () {
     return {
       profile: {},
       content: {},
       updateProfile: [
         {
-          label: "Username",
-          name: "username",
-          validation: "required",
+          label: 'Username',
+          name: 'username',
+          validation: 'required',
         },
         {
-          label: "Email",
-          name: "email",
-          validation: "required|email",
+          label: 'Email',
+          name: 'email',
+          validation: 'required|email',
         },
         {
-          type: "submit",
-          label: "Save",
+          type: 'submit',
+          label: 'Save',
         },
       ],
     };
   },
-  computed: {},
-  components: {},
-
   methods: {
     updateProfileNow() {
       this.$http
-        .post("user/update_profile", {
+        .post('user/update_profile', {
           username: this.profile.username,
           email: this.profile.email,
         })
         .then(
           (response) => {
             this.profile = response.data;
-            this.$store.dispatch("auth/updateProfile", response.data);
+            this.$store.dispatch('auth/updateProfile', response.data);
             this.$notify({
-              title: "Success",
-              text: "Profile updated",
-              group: "info",
+              title: 'Success',
+              text: 'Profile updated',
+              group: 'info',
             });
           },
           (error) => {
             this.$notify({
-              title: "Ooops...",
+              title: 'Ooops...',
               text:
                 (error.response && error.response.data) ||
                 error.message ||
                 error.toString(),
-              group: "error",
+              group: 'error',
             });
           }
         );
