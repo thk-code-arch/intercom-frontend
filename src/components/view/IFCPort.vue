@@ -345,15 +345,17 @@ export default {
       var pIntersect = new THREE.Vector3();
       if (intersects.length) {
         this.found = intersects[0];
-        console.log('pointedObject', this.found.point);
-        this.controls.enabled = false;
-        pIntersect.copy(this.found.point);
-        this.plane.setFromNormalAndCoplanarPoint(this.pNormal, pIntersect);
-        this.shift.subVectors(this.found.object.position, this.found.point);
-        this.isDragging = true;
-        this.dragObject = this.found.object;
-        this.found.object.userData.color = this.found.object.material;
-        this.found.object.material = this.highlightMaterial;
+        //dont move parent Project
+        if (this.found.object.name !== 'projectId') {
+          this.controls.enabled = false;
+          pIntersect.copy(this.found.point);
+          this.plane.setFromNormalAndCoplanarPoint(this.pNormal, pIntersect);
+          this.shift.subVectors(this.found.object.position, this.found.point);
+          this.isDragging = true;
+          this.dragObject = this.found.object;
+          this.found.object.userData.color = this.found.object.material;
+          this.found.object.material = this.highlightMaterial;
+        }
       }
     },
     pointerUp() {
