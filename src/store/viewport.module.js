@@ -64,17 +64,6 @@ export const viewport = {
       }
       // push ownCam Position
     },
-    leave_viewport({ commit, state }) {
-      if (state.currentViewport !== 0) {
-        this._vm.$socket.viewport.emit('disconnect', {
-          chatroomId: state.currentViewport,
-        });
-        commit('Select_Viewport', 0);
-      }
-      // TODO add disconnect: emit disconnect on disconnect
-      // Remove disconnect players from array
-      // disconnect when destroy View
-    },
     set_subproject({ state, commit }, subprojects) {
       const sPP = state.subprojectsPositions;
 
@@ -88,6 +77,11 @@ export const viewport = {
       });
       commit('selectedSubprojects', subprojects);
       commit('setSubprojectsPositions', arrWithPositions);
+    },
+
+    PLAYER_updateSelectedSubprojects({ dispatch }, data) {
+      console.log('socketpullProjects');
+      dispatch('pullSubprojectPositions', JSON.parse(data));
     },
     PLAYER_getplayers({ commit, state, rootState }, data) {
       // get all connected players in array

@@ -1,15 +1,15 @@
 // Copyright (c) 2021 Steffen Stein <mail@steffenstein.com> For LICENSE see docs/LICENSE
 
 //This module inits/manages socket connection, when user is logged in
-// TODO reconnect when user is logged if connection gets lost
 
-import Vue from "vue";
-import store from "../store";
+import Vue from 'vue';
+import store from '../store';
 // SocketsIO Chat
-import io from "socket.io-client";
-import authHeader from "@/services/auth-header";
-import VueSocketIO from "vue-socket.io";
-import {SOCKETS} from "../services/api"
+import io from 'socket.io-client';
+import authHeader from '@/services/auth-header';
+import projectHeader from '@/services/project-header';
+import VueSocketIO from 'vue-socket.io';
+import { SOCKETS } from '../services/api';
 
 export const iosockets = {
   namespaced: true,
@@ -22,8 +22,8 @@ export const iosockets = {
   actions: {
     init_chatroom({ commit, state }) {
       if (state.chatroomInit === false) {
-        const chatsocket = io(SOCKETS + "/chatroom", {
-          query: `token=${authHeader().replace("Bearer ", "")}`,
+        const chatsocket = io(SOCKETS + '/chatroom', {
+          query: `token=${authHeader().replace('Bearer ', '')}`,
         });
         Vue.use(
           new VueSocketIO({
@@ -32,18 +32,21 @@ export const iosockets = {
             debug: false,
             vuex: {
               store,
-              actionPrefix: "CHAT_",
-              mutationPrefix: "CHAT_",
+              actionPrefix: 'CHAT_',
+              mutationPrefix: 'CHAT_',
             },
           })
         );
-        commit("chatroom_initiated");
+        commit('chatroom_initiated');
       }
     },
     init_viewport({ commit, state }) {
       if (state.viewportInit === false) {
-        const playersocket = io(SOCKETS + "/viewport", {
-          query: `token=${authHeader().replace("Bearer ", "")}`,
+        const playersocket = io(SOCKETS + '/viewport', {
+          query: `token=${authHeader().replace(
+            'Bearer ',
+            ''
+          )}&projectId=${projectHeader()}`,
         });
         Vue.use(
           new VueSocketIO({
@@ -52,18 +55,18 @@ export const iosockets = {
             options: { useConnectionNamespace: true },
             vuex: {
               store,
-              actionPrefix: "PLAYER_",
-              mutationPrefix: "PLAYER_",
+              actionPrefix: 'PLAYER_',
+              mutationPrefix: 'PLAYER_',
             },
           })
         );
-        commit("viewport_initiated");
+        commit('viewport_initiated');
       }
     },
     close_sockets({ commit }) {
       this._vm.$socket.viewport.close();
       this._vm.$socket.chatroom.close();
-      commit("closeSockets");
+      commit('closeSockets');
     },
   },
   mutations: {
