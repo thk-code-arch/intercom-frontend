@@ -78,6 +78,11 @@ export const viewport = {
       commit('selectedSubprojects', subprojects);
       commit('setSubprojectsPositions', arrWithPositions);
     },
+
+    PLAYER_updateSelectedSubprojects({ dispatch }, data) {
+      console.log('socketpullProjects');
+      dispatch('pullSubprojectPositions', JSON.parse(data));
+    },
     PLAYER_getplayers({ commit, state, rootState }, data) {
       // get all connected players in array
       if (data.projectId === state.currentViewport) {

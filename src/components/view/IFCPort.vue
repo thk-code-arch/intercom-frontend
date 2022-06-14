@@ -146,7 +146,12 @@ export default {
     },
     updateAvatar() {
       Array.prototype.forEach.call(this.connectedPlayers, (player) => {
-        this.moveAvatar(player.username, player.position);
+        this.moveObject(player.username, player.position);
+      });
+    },
+    updateObjectPostition(postionsArray) {
+      Array.prototype.forEach.call(postionsArray, (posi) => {
+        this.moveObject(`subprojectId:${posi.id}`, posi.position);
       });
     },
     insertSubproject(addSubproject) {
@@ -230,16 +235,15 @@ export default {
         this.scene.remove(group);
       }
     },
-
-    moveAvatar(avatarName, player) {
-      const selAvatar = this.scene.getObjectByName(avatarName);
-      if (selAvatar) {
+    moveObject(oModelName, posi) {
+      const selObject = this.scene.getObjectByName(oModelName);
+      if (selObject) {
         //selAvatar.rotation.x = player.dir.x;
         //selAvatar.rotation.y = player.dir.y;
         //selAvatar.rotation.z = player.dir.z;
-        selAvatar.position.x = player.x;
-        selAvatar.position.y = player.y;
-        selAvatar.position.z = player.z;
+        selObject.position.x = posi.x;
+        selObject.position.y = posi.y;
+        selObject.position.z = posi.z;
       }
     },
     loadModel() {
@@ -393,6 +397,7 @@ export default {
       console.log('remove', rmProjects, 'allowed', allowedProjects);
       this.removeSubproject(rmProjects);
 
+      this.updateObjectPostition(this.selectedSubprojects);
       this.updateCamera();
     },
     othercamPos() {
