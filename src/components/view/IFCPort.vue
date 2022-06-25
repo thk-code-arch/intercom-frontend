@@ -54,6 +54,9 @@ export default {
         .filter((x) => x.name.startsWith('subprojectId:'))
         .map((x) => parseInt(x.name.replace('subprojectId:', '')));
     },
+    hasSubproject() {
+      return !!this.$store.state.curproject.theproject.subprojects;
+    },
   },
   methods: {
     init() {
@@ -186,7 +189,7 @@ export default {
         );
       }
     },
-    loadSubproject(subproject) {
+    async loadSubproject(subproject) {
       console.log('haeaeea', subproject);
       if (!this.scene.getObjectByName(`subprojectId:${subproject.id}`)) {
         const ifcLoader = new IFCLoader();
@@ -197,27 +200,29 @@ export default {
             (ifc, progress, error) => {
               console.log(error);
               console.log(ifc);
-              ifc.name = `subprojectId:${subproject.id}`;
-
-              const lastLoaded = this.scene.children.find((x) =>
+              const parentProject = this.scene.children.find((x) =>
                 x.name.match(/projectId/)
               );
-
+              console.log('parriet', parentProject);
+              ifc.name = `subprojectId:${subproject.id}`;
               if (
                 subproject.position.x === 0 &&
                 subproject.position.y === 0 &&
                 subproject.position.z === 0
               ) {
-                ifc.position.setFromMatrixPosition(lastLoaded.matrixWorld);
+                ifc.position.x = parentProject.position.x;
+                ifc.position.y = parentProject.position.y;
+                ifc.position.z = parentProject.position.z;
                 this.$store.dispatch('viewport/setSuprojectPosition', {
                   id: subproject.id,
-                  position: subproject.position,
+                  position: ifc.position,
                 });
               } else {
                 ifc.position.x = subproject.position.x;
                 ifc.position.y = subproject.position.y;
                 ifc.position.z = subproject.position.z;
               }
+              console.log('added Postitioon', ifc.position);
 
               this.scene.add(ifc.mesh);
               this.updateCamera();
@@ -261,9 +266,10 @@ export default {
 
             ifc.name = 'projectId';
 
-            ifc.position.x += ifc.position.x - center.x;
-            ifc.position.y += ifc.position.y - center.y;
-            ifc.position.z += ifc.position.z - center.z;
+            ifc.position.x = ifc.position.x - center.x;
+            ifc.position.y = ifc.position.y - center.y;
+            ifc.position.z = ifc.position.z - center.z;
+
             this.camera.near = size / 100;
             this.camera.far = size * 100;
 
@@ -287,7 +293,6 @@ export default {
         console.error(err);
       }
     },
-
     getCameraPosition() {
       if (this.othercamPos.position) {
         this.camera.position.x = this.othercamPos.position.x;
@@ -378,6 +383,33 @@ export default {
         this.updateCamera();
       }
     },
+    pullSpPositions() {
+      this.$http
+        .get(
+          `/view/get_selectedsubprojects/${this.$store.state.curproject.theproject.id}`
+        )
+        .then(
+          (response) => {
+            console.log('pullSpPositions', response.data.selectedSubprojects);
+            if (response.data.selectedSubprojects.length > 0) {
+              console.log(
+                'pulllength',
+                response.data.selectedSubprojects.length
+              );
+              return this.$store.dispatch(
+                'viewport/pullSubprojectPositions',
+                response.data.selectedSubprojects
+              );
+            }
+          },
+          (error) => {
+            this.content =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
+          }
+        );
+    },
   },
   watch: {
     connectedPlayers(oldval, newval) {
@@ -410,6 +442,9 @@ export default {
   },
   mounted() {
     this.init();
+    if (this.hasSubproject) {
+      this.pullSpPositions();
+    }
     this.controls.addEventListener('change', this.updateCamera);
     this.container.addEventListener('pointerdown', this.pointerDown);
     this.container.addEventListener('pointermove', this.pointerMove);
