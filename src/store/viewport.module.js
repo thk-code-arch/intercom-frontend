@@ -112,10 +112,20 @@ export const viewport = {
       });
       commit('setSubprojectsPositions', newPosition);
     },
-    pullSubprojectPositions({ commit }, pulledSpPositions) {
-      const select = pulledSpPositions.map((x) => x.id);
+    pullSubprojectPositions({ commit, rootState }, pulledSpPositions) {
+      const validSubprojects = rootState.curproject.theproject.subprojects.map(
+        (x) => x.id
+      );
 
-      commit('setSubprojectsPositions', pulledSpPositions);
+      const validPulledSpPostitions = pulledSpPositions.filter((x) =>
+        validSubprojects.includes(x.id)
+      );
+
+      const select = pulledSpPositions
+        .map((x) => x.id)
+        .filter((x) => validSubprojects.includes(x));
+
+      commit('setSubprojectsPositions', validPulledSpPostitions);
       commit('selectedSubprojects', select);
     },
   },
@@ -146,6 +156,10 @@ export const viewport = {
       state.camPosi = {};
       state.othercamPos = {};
       state.currentViewport = 0;
+      state.selectedSubprojects = [];
+      state.subprojectsPositions = [];
+    },
+    unloadSubprojects(state) {
       state.selectedSubprojects = [];
       state.subprojectsPositions = [];
     },
