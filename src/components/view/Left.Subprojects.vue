@@ -39,6 +39,12 @@
               }}</span>
             </div>
           </label>
+          <span
+            @click="unloadAllSubprojects"
+            class="text-red-500 my-2 cursor-pointer font-bold"
+          >
+            Unload all Subprojects
+          </span>
         </div>
       </div>
     </div>
@@ -68,6 +74,9 @@ export default {
     },
   },
   methods: {
+    unloadAllSubprojects() {
+      return this.$store.commit('viewport/unloadSubprojects');
+    },
     pushSpPositions() {
       this.$http
         .post('/view/set_selectedsubprojects', {
