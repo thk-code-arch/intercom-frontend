@@ -29,7 +29,7 @@
               Unload all
             </button>
             <button
-              @click="unloadAllSubprojects"
+              @click="reloadAllSubprojects"
               class="border border-gray-500 rounded px-3 py-2 leading-none focus:border-gray-500 bg-gray-400 outline-none border-box mb-1"
             >
               Reload all
@@ -91,6 +91,9 @@ export default {
       },
     },
   },
+  mounted() {
+    this.reloadAllSubprojects();
+  },
   methods: {
     unloadAllSubprojects() {
       return this.$store.commit('viewport/unloadSubprojects');
@@ -121,6 +124,33 @@ export default {
                 error.toString(),
               group: 'error',
             });
+          }
+        );
+    },
+    reloadAllSubprojects() {
+      this.$http
+        .get(
+          `/view/get_selectedsubprojects/${this.$store.state.curproject.theproject.id}`
+        )
+        .then(
+          (response) => {
+            console.log('pullSpPositions', response.data.selectedSubprojects);
+            if (response.data.selectedSubprojects.length > 0) {
+              console.log(
+                'pulllength',
+                response.data.selectedSubprojects.length
+              );
+              return this.$store.dispatch(
+                'viewport/pullSubprojectPositions',
+                response.data.selectedSubprojects
+              );
+            }
+          },
+          (error) => {
+            this.content =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
           }
         );
     },
