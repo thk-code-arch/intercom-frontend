@@ -175,8 +175,10 @@ export const viewport = {
     },
   },
   getters: {
-    subprojectPositon: ({ state }, projectId) => {
-      return state.subprojectsPositions.find((x) => x.id === projectId);
+    subprojectPosition(state) {
+      return (projectId) => {
+        return state.subprojectsPositions.find((x) => x.id === projectId);
+      };
     },
   },
 };
