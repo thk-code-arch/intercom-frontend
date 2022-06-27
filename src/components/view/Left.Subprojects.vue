@@ -21,7 +21,21 @@
     <div class="flex items-start mb-4 text-sm overflow-y-scroll">
       <div class="flex-1 px-6">
         <div class="flex flex-col">
-          <label
+          <div class="flex flex-row mt-2 justify-between">
+            <button
+              @click="unloadAllSubprojects"
+              class="border border-red-500 rounded px-3 py-2 leading-none focus:border-red-500 bg-red-400 outline-none border-box mb-1"
+            >
+              Unload all
+            </button>
+            <button
+              @click="reloadAllSubprojects"
+              class="border border-gray-500 rounded px-3 py-2 leading-none focus:border-gray-500 bg-gray-400 outline-none border-box mb-1"
+            >
+              Reload all
+            </button>
+          </div>
+          <div
             class="inline-flex items-center mt-3"
             v-for="(subProject, subProject_idx) in subprojects"
             :key="subProject_idx"
@@ -33,18 +47,20 @@
               v-model="selectedSubproject"
             />
             <div class="flex flex-col w-full">
-              <span class="ml-2 text-gray-700">{{ subProject.name }}</span>
+              <span class="ml-2 text-gray-700 font-bold">{{
+                subProject.name
+              }}</span>
               <span class="ml-2 text-gray-700">{{
                 subProject.description
               }}</span>
+              <div
+                v-if="selectedSubproject.includes(subProject.id)"
+                class="ml-2"
+              >
+                <SubprojectPositionModal v-bind:id="subProject.id" />
+              </div>
             </div>
-          </label>
-          <span
-            @click="unloadAllSubprojects"
-            class="text-red-500 my-2 cursor-pointer font-bold"
-          >
-            Unload all Subprojects
-          </span>
+          </div>
         </div>
       </div>
     </div>
@@ -52,8 +68,10 @@
 </template>
 
 <script>
+import SubprojectPositionModal from './utils/SubprojectPostitionModal';
 export default {
   name: 'left-subprojects',
+  components: { SubprojectPositionModal },
   computed: {
     isSubproject() {
       return !!this.$store.state.curproject.theproject.subprojects;
@@ -73,9 +91,15 @@ export default {
       },
     },
   },
+  mounted() {
+    this.reloadAllSubprojects();
+  },
   methods: {
     unloadAllSubprojects() {
       return this.$store.commit('viewport/unloadSubprojects');
+    },
+    hello(id) {
+      console.log(id);
     },
     pushSpPositions() {
       this.$http
@@ -100,6 +124,33 @@ export default {
                 error.toString(),
               group: 'error',
             });
+          }
+        );
+    },
+    reloadAllSubprojects() {
+      this.$http
+        .get(
+          `/view/get_selectedsubprojects/${this.$store.state.curproject.theproject.id}`
+        )
+        .then(
+          (response) => {
+            console.log('pullSpPositions', response.data.selectedSubprojects);
+            if (response.data.selectedSubprojects.length > 0) {
+              console.log(
+                'pulllength',
+                response.data.selectedSubprojects.length
+              );
+              return this.$store.dispatch(
+                'viewport/pullSubprojectPositions',
+                response.data.selectedSubprojects
+              );
+            }
+          },
+          (error) => {
+            this.content =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
           }
         );
     },
