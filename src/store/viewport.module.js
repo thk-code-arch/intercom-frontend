@@ -68,11 +68,13 @@ export const viewport = {
       const sPP = state.subprojectsPositions;
 
       const arrWithPositions = subprojects.map((x) => {
-        const positionZero = { x: 0, y: 0, z: 0 };
+        const xyzZero = { x: 0, y: 0, z: 0 };
         const posi = sPP.find((p) => p.id === x)?.position;
+        const roti = sPP.find((p) => p.id === x)?.rotation;
         return {
           id: x,
-          position: posi || positionZero,
+          position: posi || xyzZero,
+          rotation: roti || xyzZero,
         };
       });
       commit('selectedSubprojects', subprojects);
@@ -121,11 +123,20 @@ export const viewport = {
         validSubprojects.includes(x.id)
       );
 
+      const arrWithPositions = validPulledSpPostitions.map((x) => {
+        const xyzZero = { x: 0, y: 0, z: 0 };
+        return {
+          id: x.id,
+          position: x.position || xyzZero,
+          rotation: x.rotation || xyzZero,
+        };
+      });
+
       const select = pulledSpPositions
         .map((x) => x.id)
         .filter((x) => validSubprojects.includes(x));
 
-      commit('setSubprojectsPositions', validPulledSpPostitions);
+      commit('setSubprojectsPositions', arrWithPositions);
       commit('selectedSubprojects', select);
     },
   },
