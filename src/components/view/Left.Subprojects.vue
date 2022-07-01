@@ -58,6 +58,7 @@
                 class="ml-2"
               >
                 <SubprojectPositionModal v-bind:id="subProject.id" />
+                <SubprojectRotationModal v-bind:id="subProject.id" />
               </div>
             </div>
           </div>
@@ -69,9 +70,10 @@
 
 <script>
 import SubprojectPositionModal from './utils/SubprojectPostitionModal';
+import SubprojectRotationModal from './utils/SubprojectRotationModal';
 export default {
   name: 'left-subprojects',
-  components: { SubprojectPositionModal },
+  components: { SubprojectPositionModal, SubprojectRotationModal },
   computed: {
     isSubproject() {
       return !!this.$store.state.curproject.theproject.subprojects;
