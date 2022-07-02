@@ -154,7 +154,7 @@ export default {
     },
     updateObjectPostition(postionsArray) {
       Array.prototype.forEach.call(postionsArray, (posi) => {
-        this.moveObject(`subprojectId:${posi.id}`, posi.position);
+        this.moveSubproject(posi);
       });
     },
     insertSubproject(addSubproject) {
@@ -249,6 +249,20 @@ export default {
         selObject.position.x = posi.x;
         selObject.position.y = posi.y;
         selObject.position.z = posi.z;
+      }
+    },
+    moveSubproject(posi) {
+      const selObject = this.scene.getObjectByName(`subprojectId:${posi.id}`);
+      if (selObject) {
+        selObject.position.x = posi.position.x;
+        selObject.position.y = posi.position.y;
+        selObject.position.z = posi.position.z;
+        const myAxis = new THREE.Vector3(0, 1, 0);
+        // rotate the mesh 45 on this axis
+        selObject.rotateOnWorldAxis(
+          myAxis,
+          THREE.Math.degToRad(posi.rotation.y)
+        );
       }
     },
     loadModel() {
