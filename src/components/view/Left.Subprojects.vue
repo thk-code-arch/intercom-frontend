@@ -13,6 +13,16 @@
           >
             + save
           </button>
+          <button
+            class="flex flex-col px-3 py-1 mb-2 mr-2 font-semibold text-white bg-gray-800 rounded-full"
+            @click="toggleModal"
+          >
+            E
+          </button>
+          <SavedSubprojectsModal
+            @toggleSavedSubprojectsModal="toggleModal()"
+            v-if="SavedSubprojectsModalIsOpen"
+          />
         </div>
         <div class="text-sm truncate text-grey-dark">Load Subprojects</div>
       </div>
@@ -71,12 +81,22 @@
 <script>
 import SubprojectPositionModal from './utils/SubprojectPostitionModal';
 import SubprojectRotationModal from './utils/SubprojectRotationModal';
+import SavedSubprojectsModal from './utils/SavedSubprojectsModal';
 export default {
   name: 'left-subprojects',
-  components: { SubprojectPositionModal, SubprojectRotationModal },
+  data() {
+    return {
+      SavedSubprojectsModalIsOpen: false,
+    };
+  },
+  components: {
+    SubprojectPositionModal,
+    SubprojectRotationModal,
+    SavedSubprojectsModal,
+  },
   computed: {
     isSubproject() {
-      return !!this.$store.state.curproject.theproject.subprojects;
+      return !this.$store.state.curproject.theproject.subprojects;
     },
     subprojects() {
       if (this.$store.state.curproject.theproject.subprojects !== null) {
@@ -100,8 +120,8 @@ export default {
     unloadAllSubprojects() {
       return this.$store.commit('viewport/unloadSubprojects');
     },
-    hello(id) {
-      console.log(id);
+    toggleModal() {
+      this.SavedSubprojectsModalIsOpen = !this.SavedSubprojectsModalIsOpen;
     },
     pushSpPositions() {
       this.$http
