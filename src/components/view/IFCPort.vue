@@ -257,12 +257,7 @@ export default {
         selObject.position.x = posi.position.x;
         selObject.position.y = posi.position.y;
         selObject.position.z = posi.position.z;
-        const myAxis = new THREE.Vector3(0, 1, 0);
-        // rotate the mesh 45 on this axis
-        selObject.rotateOnWorldAxis(
-          myAxis,
-          THREE.Math.degToRad(posi.rotation.y)
-        );
+        selObject.rotation.y = posi.rotation.y;
       }
     },
     loadModel() {
