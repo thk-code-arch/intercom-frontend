@@ -322,6 +322,7 @@ export default {
     },
     updateCamera() {
       this.updateAvatar();
+      this.updateObjectPostition(this.selectedSubprojects);
       this.camPos = {
         x: this.camera.position.x.toFixed(2),
         y: this.camera.position.y.toFixed(2),
@@ -389,6 +390,7 @@ export default {
         this.controls.enabled = true;
         this.found.object.material = this.found.object.userData.color;
         this.dragObject = null;
+        this.updateObjectPostition(this.selectedSubprojects);
         this.updateCamera();
       }
     },
