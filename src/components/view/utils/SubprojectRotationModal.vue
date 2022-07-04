@@ -1,40 +1,23 @@
 <template>
   <div class="w-full flex flex-row">
     <div class="w-full flex-row flex items-center justify-between text-xs">
-      <div class="flex-row flex w-1/3 bg-gray-100">
-        <span class="w-1/4 font-bold">X:</span>
-        <input
-          :value="newRotation.rotation.x"
-          @input="(event) => (newRotation.rotation.x = event.target.value)"
-          type="number"
-          class="w-3/4 bg-gray-100"
-        />
-      </div>
-      <div class="flex-row flex w-1/3 bg-gray-100">
-        <span class="w-1/4 font-bold">Y:</span>
+      <div class="flex-row flex w-full bg-gray-100">
+        <span class="w-1/2 font-bold">Rotation Y:</span>
+
         <input
           :value="newRotation.rotation.y"
           @input="(event) => (newRotation.rotation.y = event.target.value)"
           type="number"
-          class="w-3/4 bg-gray-100"
-        />
-      </div>
-      <div class="flex-row flex w-1/3 bg-gray-100">
-        <span class="w-1/4 font-bold">Z:</span>
-        <input
-          :value="newRotation.rotation.z"
-          @input="(event) => (newRotation.rotation.z = event.target.value)"
-          type="number"
-          class="w-3/4 bg-gray-100"
+          class="w-1/2 bg-gray-100"
         />
       </div>
     </div>
     <div class="flex-row flex">
       <button
         class="p-1 font-semibold text-gray-800 bg-gray-300 rounded-lg"
-        @click="setNewRotation()"
+        @click="resetRotation()"
       >
-        OK
+        RESET
       </button>
     </div>
   </div>
@@ -52,7 +35,13 @@ export default {
     },
   },
   methods: {
-    setNewRotation() {
+    resetRotation() {
+      this.newRotation.position.x = 0;
+      this.newRotation.position.y = 0;
+      this.newRotation.position.z = 0;
+      this.newRotation.rotation.x = 0;
+      this.newRotation.rotation.y = 0;
+      this.newRotation.rotation.z = 0;
       return this.$store.dispatch(
         'viewport/setSuprojectPosition',
         this.newRotation
