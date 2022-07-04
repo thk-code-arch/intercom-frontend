@@ -5,14 +5,52 @@
     <!-- Top bar -->
     <div class="flex items-center flex-none px-6 py-2 border-b">
       <div class="flex flex-col w-full">
-        <div class="flex justify-between">
-          <h3 class="mb-1 font-extrabold text-grey-darkest">Subprojects</h3>
+        <div class="flex flex-row items-center justify-between space-x-1">
+          <p class="mb-1 font-extrabold font-lg text-grey-darkest">
+            Subprojects
+          </p>
           <button
-            class="flex flex-col px-3 py-1 mb-2 mr-2 font-semibold text-white bg-gray-800 rounded-full"
+            class="flex flex-col px-3 py-1 text-white bg-gray-800 rounded-lg"
             @click="pushSpPositions"
           >
-            + save
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+              />
+            </svg>
           </button>
+          <button
+            class="flex flex-col px-3 py-1 text-white bg-gray-800 rounded-lg"
+            @click="toggleModal"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              />
+            </svg>
+          </button>
+          <SavedSubprojectsModal
+            @toggleSavedSubprojectsModal="toggleModal()"
+            v-if="SavedSubprojectsModalIsOpen"
+          />
         </div>
         <div class="text-sm truncate text-grey-dark">Load Subprojects</div>
       </div>
@@ -58,6 +96,7 @@
                 class="ml-2"
               >
                 <SubprojectPositionModal v-bind:id="subProject.id" />
+                <SubprojectRotationModal v-bind:id="subProject.id" />
               </div>
             </div>
           </div>
@@ -69,12 +108,23 @@
 
 <script>
 import SubprojectPositionModal from './utils/SubprojectPostitionModal';
+import SubprojectRotationModal from './utils/SubprojectRotationModal';
+import SavedSubprojectsModal from './utils/SavedSubprojectsModal';
 export default {
   name: 'left-subprojects',
-  components: { SubprojectPositionModal },
+  data() {
+    return {
+      SavedSubprojectsModalIsOpen: false,
+    };
+  },
+  components: {
+    SubprojectPositionModal,
+    SubprojectRotationModal,
+    SavedSubprojectsModal,
+  },
   computed: {
     isSubproject() {
-      return !!this.$store.state.curproject.theproject.subprojects;
+      return !this.$store.state.curproject.theproject.subprojects;
     },
     subprojects() {
       if (this.$store.state.curproject.theproject.subprojects !== null) {
@@ -98,8 +148,8 @@ export default {
     unloadAllSubprojects() {
       return this.$store.commit('viewport/unloadSubprojects');
     },
-    hello(id) {
-      console.log(id);
+    toggleModal() {
+      this.SavedSubprojectsModalIsOpen = !this.SavedSubprojectsModalIsOpen;
     },
     pushSpPositions() {
       this.$http

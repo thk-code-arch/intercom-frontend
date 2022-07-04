@@ -9,10 +9,23 @@
         <div class="text-sm truncate text-grey-dark">List</div>
       </div>
       <button
-        class="flex flex-col inline-block px-3 py-1 mb-2 mr-2 font-semibold text-white bg-gray-800 rounded-full"
+        class="flex flex-col inline-block px-3 py-1 mb-2 mr-2 font-semibold text-white bg-gray-800 rounded-lg"
         v-on:click="takeScreenshot()"
       >
-        + Screenshot
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
       </button>
       <ScreenshotModal
         @toggleScreenshotModal="toggleScreenshotModal()"
@@ -36,14 +49,14 @@
 </template>
 
 <script>
-import ScreenshotModal from "./utils/ScreenshotModal";
-import ScreenshotCard from "./utils/ScreenshotCard";
-import projectHeader from "../../services/project-header";
+import ScreenshotModal from './utils/ScreenshotModal';
+import ScreenshotCard from './utils/ScreenshotCard';
+import projectHeader from '../../services/project-header';
 export default {
-  name: "left-savedviews",
+  name: 'left-savedviews',
   data() {
     return {
-      image: "",
+      image: '',
       ScreenshotModalIsOpen: false,
       screenshots: [],
     };
@@ -58,7 +71,7 @@ export default {
   },
   methods: {
     takeScreenshot() {
-      this.$store.dispatch("viewport/takeScreenshot");
+      this.$store.dispatch('viewport/takeScreenshot');
       this.ScreenshotModalIsOpen = true;
     },
     toggleScreenshotModal() {
